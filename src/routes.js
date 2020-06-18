@@ -61,14 +61,14 @@ const dashboardRoutes = [
     component: Schema,
     layout: "/admin"
   },
-  {
-    path: "/signin",
-    name: "Typography",
-    rtlName: "طباعة",
-    icon: LibraryBooks,
-    component: SignIn,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/signin",
+  //   name: "Typography",
+  //   rtlName: "طباعة",
+  //   icon: LibraryBooks,
+  //   component: SignIn,
+  //   layout: "/admin"
+  // },
   // {
   //   path: "/icons",
   //   name: "Icons",
