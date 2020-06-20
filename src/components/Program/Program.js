@@ -11,11 +11,28 @@ import MyExpantionPanel from "../MyExpantionPanel/MyExpantionPanel";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-// import Route from "./Route";
+import { set } from "lodash/fp";
+import DoneIcon from "@material-ui/icons/Done";
 
 export default class Program extends Component {
   state = {
-    value: "",
+    values: {
+      inputs: {
+        name: "",
+        required: true,
+      },
+      operations: {
+        name: "",
+        method: "",
+        parent: "",
+        multiple: "false",
+      },
+      result: {
+        type: "",
+        value: "",
+      },
+    },
+    finalValue: [],
   };
 
   handleChange = (panel) => (event, isExpanded) => {
@@ -23,6 +40,23 @@ export default class Program extends Component {
     isExpanded
       ? this.setState({ expanded: panel })
       : this.setState({ expanded: false }); //new state manager//
+  };
+
+  checkIfDuplicated = (values) => {
+    var arr = this.state.finalValue;
+    for (let i in arr) {
+      var firstObj = values;
+      var secondObj = arr[i];
+      if (JSON.stringify(firstObj) === JSON.stringify(secondObj)) return true;
+    }
+  };
+
+  handleSent = (values) => {
+    if (!this.checkIfDuplicated(values)) {
+      var temp = [...this.state.finalValue, values];
+      this.setState({ finalValue: temp });
+    }
+    console.log(this.state.finalValue);
   };
 
   render() {
@@ -40,24 +74,38 @@ export default class Program extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                onChange={(e) => {
+                  const newState = set(
+                    ["values", "inputs", "name"],
+                    e.target.value
+                  );
+                  this.setState(newState);
+                }}
               />
               <label>required:</label>
               <Checkbox
                 color="primary"
                 inputProps={{ "aria-label": "secondary checkbox" }}
+                onChange={(e) => {
+                  const newState = set(
+                    ["values", "inputs", "required"],
+                    e.target.value
+                  );
+                  this.setState(newState);
+                }}
               />
               <label>default:</label>
               <Checkbox
                 color="primary"
                 inputProps={{ "aria-label": "secondary checkbox" }}
+                onChange={(e) => {
+                  const newState = set(
+                    ["values", "inputs", "default"],
+                    e.target.value
+                  );
+                  this.setState(newState);
+                }}
               />
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={this.props.ondelete}
-              >
-                <DeleteIcon />
-              </IconButton>
             </Typography>
           }
         ></MyExpantionPanel>
@@ -74,6 +122,13 @@ export default class Program extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                onChange={(e) => {
+                  const newState = set(
+                    ["values", "operations", "name"],
+                    e.target.value
+                  );
+                  this.setState(newState);
+                }}
               />
               <TextField
                 label="method"
@@ -81,6 +136,13 @@ export default class Program extends Component {
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
+                }}
+                onChange={(e) => {
+                  const newState = set(
+                    ["values", "operations", "method"],
+                    e.target.value
+                  );
+                  this.setState(newState);
                 }}
               />
               <TextField
@@ -90,19 +152,26 @@ export default class Program extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                onChange={(e) => {
+                  const newState = set(
+                    ["values", "operations", "parent"],
+                    e.target.value
+                  );
+                  this.setState(newState);
+                }}
               />
               <label>multiple:</label>
               <Checkbox
                 color="primary"
                 inputProps={{ "aria-label": "secondary checkbox" }}
+                onChange={(e) => {
+                  const newState = set(
+                    ["values", "operations", "multiple"],
+                    e.target.value
+                  );
+                  this.setState(newState);
+                }}
               />
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={this.props.ondelete}
-              >
-                <DeleteIcon />
-              </IconButton>
             </Typography>
           }
         ></MyExpantionPanel>
@@ -119,6 +188,13 @@ export default class Program extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                onChange={(e) => {
+                  const newState = set(
+                    ["values", "result", "type"],
+                    e.target.value
+                  );
+                  this.setState(newState);
+                }}
               />
               <TextField
                 label="Value"
@@ -127,17 +203,31 @@ export default class Program extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                onChange={(e) => {
+                  const newState = set(
+                    ["values", "result", "value"],
+                    e.target.value
+                  );
+                  this.setState(newState);
+                }}
               />
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={this.props.ondelete}
-              >
-                <DeleteIcon />
-              </IconButton>
             </Typography>
           }
         ></MyExpantionPanel>
+        <IconButton
+          onClick={() => {
+            this.handleSent(this.state.values);
+          }}
+        >
+          <DoneIcon fontSize="small" color="blue"></DoneIcon>
+        </IconButton>
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          onClick={this.props.ondelete}
+        >
+          <DeleteIcon />
+        </IconButton>
       </div>
     );
   }
