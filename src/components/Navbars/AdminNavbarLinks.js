@@ -20,6 +20,11 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
+import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import SignIn from "./../sign-in/SignIn";
+import { useHistory } from "react-router-dom";
+import history from "./../../history";
 
 const useStyles = makeStyles(styles);
 
@@ -27,7 +32,7 @@ export default function AdminNavbarLinks() {
   const classes = useStyles();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
-  const handleClickNotification = event => {
+  const handleClickNotification = (event) => {
     if (openNotification && openNotification.contains(event.target)) {
       setOpenNotification(null);
     } else {
@@ -37,16 +42,20 @@ export default function AdminNavbarLinks() {
   const handleCloseNotification = () => {
     setOpenNotification(null);
   };
-  const handleClickProfile = event => {
+  const handleClickProfile = (event) => {
     if (openProfile && openProfile.contains(event.target)) {
       setOpenProfile(null);
     } else {
       setOpenProfile(event.currentTarget);
     }
   };
+
   const handleCloseProfile = () => {
-    setOpenProfile(null);
+    history.push("/admin/user");
   };
+
+  // const [redirect, handleCloseProfile] = React.useState("/signin");
+
   return (
     <div>
       {/* <div className={classes.searchWrapper}>
@@ -187,7 +196,7 @@ export default function AdminNavbarLinks() {
               id="profile-menu-list-grow"
               style={{
                 transformOrigin:
-                  placement === "bottom" ? "center top" : "center bottom"
+                  placement === "bottom" ? "center top" : "center bottom",
               }}
             >
               <Paper>
