@@ -22,13 +22,7 @@ import history from "./history";
 // core components
 import Admin from "layouts/Admin.js";
 import RTL from "layouts/RTL.js";
-<<<<<<< HEAD
-import SignIn from "components/sign-in/SignIn"
-import SignUp from "components/sign-up/SignUp"
-
-=======
 import SignIn from "components/sign-in/SignIn";
->>>>>>> 5ed4a42b7a21aec9778d336c80a79c1368cd68e5
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 import { UserProfile } from "views/UserProfile/UserProfile.js";
@@ -39,11 +33,7 @@ ReactDOM.render(
       <Route path="/admin" component={Admin} />
       <Route path="/rtl" component={RTL} />
       <Route path="/signin" component={SignIn} />
-<<<<<<< HEAD
-      <Route path="/signup" component={SignUp} />
-=======
       {/* <Route path="/user" component={UserProfile} /> */}
->>>>>>> 5ed4a42b7a21aec9778d336c80a79c1368cd68e5
       <Redirect from="/" to="/signin" />
       {/* <Redirect from="/signin" to="/admin/dashboard" /> */}
     </Switch>
