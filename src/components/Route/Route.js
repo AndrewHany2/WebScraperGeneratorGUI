@@ -60,17 +60,17 @@ class Route extends Component {
         />
         <MyExpantionPanel
           headName={"Methods"}
-          addPanelCompName={"Method"}
+          addPanelCompName={"ADD Method"}
           addPanelComp={<Method dataSent={this.handleSent}></Method>}
         ></MyExpantionPanel>
         <MyExpantionPanel
           headName={"Parameters"}
-          addPanelCompName={"Parameter"}
+          addPanelCompName={"ADD Parameter"}
           addPanelComp={<Parameter dataSent={this.handleSent}></Parameter>}
         ></MyExpantionPanel>
         <MyExpantionPanel
           headName={"Responses"}
-          addPanelCompName={"Response"}
+          addPanelCompName={"ADD Response"}
           addPanelComp={<Response dataSent={this.handleSent}></Response>}
         ></MyExpantionPanel>
         <IconButton
