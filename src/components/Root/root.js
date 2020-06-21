@@ -11,12 +11,12 @@ class Rt extends Component {
         <MainInfo></MainInfo>
         <MyExpantionPanel
           headName={"Routes"}
-          addPanelCompName={"Route"}
+          addPanelCompName={"ADD Route"}
           addPanelComp={<Route></Route>}
         ></MyExpantionPanel>
         <MyExpantionPanel
           headName={"Program"}
-          addPanelCompName={"Program"}
+          addPanelCompName={"ADD Program"}
           addPanelComp={<Program></Program>}
         ></MyExpantionPanel>
         {/* <Program></Program> */}
