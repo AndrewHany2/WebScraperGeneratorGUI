@@ -51,16 +51,27 @@ class Route extends Component {
     var arr = this.state.finalValue;
     for (let i in arr) {
       var firstObj = values;
+      console.log("firstObj : ");
+      console.log(firstObj);
       var secondObj = arr[i];
+      console.log("secondObj : ");
+      console.log(secondObj);
+      console.log("compare result : ");
+      console.log(JSON.stringify(firstObj) === JSON.stringify(secondObj));
       if (JSON.stringify(firstObj) === JSON.stringify(secondObj)) return true;
     }
   };
 
   handleSent = (values) => {
-    if (!this.checkIfDuplicated(values)) {
+    if (!this.checkIfDuplicated(values) && values.length != 0) {
       var temp = [...this.state.finalValue, values];
       this.setState({ finalValue: temp });
     }
+    console.log("values : ");
+    console.log(this.state.values);
+    console.log("values in parameter : ");
+    console.log(values);
+    console.log("final value : ");
     console.log(this.state.finalValue);
   };
 
@@ -175,18 +186,18 @@ class Route extends Component {
                   />
                 </RadioGroup>
                 <IconButton
+                  onClick={() => {
+                    this.handleSent(this.state.values.method);
+                  }}
+                >
+                  <DoneIcon fontSize="small" color="blue"></DoneIcon>
+                </IconButton>
+                <IconButton
                   edge="end"
                   aria-label="delete"
                   onClick={this.props.ondelete}
                 >
                   <DeleteIcon />
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    this.props.dataSent(this.state.values);
-                  }}
-                >
-                  <DoneIcon fontSize="small" color="blue"></DoneIcon>
                 </IconButton>
               </FormControl>
             </div>
@@ -259,24 +270,24 @@ class Route extends Component {
                 }}
               />
               <Checkbox
-                label={"Required"}
+                color="primary"
+                inputProps={{ "aria-label": "secondary checkbox" }}
                 onChange={(e) => {
                   const newState = set(
                     ["values", "parameter", "required"],
-                    e.target.value
+                    e.target.checked
                   );
                   this.setState(newState);
                 }}
-              ></Checkbox>
+              />
               <label>Required</label>
               <IconButton
                 onClick={() => {
-                  this.props.dataSent(this.state.values);
+                  this.handleSent(this.state.values.parameter);
                 }}
               >
                 <DoneIcon fontSize="small" color="blue"></DoneIcon>
               </IconButton>
-
               <IconButton
                 edge="end"
                 aria-label="delete"
@@ -338,13 +349,6 @@ class Route extends Component {
                   this.setState(newState);
                 }}
               />
-              <IconButton
-                onClick={() => {
-                  this.props.dataSent(this.state.values);
-                }}
-              >
-                <DoneIcon fontSize="small" color="blue"></DoneIcon>
-              </IconButton>
               {this.state.added}
               <IconButton
                 edge="end"
@@ -353,12 +357,20 @@ class Route extends Component {
               >
                 <DeleteIcon />
               </IconButton>
+              <IconButton
+                onClick={() => {
+                  this.handleSent(this.state.values.response);
+                }}
+              >
+                <DoneIcon fontSize="small" color="blue"></DoneIcon>
+              </IconButton>
             </div>
           }
         ></MyExpantionPanel>
         <IconButton
           onClick={() => {
-            this.handleSent(this.state.values);
+            this.handleSent(this.state.values.routeMainInfo);
+            this.props.dataSent(this.state.finalValue);
           }}
         >
           <DoneIcon fontSize="small" color="blue"></DoneIcon>

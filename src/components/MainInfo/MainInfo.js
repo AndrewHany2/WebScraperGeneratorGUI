@@ -11,6 +11,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
 import { set } from "lodash/fp";
 import MyExpantionPanel from "./../MyExpantionPanel/MyExpantionPanel";
+import values from "./../GlobalState/GlobalState"
 
 class MainInfo extends Component {
   constructor(props) {
@@ -25,27 +26,44 @@ class MainInfo extends Component {
         host: {
           hostName: "Host",
           url: "",
-          default: "false",
+          default: false,
         },
       },
       finalValue: [],
     };
   }
 
+  componentDidUpdate=( prevProps,  prevState)=>
+  {
+    console.log(prevState)
+  }
+
   checkIfDuplicated = (values) => {
     var arr = this.state.finalValue;
     for (let i in arr) {
       var firstObj = values;
+      console.log("firstObj : ");
+      console.log(firstObj);
       var secondObj = arr[i];
+      console.log("secondObj : ");
+      console.log(secondObj);
+      console.log("compare result : ");
+      console.log(JSON.stringify(firstObj) === JSON.stringify(secondObj));
       if (JSON.stringify(firstObj) === JSON.stringify(secondObj)) return true;
     }
   };
 
   handleSent = (values) => {
-    if (!this.checkIfDuplicated(values)) {
+    if (!this.checkIfDuplicated(values) && values.length != 0) {
       var temp = [...this.state.finalValue, values];
       this.setState({ finalValue: temp });
     }
+    console.log("values : ");
+    console.log(this.state.values);
+    console.log("values in parameter : ");
+    console.log(values);
+    console.log("final value : ");
+    console.log(this.state.finalValue);
   };
 
   handleChange = (panel) => (event, isExpanded) => {
@@ -62,19 +80,6 @@ class MainInfo extends Component {
           headName={"Main"}
           addPanelCompName={"ADD Host"}
           addPanelComp={
-            // <ExpansionPanel
-            //   expanded={this.state.expanded === "panel1"}
-            //   onChange={this.handleChange("panel1")}
-            // >
-            //   <ExpansionPanelSummary
-            //     expandIcon={<ExpandMoreIcon />}
-            //     aria-controls="panel1bh-content"
-            //     id="panel1bh-header"
-            //   >
-            //     <Typography></Typography>
-            //   </ExpansionPanelSummary>
-            //   <ExpansionPanelDetails>
-            //     <Typography>
             <MyExpantionPanel headName={"Host"}>
               <TextField
                 label={this.state.values.host.hostName}
@@ -84,11 +89,12 @@ class MainInfo extends Component {
                   shrink: true,
                 }}
                 onChange={(e) => {
-                  const newState = set(
-                    ["values", "host", "hostName"],
-                    e.target.value
-                  );
-                  this.setState(newState);
+                  // const newState = set(
+                  //   ["values", "host", "hostName"],
+                  //   e.target.value
+                  // );
+                  // this.setState(newState);
+                  values.mainInfo.Host.push({hostName: e.target.value})
                 }}
               />
               <TextField
@@ -99,11 +105,12 @@ class MainInfo extends Component {
                   shrink: true,
                 }}
                 onChange={(e) => {
-                  const newState = set(
-                    ["values", "host", "url"],
-                    e.target.value
-                  );
-                  this.setState(newState);
+                  // const newState = set(
+                  //   ["values", "host", "url"],
+                  //   e.target.value
+                  // );
+                  // this.setState(newState);
+                  values.mainInfo.Host.url=e.target.value;
                 }}
               />
               <label>default:</label>
@@ -111,11 +118,12 @@ class MainInfo extends Component {
                 color="primary"
                 inputProps={{ "aria-label": "secondary checkbox" }}
                 onChange={(e) => {
-                  const newState = set(
-                    ["values", "host", "default"],
-                    e.target.value
-                  );
-                  this.setState(newState);
+                  // const newState = set(
+                  //   ["values", "host", "default"],
+                  //   e.target.checked
+                  // );
+                  // this.setState(newState);
+                  values.mainInfo.Host.default=e.target.checked;
                 }}
               />
               <IconButton
@@ -125,24 +133,14 @@ class MainInfo extends Component {
               >
                 <DeleteIcon />
               </IconButton>
+              <IconButton
+                onClick={() => {
+                  this.handleSent(this.state.values.host);
+                }}
+              >
+                <DoneIcon fontSize="small" color="blue"></DoneIcon>
+              </IconButton>
             </MyExpantionPanel>
-            /* <IconButton
-                      onClick={() => {
-                        this.props.dataSent(this.state.values);
-                        var added = (
-                          <div>
-                            {this.state.values.host.hostName} added successfully
-                          </div>
-                        );
-                        this.setState({ added: added });
-                      }}
-                    >
-                      <DoneIcon fontSize="small" color="blue"></DoneIcon>
-                    </IconButton>
-                    // {this.state.added} */
-            //     </Typography>
-            //   </ExpansionPanelDetails>
-            // </ExpansionPanel>
           }
         >
           <TextField
@@ -155,11 +153,12 @@ class MainInfo extends Component {
               shrink: true,
             }}
             onChange={(e) => {
-              const newState = set(
-                ["values", "mainInfo", "name"],
-                e.target.value
-              );
-              this.setState(newState);
+              // const newState = set(
+              //   ["values", "mainInfo", "name"],
+              //   e.target.value
+              // );
+              // this.setState(newState);
+              values.mainInfo.name=e.target.value;
             }}
           />
           <TextField
@@ -172,17 +171,19 @@ class MainInfo extends Component {
               shrink: true,
             }}
             onChange={(e) => {
-              const newState = set(
-                ["values", "mainInfo", "defaultHeaders"],
-                e.target.value
-              );
-              this.setState(newState);
+              // const newState = set(
+              //   ["values", "mainInfo", "defaultHeaders"],
+              //   e.target.value
+              // );
+              // this.setState(newState);
+              values.mainInfo.defaultHeaders=e.target.value;
             }}
           />
           <IconButton
             onClick={() => {
-              this.handleSent(this.state.values);
-              console.log(this.state.finalValue);
+              // this.handleSent(this.state.values.mainInfo);
+              // this.props.dataSent(this.state.finalValue);
+              console.log(values);
             }}
           >
             <DoneIcon fontSize="small" color="blue"></DoneIcon>
