@@ -19,6 +19,7 @@ import Program from "./../../components/Program/Program";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
+import openScraper from '../../global'
 
 class Schema extends Component {
   state = {
@@ -50,7 +51,7 @@ class Schema extends Component {
     }
   };
 
-  handleSubmit = () => {};
+  handleSubmit = () => { };
 
   render() {
     const styles = {
@@ -109,6 +110,8 @@ class Schema extends Component {
                       <Button
                         onClick={() => {
                           console.log(this.state.finalValue);
+                          console.log("Open Scraper:");
+                          console.log(openScraper);
                         }}
                         color="primary"
                       >

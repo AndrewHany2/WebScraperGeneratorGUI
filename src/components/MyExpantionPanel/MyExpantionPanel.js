@@ -13,12 +13,10 @@ class MyExpantionPanel extends Component {
   state = {};
 
   handleChange = (panel) => (event, isExpanded) => {
-    // setExpanded(isExpanded ? panel : false); // //previous state manager , now not needed //
-    isExpanded
-      ? this.setState({ expanded: panel })
-      : this.setState({ expanded: false }); //new state manager//
+    this.setState({ expanded: isExpanded ? panel: false })
   };
-  a() {
+
+  render() {
     return (
       <div>
         <ExpansionPanel
@@ -35,7 +33,7 @@ class MyExpantionPanel extends Component {
           <ExpansionPanelDetails>
             <Typography>
               {this.props.children}
-              <AddPanel comp={this.props.addPanelComp}>
+              <AddPanel comp={this.props.addPanelComp} onclick={this.props.onclick}>
                 {this.props.addPanelCompName}
               </AddPanel>
             </Typography>
@@ -43,9 +41,6 @@ class MyExpantionPanel extends Component {
         </ExpansionPanel>
       </div>
     );
-  }
-  render() {
-    return this.a();
   }
 }
 

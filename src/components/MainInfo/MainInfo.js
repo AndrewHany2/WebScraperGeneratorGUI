@@ -12,89 +12,63 @@ import DoneIcon from "@material-ui/icons/Done";
 import { set } from "lodash/fp";
 import MyExpantionPanel from "./../MyExpantionPanel/MyExpantionPanel";
 import values from "./../GlobalState/GlobalState"
+import openScraper from '../../global'
 
 class MainInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: "false",
-      values: {
-        mainInfo: {
-          name: "",
-          defaultHeaders: "",
-        },
-        host: {
-          hostName: "Host",
-          url: "",
-          default: false,
-        },
-      },
-      finalValue: [],
-    };
-  }
-
-  componentDidUpdate=( prevProps,  prevState)=>
-  {
-    console.log(prevState)
-  }
-
-  checkIfDuplicated = (values) => {
-    var arr = this.state.finalValue;
-    for (let i in arr) {
-      var firstObj = values;
-      console.log("firstObj : ");
-      console.log(firstObj);
-      var secondObj = arr[i];
-      console.log("secondObj : ");
-      console.log(secondObj);
-      console.log("compare result : ");
-      console.log(JSON.stringify(firstObj) === JSON.stringify(secondObj));
-      if (JSON.stringify(firstObj) === JSON.stringify(secondObj)) return true;
+      mainInfo: {
+        name: "",
+        defaultHeaders: "",
+        hosts: []
+      }
     }
   };
 
-  handleSent = (values) => {
-    if (!this.checkIfDuplicated(values) && values.length != 0) {
-      var temp = [...this.state.finalValue, values];
-      this.setState({ finalValue: temp });
-    }
-    console.log("values : ");
-    console.log(this.state.values);
-    console.log("values in parameter : ");
-    console.log(values);
-    console.log("final value : ");
-    console.log(this.state.finalValue);
-  };
+  componentDidUpdate() {
+    openScraper.mainInfo = this.state.mainInfo;
+  }
 
-  handleChange = (panel) => (event, isExpanded) => {
-    // setExpanded(isExpanded ? panel : false); // //previous state manager , now not needed //
-    isExpanded
-      ? this.setState({ expanded: panel })
-      : this.setState({ expanded: false }); //new state manager//
-  };
+  handleDelete = (e) => {
+    const index = e.target.closest("button[testmain]").getAttribute("index");
 
+    console.log(index);
+
+    console.log("pre:");
+    console.log(this.state.mainInfo.hosts);
+
+    var hosts = [...this.state.mainInfo.hosts].splice(index, 1);
+    
+    console.log("post:");
+    console.log(hosts);
+    
+    this.setState({ mainInfo: { name: this.state.mainInfo.name, defaultHeaders: this.state.mainInfo.defaultHeaders, hosts: [...hosts] } }, () => console.log(this.state.mainInfo.hosts));
+  }
+
+
+  
   render() {
     return (
       <div>
         <MyExpantionPanel
           headName={"Main"}
-          addPanelCompName={"ADD Host"}
+          addPanelCompName={"Add Host"}
+          onclick={() => { this.setState({ mainInfo: { name: this.state.mainInfo.name, defaultHeaders: this.state.mainInfo.defaultHeaders, hosts: [...this.state.mainInfo.hosts, { name: "", url: "", default: false }] } }); console.log(";;") }}
           addPanelComp={
             <MyExpantionPanel headName={"Host"}>
               <TextField
-                label={this.state.values.host.hostName}
+                label={this.state.mainInfo.hosts[this.state.mainInfo.hosts.length - 1]?.name}
                 style={{ margin: 8 }}
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
                 }}
+                inputProps={{
+                  index: (this.state.mainInfo.hosts.length == 0) ? 0 : this.state.mainInfo.hosts.length
+                }}
                 onChange={(e) => {
-                  // const newState = set(
-                  //   ["values", "host", "hostName"],
-                  //   e.target.value
-                  // );
-                  // this.setState(newState);
-                  values.mainInfo.Host.push({hostName: e.target.value})
+                  this.state.mainInfo.hosts[e.target.getAttribute("index")].name = e.target.value;
                 }}
               />
               <TextField
@@ -104,41 +78,32 @@ class MainInfo extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                inputProps={{
+                  index: (this.state.mainInfo.hosts.length == 0) ? 0 : this.state.mainInfo.hosts.length
+                }}
                 onChange={(e) => {
-                  // const newState = set(
-                  //   ["values", "host", "url"],
-                  //   e.target.value
-                  // );
-                  // this.setState(newState);
-                  values.mainInfo.Host.url=e.target.value;
+                  this.state.mainInfo.hosts[e.target.getAttribute("index")].url = e.target.value;
                 }}
               />
               <label>default:</label>
               <Checkbox
                 color="primary"
-                inputProps={{ "aria-label": "secondary checkbox" }}
+                inputProps={{
+                  "aria-label": "secondary checkbox",
+                  index: (this.state.mainInfo.hosts.length == 0) ? 0 : this.state.mainInfo.hosts.length
+                }}
                 onChange={(e) => {
-                  // const newState = set(
-                  //   ["values", "host", "default"],
-                  //   e.target.checked
-                  // );
-                  // this.setState(newState);
-                  values.mainInfo.Host.default=e.target.checked;
+                  this.state.mainInfo.hosts[e.target.getAttribute("index")].default = e.target.checked;
                 }}
               />
               <IconButton
                 edge="end"
                 aria-label="delete"
-                onClick={this.props.ondelete}
+                onClick={this.handleDelete}
+                index={(this.state.mainInfo.hosts.length == 0) ? 0 : this.state.mainInfo.hosts.length}
+                testmain=""
               >
                 <DeleteIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => {
-                  this.handleSent(this.state.values.host);
-                }}
-              >
-                <DoneIcon fontSize="small" color="blue"></DoneIcon>
               </IconButton>
             </MyExpantionPanel>
           }
@@ -153,12 +118,7 @@ class MainInfo extends Component {
               shrink: true,
             }}
             onChange={(e) => {
-              // const newState = set(
-              //   ["values", "mainInfo", "name"],
-              //   e.target.value
-              // );
-              // this.setState(newState);
-              values.mainInfo.name=e.target.value;
+              this.state.mainInfo.name = e.target.value;
             }}
           />
           <TextField
@@ -171,23 +131,9 @@ class MainInfo extends Component {
               shrink: true,
             }}
             onChange={(e) => {
-              // const newState = set(
-              //   ["values", "mainInfo", "defaultHeaders"],
-              //   e.target.value
-              // );
-              // this.setState(newState);
-              values.mainInfo.defaultHeaders=e.target.value;
+              this.state.mainInfo.defaultHeaders = e.target.value;
             }}
           />
-          <IconButton
-            onClick={() => {
-              // this.handleSent(this.state.values.mainInfo);
-              // this.props.dataSent(this.state.finalValue);
-              console.log(values);
-            }}
-          >
-            <DoneIcon fontSize="small" color="blue"></DoneIcon>
-          </IconButton>
         </MyExpantionPanel>
       </div>
     );

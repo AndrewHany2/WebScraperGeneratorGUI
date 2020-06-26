@@ -6,6 +6,7 @@ import Program from "../Program/Program";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
+import openScraper from '../../global'
 
 class Rt extends Component {
   constructor(props) {
@@ -48,6 +49,8 @@ class Rt extends Component {
         <IconButton
           onClick={() => {
             console.log(this.state.finalValue);
+            console.log("Open Scraper:");
+            console.log(openScraper);
           }}
         >
           <DoneIcon fontSize="small" color="blue"></DoneIcon>
