@@ -14,7 +14,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import { card } from "assets/jss/material-dashboard-react";
 import MainInfo from "./../../components/MainInfo/MainInfo";
 import MyExpantionPanel from "./../../components/MyExpantionPanel/MyExpantionPanel";
-import Route from "./../../components/Route/Route";
+import Route from "../../components/Route/Route";
 import Program from "./../../components/Program/Program";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
