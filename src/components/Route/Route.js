@@ -433,6 +433,16 @@ class Route extends Component {
     }
     return (
       <div>
+                     <ExpansionPanel>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="main-panel-content"
+                id="main-panel-header"
+              >
+                <Typography>Route</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <Typography>
         <Button
         onClick={() => {
           this.setState({
@@ -451,18 +461,7 @@ class Route extends Component {
         {
           this.state.route.routes.map((a,i)=>
           {
-            return
-            (
-              <ExpansionPanel>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="main-panel-content"
-                id="main-panel-header"
-              >
-                <Typography>Route</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <Typography>
+            return(<div>
                   <div>
                   <Button
                     onClick={() => {
@@ -542,13 +541,14 @@ class Route extends Component {
                     {
                       responseComp
                     }
-                    </div>
-                </Typography>
-              </ExpansionPanelDetails>
-              </ExpansionPanel>
-            )
+                    </div> 
+                    </div>)
+                    
           })
         }
+                        </Typography>
+              </ExpansionPanelDetails>
+              </ExpansionPanel>
       </div>
     );        
   }
