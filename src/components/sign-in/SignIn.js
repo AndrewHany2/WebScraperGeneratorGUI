@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import fire from 'firebase';
+import history from "./../../history"
 
 function Copyright() {
   return (
@@ -45,6 +47,23 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+
+// function authListener() {
+//   fire.auth().onAuthStateChanged((user) => {
+//     console.log(user);
+//     if (user) {
+//       setUser(user);
+//       localStorage.setItem('user', user.uid);
+//     } else {
+//       this.setState({ user: null });
+//       localStorage.removeItem('user');
+//     }
+//   });
+// }
+// useEffect(() => {
+//   authListener();
+// });
+// const [user, setUser] = useState(null);
 
 export default function SignIn() {
   const classes = useStyles();
@@ -93,6 +112,7 @@ export default function SignIn() {
             color="primary"
             className={classes.submit}
             href="/admin/dashboard"
+            // onClick={()=>{if(user){history.push}}}
           >
             Sign In
           </Button>

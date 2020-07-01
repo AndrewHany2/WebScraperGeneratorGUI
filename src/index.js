@@ -24,10 +24,9 @@ import Admin from "layouts/Admin.js";
 import RTL from "layouts/RTL.js";
 import SignIn from "components/sign-in/SignIn";
 import SignUp from "components/sign-up/SignUp";
-
-
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 import { UserProfile } from "views/UserProfile/UserProfile.js";
+
 
 ReactDOM.render(
   <Router history={history}>
@@ -43,3 +42,4 @@ ReactDOM.render(
   </Router>,
   document.getElementById("root")
 );
+

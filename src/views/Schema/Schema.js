@@ -20,6 +20,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
 import openScraper from '../../global'
+import Definition from "components/Definition/Definition";
 
 class Schema extends Component {
   state = {
@@ -104,6 +105,13 @@ class Schema extends Component {
                           addPanelCompName={"ADD Program"}
                           addPanelComp={
                             <Program dataSent={this.handleSent}></Program>
+                          }
+                        ></MyExpantionPanel>
+                        <MyExpantionPanel
+                          headName={"Definition"}
+                          addPanelCompName={"ADD Definition"}
+                          addPanelComp={
+                            <Definition></Definition>
                           }
                         ></MyExpantionPanel>
                       </div>

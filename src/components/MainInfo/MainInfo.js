@@ -15,39 +15,70 @@ class MainInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      addHost:false,
+      addDefaultHeader:false,
       mainInfo: {
         name: "",
-        defaultHeaders: "",
+        defaultHeaders: [],
         hosts: []
       }
     }
   };
 
   componentDidUpdate() {
-    // let mainInfo = this.state.mainInfo;
-    // mainInfo.hosts.forEach(v => delete v.id); // delete is bad
-    // https://stackoverflow.com/questions/18133635/remove-property-for-all-objects-in-array
-    // Make it all at once on sending to api
-
     openScraper.mainInfo = this.state.mainInfo;
   }
 
-  handleDelete = (e) => {
-    const id = e.target.closest("button[host-id]").getAttribute("host-id");
+  handleDeleteDefaultHeader = (e) => {
+    const id = e.target.closest("button[defaultHeader-id]").getAttribute("defaultHeader-id");
 
-    this.state.mainInfo.hosts.find(host => host.id == host.id);
+    this.state.mainInfo.defaultHeaders.find(defaultHeader => defaultHeader.id == defaultHeader.id);
 
-    var hosts = [...this.state.mainInfo.hosts];
-    hosts.splice(id, 1);
+    var defaultHeaders = [...this.state.mainInfo.defaultHeaders];
+    defaultHeaders.splice(id, 1);
 
     this.setState({
       mainInfo: {
         name: this.state.mainInfo.name,
-        defaultHeaders: this.state.mainInfo.defaultHeaders,
-        hosts: [...hosts]
+        hosts:[...this.state.mainInfo.hosts],
+        defaultHeaders: [...defaultHeaders]
       }
-    }, () => console.log(this.state.mainInfo.hosts));
+    }, () => console.log(this.state.mainInfo.defaultHeaders));
   }
+
+  updateDefaultHeader = (id, property, value) => {
+    let defaultHeaders = this.state.mainInfo.defaultHeaders;
+    this.state.mainInfo.defaultHeaders.find((defaultHeader, i) => {
+      if (defaultHeader.id === id) {
+        defaultHeaders[i][property] = value;
+        return true;
+      }
+    });
+    this.setState({
+      mainInfo: {
+        name: this.state.mainInfo.name,
+        hosts:[...this.state.mainInfo.hosts],
+        defaultHeaders: defaultHeaders
+      }
+    });
+  }
+  
+    handleDeleteHost = (e) => {
+      const id = e.target.closest("button[host-id]").getAttribute("host-id");
+  
+      this.state.mainInfo.hosts.find(host => host.id == host.id);
+  
+      var hosts = [...this.state.mainInfo.hosts];
+      hosts.splice(id, 1);
+  
+      this.setState({
+        mainInfo: {
+          name: this.state.mainInfo.name,
+          defaultHeaders:[...this.state.mainInfo.defaultHeaders],
+          hosts: [...hosts],
+        }
+      }, () => console.log(this.state.mainInfo.hosts));
+    }
 
   updateHost = (id, property, value) => {
     let hosts = this.state.mainInfo.hosts;
@@ -57,11 +88,10 @@ class MainInfo extends Component {
         return true;
       }
     });
-
     this.setState({
       mainInfo: {
         name: this.state.mainInfo.name,
-        defaultHeaders: this.state.mainInfo.defaultHeaders,
+        defaultHeaders: [...this.state.mainInfo.defaultHeaders],
         hosts: hosts
       }
     });
@@ -72,6 +102,107 @@ class MainInfo extends Component {
   };
 
   render() {
+    let defaultHeaderComp;
+    let hostComp;
+    if(this.state.addDefaultHeader)
+    {
+      defaultHeaderComp=                
+      this.state.mainInfo.defaultHeaders.map((defaultHeader, i) => {
+        return (
+          <ExpansionPanel
+            key={i}
+            expanded={this.state.expanded === ("panel-" + i)}
+            onChange={this.handleChange("panel-" + i)}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={"panel-" + i + "-content"}
+              id={"panel-" + i + "-header"}
+            >
+              <Typography>{defaultHeader.name}</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <TextField
+                label="Default Header"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={defaultHeader.name}
+                onChange={(e) => this.updateDefaultHeader(defaultHeader.id, "name", e.target.value)}
+              />
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={this.handleDeleteDefaultHeader}
+                defaultHeader-id={defaultHeader.id}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        );
+      })
+    }
+    if(this.state.addHost)
+    {
+      hostComp=                     
+      this.state.mainInfo.hosts.map((host, i) => {
+        return (
+          <ExpansionPanel
+            key={i}
+            expanded={this.state.expanded === ("panel-" + i)}
+            onChange={this.handleChange("panel-" + i)}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={"panel-" + i + "-content"}
+              id={"panel-" + i + "-header"}
+            >
+              <Typography>{host.name}</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <TextField
+                label="host"
+                style={{ margin: 8 }}
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={host.name}
+                onChange={(e) => this.updateHost(host.id, "name", e.target.value)}
+              />
+              <TextField
+                label="url"
+                style={{ margin: 8 }}
+                margin="normal"
+                value={host.url}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={(e) => this.updateHost(host.id, "url", e.target.value)}
+              />
+              <label>default:</label>
+              <Checkbox
+                color="primary"
+                inputProps={{
+                  "aria-label": "secondary checkbox",
+                }}
+                checked={host.default}
+                onChange={(e) => this.updateHost(host.id, "default", e.target.checked)}
+              />
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={this.handleDeleteHost}
+                host-id={host.id}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        );
+      })           
+    }
     return (
       <div>
         <ExpansionPanel>
@@ -84,13 +215,50 @@ class MainInfo extends Component {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
+            <TextField
+              label="Name"
+              style={{ margin: 8 }}
+              margin="normal"
+              onChange={(e) => 
+                this.setState({
+                  mainInfo: {
+                    name: e.target.value,
+                    defaultHeaders:[...this.state.mainInfo.defaultHeaders],
+                    hosts:[...this.state.mainInfo.hosts],
+                  }
+                })}
+            />
+            <div>
               <Button
                 onClick={() => {
                   this.setState({
+                    addDefaultHeader:true,
                     mainInfo:
                     {
                       name: this.state.mainInfo.name,
-                      defaultHeaders: this.state.mainInfo.defaultHeaders,
+                      hosts:[...this.state.mainInfo.hosts],
+                      defaultHeaders: [...this.state.mainInfo.defaultHeaders, {
+                        id: (this.state.mainInfo.defaultHeaders[this.state.mainInfo.defaultHeaders.length - 1]?.id ?? -1) + 1,
+                        name: ""
+                      }]            
+                    }
+                  });               
+                }}>
+                Add Default Header
+              </Button>
+              {
+                defaultHeaderComp
+              }
+              </div>
+              <div>
+              <Button
+                onClick={() => {
+                  this.setState({
+                    addHost:true,
+                    mainInfo:
+                    {
+                      name: this.state.mainInfo.name,
+                      defaultHeaders:[...this.state.mainInfo.defaultHeaders],
                       hosts: [...this.state.mainInfo.hosts, {
                         id: (this.state.mainInfo.hosts[this.state.mainInfo.hosts.length - 1]?.id ?? -1) + 1,
                         name: "", url: "", default: false
@@ -101,62 +269,9 @@ class MainInfo extends Component {
                 Add Host
                 </Button>
               {
-                this.state.mainInfo.hosts.map((host, i) => {
-                  return (
-                    <ExpansionPanel
-                      key={i}
-                      expanded={this.state.expanded === ("panel-" + i)}
-                      onChange={this.handleChange("panel-" + i)}>
-                      <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls={"panel-" + i + "-content"}
-                        id={"panel-" + i + "-header"}
-                      >
-                        <Typography>{host.name}</Typography>
-                      </ExpansionPanelSummary>
-                      <ExpansionPanelDetails>
-                        <TextField
-                          label="host"
-                          style={{ margin: 8 }}
-                          margin="normal"
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                          value={host.name}
-                          onChange={(e) => this.updateHost(host.id, "name", e.target.value)}
-                        />
-                        <TextField
-                          label="url"
-                          style={{ margin: 8 }}
-                          margin="normal"
-                          value={host.url}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                          onChange={(e) => this.updateHost(host.id, "url", e.target.value)}
-                        />
-                        <label>default:</label>
-                        <Checkbox
-                          color="primary"
-                          inputProps={{
-                            "aria-label": "secondary checkbox",
-                          }}
-                          checked={host.default}
-                          onChange={(e) => this.updateHost(host.id, "default", e.target.checked)}
-                        />
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={this.handleDelete}
-                          host-id={host.id}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                  );
-                })
+                hostComp
               }
+              </div>
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>

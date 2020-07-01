@@ -1,6 +1,8 @@
-
 var openScraper = {
-    mainInfo: {}
+    mainInfo: {},
+    route:{},
+    program:{},
+    definition:{},  
 };
 
 export default openScraper;

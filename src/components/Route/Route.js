@@ -13,202 +13,302 @@ import {
 import DoneIcon from "@material-ui/icons/Done";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { set } from "lodash/fp";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import openScraper from '../../global'
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+
 
 class Route extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedValue: "",
-      values: {
-        method: {
-          name: "Method",
-          summary: "",
-          operationId: "",
-          description: "",
-          outputFile: "",
-        },
-        parameter: {
-          name: "Parameter",
-          in: "",
-          description: "",
-          type: "",
-          required: "",
-        },
-        response: {
-          responseCode: "",
-          description: "",
-          schema: "",
-        },
-        routeMainInfo: {
-          name: "",
-        },
-      },
-      finalValue: [],
-    };
+      addMethod:false,
+      addParameter:false,
+      addResponse:false,
+      route:
+      {
+        name:"",
+        routes:[],
+        methods:[],
+        parameters:[],
+        responses:[]
+      }
+  };
+}
+
+  componentDidUpdate() {
+    openScraper.route = this.state.route;
   }
 
-  checkIfDuplicated = (values) => {
-    var arr = this.state.finalValue;
-    for (let i in arr) {
-      var firstObj = values;
-      console.log("firstObj : ");
-      console.log(firstObj);
-      var secondObj = arr[i];
-      console.log("secondObj : ");
-      console.log(secondObj);
-      console.log("compare result : ");
-      console.log(JSON.stringify(firstObj) === JSON.stringify(secondObj));
-      if (JSON.stringify(firstObj) === JSON.stringify(secondObj)) return true;
-    }
-  };
+  handleDeleteRoute = (e) => {
+    const id = e.target.closest("button[route-id]").getAttribute("route-id");
 
-  handleSent = (values) => {
-    if (!this.checkIfDuplicated(values) && values.length != 0) {
-      var temp = [...this.state.finalValue, values];
-      this.setState({ finalValue: temp });
-    }
-    console.log("values : ");
-    console.log(this.state.values);
-    console.log("values in parameter : ");
-    console.log(values);
-    console.log("final value : ");
-    console.log(this.state.finalValue);
+    this.state.route.routes.find(route => route.id == route.id);
+
+    var routes = [...this.state.route.routes];
+    routes.splice(id, 1);
+
+    this.setState({
+      route: {
+        // name: this.state.route.name,
+        // parameters:[...this.state.route.parameters],
+        // responses:[...this.state.route.responses],
+        routes: [...routes]
+      }
+    }, () => console.log(this.state.route.routes));
+  }
+
+
+  updateRoute = (id, property, value) => {
+    let routes = this.state.route.routes;
+    this.state.route.routes.find((route, i) => {
+      if (route.id === id) {
+        routes[i][property] = value;
+        return true;
+      }
+    });
+    this.setState({
+      route: {
+        // name: this.state.route.name,
+        // parameters:[...this.state.route.parameters],
+        // responses:[...this.state.route.responses],
+        routes: routes
+      }
+    });
+  }
+  
+  handleDeleteMethod = (e) => {
+    const id = e.target.closest("button[method-id]").getAttribute("method-id");
+
+    this.state.route.methods.find(method => method.id == method.id);
+
+    var methods = [...this.state.route.methods];
+    methods.splice(id, 1);
+
+    this.setState({
+      route: {
+        name: this.state.route.name,
+        parameters:[...this.state.route.parameters],
+        responses:[...this.state.route.responses],
+        methods: [...methods]
+      }
+    }, () => console.log(this.state.route.methods));
+  }
+
+
+  updateMethod = (id, property, value) => {
+    let methods = this.state.route.methods;
+    this.state.route.methods.find((method, i) => {
+      if (method.id === id) {
+        methods[i][property] = value;
+        return true;
+      }
+    });
+    this.setState({
+      route: {
+        name: this.state.route.name,
+        parameters:[...this.state.route.parameters],
+        responses:[...this.state.route.responses],
+        methods: methods
+      }
+    });
+  }
+
+  handleDeleteParameter = (e) => {
+    const id = e.target.closest("button[parameter-id]").getAttribute("parameter-id");
+
+    this.state.route.parameters.find(parameter => parameter.id == parameter.id);
+
+    var parameters = [...this.state.route.parameters];
+    parameters.splice(id, 1);
+
+    this.setState({
+      route: {
+        name: this.state.route.name,
+        methods:[...this.state.route.methods],
+        responses:[...this.state.route.responses],
+        parameters: [...parameters]
+      }
+    }, () => console.log(this.state.route.parameters));
+  }
+
+
+  updateParameter = (id, property, value) => {
+    let parameters = this.state.route.parameters;
+    this.state.route.parameters.find((parameter, i) => {
+      if (parameter.id === id) {
+        parameters[i][property] = value;
+        return true;
+      }
+    });
+    this.setState({
+      route: {
+        name: this.state.route.name,
+        methods:[...this.state.route.methods],
+        responses:[...this.state.route.responses],
+        parameters: parameters
+      }
+    });
+  }
+
+  updateResponse = (id, property, value) => {
+    let responses = this.state.route.responses;
+    this.state.route.responses.find((response, i) => {
+      if (response.id === id) {
+        responses[i][property] = value;
+        return true;
+      }
+    });
+    this.setState({
+      route: {
+        name: this.state.route.name,
+        methods:[...this.state.route.methods],
+        parameters:[...this.state.route.parameters],
+        responses: responses
+      }
+    });
+  }
+
+  handleDeleteResponse = (e) => {
+    const id = e.target.closest("button[response-id]").getAttribute("response-id");
+
+    this.state.route.responses.find(response => response.id == response.id);
+
+    var responses = [...this.state.route.responses];
+    responses.splice(id, 1);
+
+    this.setState({
+      route: {
+        name: this.state.route.name,
+        methods:[...this.state.route.methods],
+        parameters:[...this.state.route.parameters],
+        responses: [...responses]
+      }
+    }, () => console.log(this.state.route.parameters));
+  }
+
+  handleChange = (panel) => (event, isExpanded) => {
+    this.setState({ expanded: isExpanded ? panel : false })
   };
 
   render() {
-    return (
-      <div>
-        <TextField
-          id="standard-full-width"
-          label="Route Name"
-          style={{ margin: 8 }}
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={(e) => {
-            const newState = set(
-              ["values", "routeMainInfo", "name"],
-              e.target.value
-            );
-            this.setState(newState);
-          }}
-        />
-        <MyExpantionPanel
-          headName={"Methods"}
-          addPanelCompName={"ADD Method"}
-          addPanelComp={
-            <div>
+    let methodComp;
+    let parameterComp;
+    let responseComp;
+    if(this.state.addMethod)
+    {
+      methodComp=                
+      this.state.route.methods.map((method, i) => {
+        return (
+          <ExpansionPanel
+            key={i}
+            expanded={this.state.expanded === ("panel-" + i)}
+            onChange={this.handleChange("panel-" + i)}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={"panel-" + i + "-content"}
+              id={"panel-" + i + "-header"}
+            >
+              <Typography>{method.name}</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
               <TextField
-                label={this.state.values.method.name}
+                label="method"
                 style={{ margin: 8 }}
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "method", "name"],
-                    e.target.value
-                  );
-                  this.setState(newState);
-                }}
+                value={method.name}
+                onChange={(e) => this.updateMethod(method.id, "name", e.target.value)}
               />
               <TextField
-                label="Summary"
+                label="summary"
                 style={{ margin: 8 }}
                 margin="normal"
+                value={method.summary}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "method", "summary"],
-                    e.target.value
-                  );
-                  this.setState(newState);
-                }}
+                onChange={(e) => this.updateMethod(method.id, "summary", e.target.value)}
               />
               <TextField
-                label="Description"
+                label="description"
                 style={{ margin: 8 }}
                 margin="normal"
+                value={method.description}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "method", "description"],
-                    e.target.value
-                  );
-                  this.setState(newState);
-                }}
+                onChange={(e) => this.updateMethod(method.id, "description", e.target.value)}
               />
               <TextField
-                label="Operation Id"
+                label="operationId"
                 style={{ margin: 8 }}
                 margin="normal"
+                value={method.operationId}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "method", "operationId"],
-                    e.target.value
-                  );
-                  this.setState(newState);
-                }}
+                onChange={(e) => this.updateMethod(method.id, "operationId", e.target.value)}
               />
-              <FormControl component="fieldset">
-                <FormLabel component="legend">Output File</FormLabel>
-                <RadioGroup
-                  aria-label="outputFile"
-                  name="outputFile"
-                  value={this.state.values.outputFile}
-                  onChange={(e) => {
-                    const newState = set(
-                      ["values", "method", "outputFile"],
-                      e.target.value
-                    );
-                    this.setState(newState);
-                  }}
-                >
-                  <FormControlLabel
-                    value="Json"
-                    control={<Radio />}
-                    label="Json"
-                  />
-                  <FormControlLabel
-                    value="XML"
-                    control={<Radio />}
-                    label="XML"
-                  />
-                </RadioGroup>
-                <IconButton
-                  onClick={() => {
-                    this.handleSent(this.state.values.method);
-                  }}
-                >
-                  <DoneIcon fontSize="small" color="blue"></DoneIcon>
-                </IconButton>
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={this.props.ondelete}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </FormControl>
-            </div>
-          }
-        ></MyExpantionPanel>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Output File</FormLabel>
+              <RadioGroup
+                aria-label="outputFile"
+                name="outputFile"
+                value={method.outputFile}
+                onChange={(e) => this.updateMethod(method.id, "outputFile", e.target.value)}
+              >
+                <FormControlLabel
+                  value="Json"
+                  control={<Radio />}
+                  label="Json"
+                />
+                <FormControlLabel
+                  value="XML"
+                  control={<Radio />}
+                  label="XML"
+                />
+              </RadioGroup>
+            </FormControl>
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={this.handleDelete}
+              method-id={method.id}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        );
+      })
+    }
+    if(this.state.addParameter)
+    {
+      parameterComp=      
+      this.state.route.parameters.map((parameter, i) => 
+      {
+        return (
 
-        <MyExpantionPanel
-          headName={"Parameters"}
-          addPanelCompName={"ADD Parameter"}
-          addPanelComp={
-            <div>
+          <ExpansionPanel
+            key={i}
+            expanded={this.state.expanded === ("panel-" + i)}
+            onChange={this.handleChange("panel-" + i)}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={"panel-" + i + "-content"}
+              id={"panel-" + i + "-header"}
+            >
+              <Typography>{parameter.name}</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
               <TextField
                 label="Parameter Name"
                 style={{ margin: 8 }}
@@ -216,13 +316,8 @@ class Route extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "parameter", "name"],
-                    e.target.value
-                  );
-                  this.setState(newState);
-                }}
+                value={parameter.name}
+                onChange={(e) => this.updateParameter(parameter.id, "name", e.target.value)}
               />
               <TextField
                 label="Parameter In"
@@ -231,13 +326,8 @@ class Route extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "parameter", "in"],
-                    e.target.value
-                  );
-                  this.setState(newState);
-                }}
+                value={parameter.in}
+                onChange={(e) => this.updateParameter(parameter.id, "in", e.target.value)}
               />
               <TextField
                 label="Description"
@@ -246,13 +336,8 @@ class Route extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "parameter", "description"],
-                    e.target.value
-                  );
-                  this.setState(newState);
-                }}
+                value={parameter.description}
+                onChange={(e) => this.updateParameter(parameter.id, "description", e.target.value)}
               />
               <TextField
                 label="Type"
@@ -261,49 +346,48 @@ class Route extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "parameter", "type"],
-                    e.target.value
-                  );
-                  this.setState(newState);
-                }}
+                value={parameter.type}
+                onChange={(e) => this.updateParameter(parameter.id, "type", e.target.value)}
               />
               <Checkbox
                 color="primary"
                 inputProps={{ "aria-label": "secondary checkbox" }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "parameter", "required"],
-                    e.target.checked
-                  );
-                  this.setState(newState);
-                }}
+                onChange={(e) => this.updateParameter(parameter.id, "default", e.target.checked)}
               />
               <label>Required</label>
-              <IconButton
-                onClick={() => {
-                  this.handleSent(this.state.values.parameter);
-                }}
-              >
-                <DoneIcon fontSize="small" color="blue"></DoneIcon>
-              </IconButton>
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={this.props.ondelete}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </div>
-          }
-        ></MyExpantionPanel>
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={this.handleDeleteParameter}
+              parameter-id={parameter.id}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
 
-        <MyExpantionPanel
-          headName={"Responses"}
-          addPanelCompName={"ADD Response"}
-          addPanelComp={
-            <div>
+        );
+      })
+    }
+    if(this.state.addResponse)
+    {
+      responseComp=      
+      this.state.route.responses.map((response, i) => 
+      {
+        return (
+
+        <ExpansionPanel
+            key={i}
+            expanded={this.state.expanded === ("panel-" + i)}
+            onChange={this.handleChange("panel-" + i)}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={"panel-" + i + "-content"}
+              id={"panel-" + i + "-header"}
+            >
+              <Typography>{response.code}</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
               <TextField
                 label="Response Code"
                 style={{ margin: 8 }}
@@ -311,73 +395,162 @@ class Route extends Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "response", "responseCode"],
-                    e.target.value
-                  );
-                  this.setState(newState);
-                }}
+                value={response.code}
+                onChange={(e) => this.updateResponse(response.id, "code", e.target.value)}
               />
-              <TextField
-                label="Description"
+                            <TextField
+                label="description"
                 style={{ margin: 8 }}
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "response", "description"],
-                    e.target.value
-                  );
-                  this.setState(newState);
-                }}
+                value={response.description}
+                onChange={(e) => this.updateResponse(response.id, "description", e.target.value)}
               />
-              <TextField
-                label="Schema"
+                            <TextField
+                label="schema"
                 style={{ margin: 8 }}
                 margin="normal"
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  const newState = set(
-                    ["values", "response", "schema"],
-                    e.target.value
-                  );
-                  this.setState(newState);
-                }}
+                value={response.schema}
+                onChange={(e) => this.updateResponse(response.id, "schema", e.target.value)}
               />
-              {this.state.added}
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={this.props.ondelete}
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={this.handleDeleteResponse}
+              response-id={response.id}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        );
+      })
+    }
+    return (
+      <div>
+        <Button
+        onClick={() => {
+          this.setState({
+            addMethod:true,
+            route:
+            {
+              routes:[...this.state.routes,{
+                id:(this.state.route.routes[this.state.route.routes.length - 1]?.id ?? -1) + 1,
+                name:"",methods:[],responses:[],parameters:[]
+              }]
+            }
+          });
+        }}>
+        Add Route
+        </Button>
+        {
+          this.state.route.routes.map((a,i)=>
+          {
+            return
+            (
+              <ExpansionPanel>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="main-panel-content"
+                id="main-panel-header"
               >
-                <DeleteIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => {
-                  this.handleSent(this.state.values.response);
-                }}
-              >
-                <DoneIcon fontSize="small" color="blue"></DoneIcon>
-              </IconButton>
-            </div>
-          }
-        ></MyExpantionPanel>
-        <IconButton
-          onClick={() => {
-            this.handleSent(this.state.values.routeMainInfo);
-            this.props.dataSent(this.state.finalValue);
-          }}
-        >
-          <DoneIcon fontSize="small" color="blue"></DoneIcon>
-        </IconButton>
+                <Typography>Route</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <Typography>
+                  <div>
+                  <Button
+                    onClick={() => {
+                      this.setState({
+                        addMethod:true,
+                        route:
+                        { 
+                          routes:[...this.state.routes , {
+                            methods: [...this.state.route.methods, 
+                              {
+                              id: (this.state.route.methods[this.state.route.methods.length - 1]?.id ?? -1) + 1,
+                              name:"Method", summary: "", description: "", operationId: "", description: "",
+                              outputFile: ""
+                            }
+                            ]
+                          }]
+                          // name: this.state.route.name,
+                          // parameters:[...this.state.route.parameters],
+                          // responses:[...this.state.route.responses],
+                          // methods: [...this.state.route.methods, {
+                          //   id: (this.state.route.methods[this.state.route.methods.length - 1]?.id ?? -1) + 1,
+                          //   name:"Method", summary: "", description: "", operationId: "", description: "",
+                          //   outputFile: "",
+                          // }]
+                        }
+                      });
+                    }}>
+                    Add Method
+                    </Button>
+                  {
+                    methodComp
+                  }
+                  </div>
+                  <div>
+                  <Button
+                    onClick={() => {
+                      this.setState({
+                        addParameter:true,
+                        route:
+                        {
+                          name: this.state.route.name,
+                          methods:[...this.state.route.methods],
+                          responses:[...this.state.route.responses],
+                          parameters: [...this.state.route.parameters, {
+                            id: (this.state.route.parameters[this.state.route.parameters.length - 1]?.id ?? -1) + 1,
+                            name: "Parameter", in: "", description: "", type: "",
+                            required: "",
+                          }]
+                        }
+                      });
+                    }}>
+                    Add Parameter
+                    </Button>
+                    {
+                      parameterComp
+                    }
+                    </div>
+                    <div>
+                    <Button
+                    onClick={() => {
+                      this.setState({
+                        addResponse:true,
+                        route:
+                        {
+                          name: this.state.route.name,
+                          methods:[...this.state.route.methods],
+                          parameters:[...this.state.route.parameters],
+                          responses: [...this.state.route.responses, {
+                            id: (this.state.route.responses[this.state.route.responses.length - 1]?.id ?? -1) + 1,
+                            code: "Resposne", description: "", schema: ""
+                          }]
+                        }
+                      });
+                    }}>
+                    Add Response
+                    </Button>
+                    {
+                      responseComp
+                    }
+                    </div>
+                </Typography>
+              </ExpansionPanelDetails>
+              </ExpansionPanel>
+            )
+          })
+        }
       </div>
-    );
+    );        
   }
 }
-
 export default Route;

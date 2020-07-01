@@ -79,7 +79,7 @@ class AddPanel extends Component {
   render() {
     return (
       <div>
-        <Button onClick={() => { this.onAddComponent(); this.props.onclick(); }}>{this.props.children}</Button>
+        <Button onClick={() => { this.onAddComponent();  }}>{this.props.children}</Button>
         {this.state.components}
       </div>
     );
