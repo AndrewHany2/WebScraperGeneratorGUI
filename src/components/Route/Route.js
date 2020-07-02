@@ -20,6 +20,10 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import openScraper from '../../global'
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Select from '@material-ui/core/Select';
 
 class Route extends Component {
   constructor(props) {
@@ -703,15 +707,15 @@ class Route extends Component {
                                                                         value={selector.selectorType}
                                                                         onChange={(e) => { this.updateSelector(route.id, method.id, selector.id, "selectorType", e.target.value) }}
                                                                       >
-                                                                        <MenuItem value={parameter}>Parameter</MenuItem>
-                                                                        <MenuItem value={querySelector}>Query Selector</MenuItem>
-                                                                        <MenuItem value={regex}>Regex</MenuItem>
-                                                                        <MenuItem value={object}>Object</MenuItem>
+                                                                        <MenuItem value={selector.parameter}>Parameter</MenuItem>
+                                                                        <MenuItem value={selector.querySelector}>Query Selector</MenuItem>
+                                                                        <MenuItem value={selector.regex}>Regex</MenuItem>
+                                                                        <MenuItem value={selector.object}>Object</MenuItem>
                                                                       </Select>
                                                                     </FormControl>
                                                                     {
                                                                       selector.selectorType === "parameter" ?
-                                                                        <ReactFragment>
+                                                                        <React.Fragment>
                                                                           <TextField
                                                                             label="selector"
                                                                             style={{ margin: 8 }}
@@ -726,11 +730,11 @@ class Route extends Component {
                                                                             selector.type === "object" ?
                                                                               <div>hazem</div> : null
                                                                           }
-                                                                        </ReactFragment> : null
+                                                                        </React.Fragment> : null
                                                                     }
                                                                     {
                                                                       selector.selectorType === "querySelector" ?
-                                                                        <ReactFragment>
+                                                                        <React.Fragment>
                                                                           <TextField
                                                                             label="selector"
                                                                             style={{ margin: 8 }}
@@ -749,19 +753,19 @@ class Route extends Component {
                                                                               shrink: false,
                                                                             }}
                                                                             value={selector.type}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, type.id, "type", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "type", e.target.value)}
                                                                           />
                                                                           {
                                                                             selector.type === "object" ?
                                                                               <div>hazem</div>
                                                                               : null
                                                                           }
-                                                                        </ReactFragment> : null
+                                                                        </React.Fragment> : null
 
                                                                     }
                                                                     {
                                                                       selector.selectorType === "regex" ?
-                                                                        <ReactFragment>
+                                                                        <React.Fragment>
                                                                           <TextField
                                                                             label="selector"
                                                                             style={{ margin: 8 }}
@@ -780,27 +784,27 @@ class Route extends Component {
                                                                               shrink: false,
                                                                             }}
                                                                             value={selector.type}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, type.id, "type", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "type", e.target.value)}
                                                                           />
                                                                           <TextField
-                                                                            label="regexGroup"
+                                                                            label="regex Group"
                                                                             style={{ margin: 8 }}
                                                                             margin="normal"
                                                                             InputLabelProps={{
                                                                               shrink: false,
                                                                             }}
                                                                             value={selector.regexGroup}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, regexGroup.id, "type", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "regexGroup", e.target.value)}
                                                                           />
                                                                           {
                                                                             selector.type === "object" ?
                                                                               <div>hazem</div> : null
                                                                           }
-                                                                        </ReactFragment> : null
+                                                                        </React.Fragment> : null
                                                                     }
                                                                     {
                                                                       selector.selectorType === "regex" ?
-                                                                        <ReactFragment>
+                                                                        <React.Fragment>
                                                                           <TextField
                                                                             label="selector"
                                                                             style={{ margin: 8 }}
@@ -819,7 +823,7 @@ class Route extends Component {
                                                                               shrink: false,
                                                                             }}
                                                                             value={selector.type}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, type.id, "type", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "type", e.target.value)}
                                                                           />
                                                                           <TextField
                                                                             label="regexGroup"
@@ -829,13 +833,13 @@ class Route extends Component {
                                                                               shrink: false,
                                                                             }}
                                                                             value={selector.regexGroup}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, regexGroup.id, "type", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "regexGroup", e.target.value)}
                                                                           />
                                                                           {
                                                                             selector.type === "object" ?
                                                                               <div>hazem</div> : null
                                                                           }
-                                                                        </ReactFragment> : null
+                                                                        </React.Fragment> : null
                                                                     }
                                                                     <IconButton
                                                                       edge="end"
