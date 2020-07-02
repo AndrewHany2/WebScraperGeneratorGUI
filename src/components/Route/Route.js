@@ -157,7 +157,7 @@ class Route extends Component {
     let methods = this.state.routes.methods;
     this.state.routes.find((route, i) => {
       if (route.id === routeId) {
-        this.state.routes.methods.find((method, j) => {
+        this.state.routes[i].methods.find((method, j) => {
           if (method.id === methodId) {
             routes[i].methods[j].parameters.push(parameter);
           }
