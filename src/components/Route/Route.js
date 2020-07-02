@@ -138,78 +138,38 @@ class Route extends Component {
     });
   }
 
-  handleDeleteParameter = (e) => {
-    const id = e.target.closest("button[parameter-id]").getAttribute("parameter-id");
-
-    this.state.route.parameters.find(parameter => parameter.id == parameter.id);
-
-    var parameters = [...this.state.route.parameters];
-    parameters.splice(id, 1);
-
-    this.setState({
-      route: {
-        name: this.state.route.name,
-        methods: [...this.state.route.methods],
-        responses: [...this.state.route.responses],
-        parameters: [...parameters]
-      }
-    }, () => console.log(this.state.route.parameters));
-  }
-
-
-  updateParameter = (id, property, value) => {
-    let parameters = this.state.route.parameters;
-    this.state.route.parameters.find((parameter, i) => {
-      if (parameter.id === id) {
-        parameters[i][property] = value;
+  addMethod = (routeId, method) => {
+    let routes = this.state.routes;
+    this.state.routes.find((route, i) => {
+      if (route.id === routeId) {
+        routes[i].methods.push(method);
         return true;
       }
     });
+
     this.setState({
-      route: {
-        name: this.state.route.name,
-        methods: [...this.state.route.methods],
-        responses: [...this.state.route.responses],
-        parameters: parameters
-      }
+      routes: [...routes]
     });
   }
 
-  updateResponse = (id, property, value) => {
-    let responses = this.state.route.responses;
-    this.state.route.responses.find((response, i) => {
-      if (response.id === id) {
-        responses[i][property] = value;
-        return true;
+  addParameter = (routeId, methodId, parameter) => {
+    let routes = this.state.routes;
+    let methods = this.state.routes.methods;
+    this.state.routes.find((route, i) => {
+      if (route.id === routeId) {
+        this.state.routes.methods.find((method, j) => {
+          if (method.id === methodId) {
+            routes[i].methods[j].parameters.push(parameter);
+          }
+        })
       }
     });
+
     this.setState({
-      route: {
-        name: this.state.route.name,
-        methods: [...this.state.route.methods],
-        parameters: [...this.state.route.parameters],
-        responses: responses
-      }
+      routes: [...routes]
     });
   }
 
-  handleDeleteResponse = (e) => {
-    const id = e.target.closest("button[response-id]").getAttribute("response-id");
-
-    this.state.route.responses.find(response => response.id == response.id);
-
-    var responses = [...this.state.route.responses];
-    responses.splice(id, 1);
-
-    this.setState({
-      route: {
-        name: this.state.route.name,
-        methods: [...this.state.route.methods],
-        parameters: [...this.state.route.parameters],
-        responses: [...responses]
-      }
-    }, () => console.log(this.state.route.parameters));
-  }
 
   handleChange = (panel) => (event, isExpanded) => {
     this.setState({ expanded: isExpanded ? panel : false })
@@ -254,7 +214,7 @@ class Route extends Component {
                         aria-controls={"route-" + i + "-content"}
                         id={"route-" + i + "-header"}
                       >
-                        <Typography>{route.name}</Typography>
+                        <Typography>{route.name ? route.name : "Route"}</Typography>
                       </ExpansionPanelSummary>
                       <ExpansionPanelDetails>
                         <Typography>
@@ -272,7 +232,7 @@ class Route extends Component {
                             <Button
                               onClick={() => {
                                 this.addMethod(route.id, {
-                                  id: (route.methods[route.methods.length -1]?.id ?? -1) + 1,
+                                  id: (route.methods[route.methods.length - 1]?.id ?? -1) + 1,
                                   name: "",
                                   summary: "",
                                   description: "",
@@ -333,30 +293,48 @@ class Route extends Component {
                                         margin="normal"
                                         value={method.operationId}
                                         InputLabelProps={{
-                                          shrink: true,
+                                          shrink: false,
                                         }}
                                         onChange={(e) => this.updateMethod(route.id, method.id, "operationId", e.target.value)}
                                       />
-                                      {/* <FormControl component="fieldset">
-                                      <FormLabel component="legend">Output File</FormLabel>
-                                      <RadioGroup
-                                        aria-label="outputFile"
-                                        name="outputFile"
-                                        value={method.outputFile}
-                                        onChange={(e) => this.updateMethod(method.id, "outputFile", e.target.value)}
-                                      >
-                                        <FormControlLabel
-                                          value="Json"
-                                          control={<Radio />}
-                                          label="Json"
-                                        />
-                                        <FormControlLabel
-                                          value="XML"
-                                          control={<Radio />}
-                                          label="XML"
-                                        />
-                                      </RadioGroup>
-                                    </FormControl> */}
+                                      <FormControl component="fieldset">
+                                        <FormLabel component="legend">Output File</FormLabel>
+                                        <RadioGroup
+                                          aria-label="outputFile"
+                                          name="outputFile"
+                                          value={method.outputFile}
+                                          onChange={(e) => this.updateMethod(method.id, "outputFile", e.target.value)}
+                                        >
+                                          <FormControlLabel
+                                            value="Json"
+                                            control={<Radio />}
+                                            label="Json"
+                                          />
+                                          <FormControlLabel
+                                            value="XML"
+                                            control={<Radio />}
+                                            label="XML"
+                                          />
+                                        </RadioGroup>
+                                      </FormControl>
+                                      <div>
+                                        <Button
+                                          onClick={() => {
+                                            this.addParameter(route.id, method.id, {
+                                              id: (route.method.parameters[route.method.parameters.length - 1]?.id ?? -1) + 1,
+                                              name: "",
+                                              in: "",
+                                              description: "",
+                                              required: "",
+                                              type: ""
+                                            });
+                                          }}>
+                                          Add Parameter
+                                        </Button>
+                                        {
+                                          route.method.parameters.map((parameter, j) => { return (<div>ana parameter</div>) })
+                                        }
+                                      </div>
                                       <IconButton
                                         edge="end"
                                         aria-label="delete"
