@@ -32,19 +32,18 @@ import { UserProfile } from "views/UserProfile/UserProfile.js";
 const authToken = localStorage.getItem("AuthToken");
 ReactDOM.render(
   <Router history={history}>
-    <Route exact path="/login" component={login} />
-
-    <Route path="/signup" component={SignUp} />
-    {/* <Redirect from="/" to="/login" /> */}
-    {authToken === null ? (
-      history.push("/login")
-    ) : (
+    {authToken !== null ? (
       <Switch>
         <Route path="/admin" component={Admin} />
-        {/* <Route path="/user" component={UserProfile} /> */}
         <Redirect from="/admin" to="/admin/dashboard" />
       </Switch>
-    )}
+    ) : (
+        <Switch>
+          <Route path="/login" component={login} />
+          <Route path="/signup" component={SignUp} />
+          <Redirect to="/login" component={login} />
+        </Switch>
+      )}
   </Router>,
   document.getElementById("root")
 );
