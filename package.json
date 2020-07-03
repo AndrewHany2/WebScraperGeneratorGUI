@@ -7,8 +7,10 @@
   "dependencies": {
     "@material-ui/core": "4.10.0",
     "@material-ui/icons": "4.9.1",
+    "axios": "^0.19.2",
     "chartist": "0.10.1",
     "classnames": "2.2.6",
+    "dayjs": "^1.8.29",
     "express": "^4.17.1",
     "firebase": "^7.15.5",
     "history": "4.10.1",
@@ -64,5 +66,6 @@
       "not op_mini all"
     ],
     "development": []
-  }
+  },
+  "proxy": "http://localhost:5000/webscraper-270ff/us-central1/api"
 }

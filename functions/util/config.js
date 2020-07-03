@@ -1,12 +1,10 @@
-var firebaseConfig = {
-    apiKey: "AIzaSyBkp7rmdXeEZ4Winxa4eiYLHBfclxO9C_E",
-    authDomain: "webscrapergenerator.firebaseapp.com",
-    databaseURL: "https://webscrapergenerator.firebaseio.com",
-    projectId: "webscrapergenerator",
-    storageBucket: "webscrapergenerator.appspot.com",
-    messagingSenderId: "807492039852",
-    appId: "1:807492039852:web:ee4e5eccc7e43306c49b09",
-    measurementId: "G-KFF29YY496",
+module.exports = {
+  apiKey: "AIzaSyD3iXSOLnVg1RwJY83luXcYs6J9xHvTjGI",
+  authDomain: "webscraper-270ff.firebaseapp.com",
+  databaseURL: "https://webscraper-270ff.firebaseio.com",
+  projectId: "webscraper-270ff",
+  storageBucket: "webscraper-270ff.appspot.com",
+  messagingSenderId: "712541248468",
+  appId: "1:712541248468:web:36d972eaea10bc26b71441",
+  measurementId: "G-T0QCTR3F9D"
   };
-
-  export default firebaseConfig

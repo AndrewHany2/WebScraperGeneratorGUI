@@ -22,24 +22,29 @@ import history from "./history";
 // core components
 import Admin from "layouts/Admin.js";
 import RTL from "layouts/RTL.js";
-import SignIn from "components/sign-in/SignIn";
+import login from "components/sign-in/SignIn";
 import SignUp from "components/sign-up/SignUp";
+import home from "layouts/home";
+
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 import { UserProfile } from "views/UserProfile/UserProfile.js";
 
-
+const authToken = localStorage.getItem("AuthToken");
 ReactDOM.render(
   <Router history={history}>
-    <Switch>
-      <Route path="/admin" component={Admin} />
-      <Route path="/rtl" component={RTL} />
-      <Route path="/signin" component={SignIn} />
-      <Route path="/signup" component={SignUp} />
-      {/* <Route path="/user" component={UserProfile} /> */}
-      <Redirect from="/" to="/signin" />
-      {/* <Redirect from="/signin" to="/admin/dashboard" /> */}
-    </Switch>
+    <Route exact path="/login" component={login} />
+
+    <Route path="/signup" component={SignUp} />
+    {/* <Redirect from="/" to="/login" /> */}
+    {authToken === null ? (
+      history.push("/login")
+    ) : (
+      <Switch>
+        <Route path="/admin" component={Admin} />
+        {/* <Route path="/user" component={UserProfile} /> */}
+        <Redirect from="/admin" to="/admin/dashboard" />
+      </Switch>
+    )}
   </Router>,
   document.getElementById("root")
 );
-

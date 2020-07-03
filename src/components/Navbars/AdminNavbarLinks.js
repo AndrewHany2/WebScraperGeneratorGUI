@@ -51,7 +51,8 @@ export default function AdminNavbarLinks() {
   };
 
   const handleCloseProfile = () => {
-    history.push("/admin/user");
+    localStorage.removeItem("AuthToken");
+    history.push("/login");
   };
 
   // const [redirect, handleCloseProfile] = React.useState("/signin");
