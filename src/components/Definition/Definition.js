@@ -5,18 +5,66 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import openScraper from '../../global'
 import Button from "@material-ui/core/Button";
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import ListItemText from '@material-ui/core/ListItemText';
+import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
+import Chip from '@material-ui/core/Chip';
+import { withStyles } from '@material-ui/styles';
 
+const styles = (theme) => ({
+  formControl: {
+    margin: 1,
+    minWidth: 120,
+    maxWidth: 300,
+  },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    margin: 2,
+  },
+  noLabel: {
+    marginTop: 3,
+  },
+
+});
 
 class Definition extends Component {
   state = {
     addProperty: false,
+    MenuProps: {
+      PaperProps: {
+        style: {
+          maxHeight: 48 * 4.5 + 8,
+          width: 250,
+        },
+      },
+    },
     definitions: []
   }
+
+  handleSelectChange = (e) => {
+
+  }
+
+  // getStyles(name, personName, theme) {
+  //   return {
+  //     fontWeight:
+  //       personName.indexOf(name) === -1
+  //         ? theme.typography.fontWeightRegular
+  //         : theme.typography.fontWeightMedium,
+  //   };
+  // }
+
   componentDidUpdate() {
     openScraper.definition = this.state.definition;
   }
@@ -128,6 +176,8 @@ class Definition extends Component {
   };
 
   render() {
+    const { classes } = this.props;
+
     return (
       <div>
         <ExpansionPanel>
@@ -146,7 +196,7 @@ class Definition extends Component {
                   this.setState({
                     definitions: [...this.state.definitions, {
                       id: (this.state.definitions[this.state.definitions.length - 1]?.id ?? -1) + 1,
-                      name: "", type: "", required: "", properties: []
+                      name: "", type: "", required: [], properties: []
                     }]
                   });
                 }}>
@@ -174,22 +224,40 @@ class Definition extends Component {
                             style={{ margin: 8 }}
                             margin="normal"
                             value={definition.name}
-                            onChange={(e) => this.updateProperty(definition.id, "name", e.target.value)}
+                            onChange={(e) => this.updateDefinition(definition.id, "name", e.target.value)}
                           />
                           <TextField
                             label="Type"
                             style={{ margin: 8 }}
                             margin="normal"
                             value={definition.type}
-                            onChange={(e) => this.updateProperty(definition.id, "type", e.target.value)}
+                            onChange={(e) => this.updateDefinition(definition.id, "type", e.target.value)}
                           />
-                          <TextField
-                            label="Required"
-                            style={{ margin: 8 }}
-                            margin="normal"
-                            value={definition.required}
-                            onChange={(e) => this.updateProperty(definition.id, "required", e.target.checked)}
-                          />
+                          <FormControl className={classes.formControl}>
+                            <InputLabel id="demo-mutiple-chip-label">Required</InputLabel>
+                            <Select
+                              labelId="demo-mutiple-chip-label"
+                              id="demo-mutiple-chip"
+                              multiple
+                              value={definition.required}
+                              onChange={(e) => this.updateDefinition(definition.id, "required", e.target.value)}
+                              input={<Input id="select-multiple-chip" />}
+                              renderValue={(selected) => (
+                                <div className={classes.chips}>
+                                  {selected.map((value) => (
+                                    <Chip key={value} label={value} className={classes.chip} />
+                                  ))}
+                                </div>
+                              )}
+                              MenuProps={this.state.MenuProps}
+                            >
+                              {definition.properties.map((property) => (
+                                <MenuItem key={property.id} value={property.name}/* style={this.getStyles(property.name, definition.required, theme)}*/>
+                                  {property.name}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
                           <IconButton
                             edge="end"
                             aria-label="delete"
@@ -271,4 +339,4 @@ class Definition extends Component {
   }
 }
 
-export default Definition;
+export default withStyles(styles)(Definition);

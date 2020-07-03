@@ -531,7 +531,7 @@ class Route extends Component {
                                 return (
                                   <ExpansionPanel
                                     key={j}
-                                    expanded={this.state.expanded === ("method-" + j)}
+                                    // expanded={this.state.expanded === ("method-" + j)}
                                     onChange={this.handleChange("method-" + j)}>
                                     <ExpansionPanelSummary
                                       expandIcon={<ExpandMoreIcon />}
@@ -787,10 +787,10 @@ class Route extends Component {
                                                                         value={selector.selectorType}
                                                                         onChange={(e) => { this.updateSelector(route.id, method.id, response.id, selector.id, "selectorType", e.target.value) }}
                                                                       >
-                                                                        <MenuItem value={"Parameter"}>Parameter</MenuItem>
-                                                                        <MenuItem value={"Parameter"}>Query Selector</MenuItem>
-                                                                        <MenuItem value={"Parameter"}>Regex</MenuItem>
-                                                                        <MenuItem value={"Parameter"}>Object</MenuItem>
+                                                                        <MenuItem value={"parameter"}>Parameter</MenuItem>
+                                                                        <MenuItem value={"querySelector"}>Query Selector</MenuItem>
+                                                                        <MenuItem value={"regex"}>Regex</MenuItem>
+                                                                        <MenuItem value={"object"}>Object</MenuItem>
                                                                       </Select>
                                                                     </FormControl>
                                                                     {
@@ -853,36 +853,6 @@ class Route extends Component {
                                                                           />
                                                                           <TextField
                                                                             label="regex Group"
-                                                                            style={{ margin: 8 }}
-                                                                            margin="normal"
-                                                                            value={selector.regexGroup}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "regexGroup", e.target.value)}
-                                                                          />
-                                                                          {
-                                                                            selector.type === "object" ?
-                                                                              <div>hazem</div> : null
-                                                                          }
-                                                                        </React.Fragment> : null
-                                                                    }
-                                                                    {
-                                                                      selector.selectorType === "regex" ?
-                                                                        <React.Fragment>
-                                                                          <TextField
-                                                                            label="selector"
-                                                                            style={{ margin: 8 }}
-                                                                            margin="normal"
-                                                                            value={selector.selector}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "selector", e.target.value)}
-                                                                          />
-                                                                          <TextField
-                                                                            label="type"
-                                                                            style={{ margin: 8 }}
-                                                                            margin="normal"
-                                                                            value={selector.type}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "type", e.target.value)}
-                                                                          />
-                                                                          <TextField
-                                                                            label="regexGroup"
                                                                             style={{ margin: 8 }}
                                                                             margin="normal"
                                                                             value={selector.regexGroup}

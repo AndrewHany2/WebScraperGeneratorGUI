@@ -118,9 +118,6 @@ class MainInfo extends Component {
                 label="Name"
                 style={{ margin: 8 }}
                 margin="normal"
-                InputLabelProps={{
-                  shrink: false,
-                }}
                 onChange={(e) =>
                   this.setState({
                     mainInfo: {
@@ -167,9 +164,6 @@ class MainInfo extends Component {
                             label="Default Header"
                             style={{ margin: 8 }}
                             margin="normal"
-                            InputLabelProps={{
-                              shrink: true,
-                            }}
                             value={defaultHeader.name}
                             onChange={(e) => this.updateDefaultHeader(defaultHeader.id, "name", e.target.value)}
                           />
@@ -221,12 +215,9 @@ class MainInfo extends Component {
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                           <TextField
-                            label="host"
+                            label="Host"
                             style={{ margin: 8 }}
                             margin="normal"
-                            InputLabelProps={{
-                              shrink: false,
-                            }}
                             value={host.name}
                             onChange={(e) => this.updateHost(host.id, "name", e.target.value)}
                           />
@@ -235,9 +226,6 @@ class MainInfo extends Component {
                             style={{ margin: 8 }}
                             margin="normal"
                             value={host.url}
-                            InputLabelProps={{
-                              shrink: false,
-                            }}
                             onChange={(e) => this.updateHost(host.id, "url", e.target.value)}
                           />
                           <FormControlLabel
