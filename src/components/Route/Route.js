@@ -39,21 +39,23 @@ class Route extends Component {
   }
 
   handleDeleteRoute = (e) => {
-    const id = e.target.closest("button[route-id]").getAttribute("route-id");
+    const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
 
-    this.state.routes.find(route => route.id == route.id);
+    this.deleteRoute(routeId);
+  }
 
-    var routes = [...this.state.routes];
-    routes.splice(id, 1);
+  deleteRoute = (routeId) => {
+    let routes = this.state.routes;
+    this.state.routes.find((route, i) => {
+      if (route.id == routeId) {
+        routes.splice(i, 1);
+        return true;
+      }
+    });
 
     this.setState({
-      route: {
-        // name: this.state.route.name,
-        // parameters:[...this.state.route.parameters],
-        // responses:[...this.state.route.responses],
-        routes: [...routes]
-      }
-    }, () => console.log(this.state.routes));
+      routes: [...routes]
+    });
   }
 
 
@@ -66,12 +68,7 @@ class Route extends Component {
       }
     });
     this.setState({
-      route: {
-        // name: this.state.route.name,
-        // parameters:[...this.state.route.parameters],
-        // responses:[...this.state.route.responses],
-        routes: routes
-      }
+      routes: routes
     });
   }
 
@@ -142,20 +139,6 @@ class Route extends Component {
     });
   }
 
-
-  addMethod = (routeId, method) => {
-    let routes = this.state.routes;
-    this.state.routes.find((route, i) => {
-      if (route.id === routeId) {
-        routes[i].methods.push(method);
-        return true;
-      }
-    });
-
-    this.setState({
-      routes: [...routes]
-    });
-  }
 
   addParameter = (routeId, methodId, parameter) => {
     let routes = this.state.routes;
@@ -351,13 +334,111 @@ class Route extends Component {
             this.state.routes[i].methods[j].responses.find((response, k) => {
 
               if (response.id === responseId) {
-                routes[i].methods[j].responses[k].push(selector);
+                routes[i].methods[j].responses[k].selectors.push(selector);
 
               }
             })
 
           }
         })
+      }
+    });
+
+    this.setState({
+      routes: [...routes]
+    });
+  }
+
+  updateSelector = (routeId, methodId, responseId, selectorId, property, value) => {
+    let routes = this.state.routes;
+
+    this.state.routes.find((route, i) => {
+
+      if (route.id === routeId) {
+        let methods = route.methods;
+
+        route.methods.find((method, j) => {
+
+          if (method.id === methodId) {
+            let responses = method.responses;
+
+            method.responses.find((response, h) => {
+
+              if (response.id === responseId) {
+                let selectors = response.selectors;
+
+                response.selectors.find((selector, l) => {
+
+                  if (selector.id === selectorId) {
+                    selectors[l][property] = value;
+                    return true
+                  }
+                })
+                responses[h].selectors = [...selectors];
+                return true;
+              }
+            })
+            methods[j].responses = [...responses]
+            return true;
+          }
+
+        });
+        routes[i].methods = [...methods]
+        return true
+      }
+    });
+
+    this.setState({
+      routes: [...routes]
+    });
+  }
+
+
+  handleDeleteSelector = (e) => {
+    const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
+    const methodId = e.target.closest("button[method-id]").getAttribute("method-id");
+    const responseId = e.target.closest("button[response-id]").getAttribute("response-id");
+    const selectorId = e.target.closest("button[selector-id]").getAttribute("selector-id");
+
+
+    this.deleteSelector(routeId, methodId, responseId, selectorId);
+  }
+
+  deleteSelector = (routeId, methodId, responseId, selectorId) => {
+    let routes = this.state.routes;
+
+    this.state.routes.find((route, i) => {
+
+      if (route.id == routeId) {
+        let methods = route.methods;
+
+        route.methods.find((method, j) => {
+
+          if (method.id == methodId) {
+            let responses = method.responses;
+
+            method.responses.find((response, h) => {
+
+              if (response.id === responseId) {
+                let selectors = response.selectors;
+
+                response.selectors.find((selector, l) => {
+
+                  if (selector.id === selectorId) {
+                    selectors.splice(l, 1);
+                    return true;
+                  }
+                })
+                responses[h].selectors = [...selectors];
+                return true;
+              }
+            })
+            methods[j].responses = [...responses];
+            return true;
+          }
+        });
+        routes[i].methods = [...methods];
+        return true;
       }
     });
 
@@ -418,12 +499,17 @@ class Route extends Component {
                             label="Name"
                             style={{ margin: 8 }}
                             margin="normal"
-                            InputLabelProps={{
-                              shrink: true,
-                            }}
                             value={route.name}
                             onChange={(e) => this.updateRoute(route.id, "name", e.target.value)}
                           />
+                          <IconButton
+                            edge="end"
+                            aria-label="delete"
+                            onClick={this.handleDeleteRoute}
+                            route-id={route.id}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
                           <div>
                             <Button
                               onClick={() => {
@@ -452,7 +538,7 @@ class Route extends Component {
                                       aria-controls={"method-" + j + "-content"}
                                       id={"method-" + j + "-header"}
                                     >
-                                      <Typography>{method.name ? method.name : "method"}</Typography>
+                                      <Typography>{method.name ? method.name : "Method"}</Typography>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
                                       <Typography>
@@ -460,9 +546,6 @@ class Route extends Component {
                                           label="name"
                                           style={{ margin: 8 }}
                                           margin="normal"
-                                          InputLabelProps={{
-                                            shrink: true,
-                                          }}
                                           value={method.name}
                                           onChange={(e) => this.updateMethod(route.id, method.id, "name", e.target.value)}
                                         />
@@ -471,9 +554,6 @@ class Route extends Component {
                                           style={{ margin: 8 }}
                                           margin="normal"
                                           value={method.summary}
-                                          InputLabelProps={{
-                                            shrink: true,
-                                          }}
                                           onChange={(e) => this.updateMethod(route.id, method.id, "summary", e.target.value)}
                                         />
                                         <TextField
@@ -481,9 +561,6 @@ class Route extends Component {
                                           style={{ margin: 8 }}
                                           margin="normal"
                                           value={method.description}
-                                          InputLabelProps={{
-                                            shrink: true,
-                                          }}
                                           onChange={(e) => this.updateMethod(route.id, method.id, "description", e.target.value)}
                                         />
                                         <TextField
@@ -491,9 +568,6 @@ class Route extends Component {
                                           style={{ margin: 8 }}
                                           margin="normal"
                                           value={method.operationId}
-                                          InputLabelProps={{
-                                            shrink: false,
-                                          }}
                                           onChange={(e) => this.updateMethod(route.id, method.id, "operationId", e.target.value)}
                                         />
                                         <FormControl component="fieldset">
@@ -516,6 +590,14 @@ class Route extends Component {
                                             />
                                           </RadioGroup>
                                         </FormControl>
+                                        <IconButton
+                                          edge="end"
+                                          aria-label="delete"
+                                          onClick={this.handleDeleteMethod}
+                                          method-id={method.id}
+                                        >
+                                          <DeleteIcon />
+                                        </IconButton>
                                         <div>
                                           <Button
                                             onClick={() => {
@@ -550,9 +632,6 @@ class Route extends Component {
                                                         label="name"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
-                                                        InputLabelProps={{
-                                                          shrink: false,
-                                                        }}
                                                         value={parameter.name}
                                                         onChange={(e) => this.updateParameter(route.id, method.id, parameter.id, "name", e.target.value)}
                                                       />
@@ -560,9 +639,6 @@ class Route extends Component {
                                                         label="in"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
-                                                        InputLabelProps={{
-                                                          shrink: false,
-                                                        }}
                                                         value={parameter.in}
                                                         onChange={(e) => this.updateParameter(route.id, method.id, parameter.id, "in", e.target.value)}
                                                       />
@@ -570,36 +646,43 @@ class Route extends Component {
                                                         label="description"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
-                                                        InputLabelProps={{
-                                                          shrink: false,
-                                                        }}
                                                         value={parameter.description}
                                                         onChange={(e) => this.updateParameter(route.id, method.id, parameter.id, "description", e.target.value)}
                                                       />
-                                                      <TextField
-                                                        label="type"
-                                                        style={{ margin: 8 }}
-                                                        margin="normal"
-                                                        InputLabelProps={{
-                                                          shrink: false,
-                                                        }}
-                                                        value={parameter.type}
-                                                        onChange={(e) => this.updateParameter(route.id, method.id, parameter.id, "type", e.target.value)}
-                                                      />
-                                                      <Checkbox
-                                                        color="primary"
-                                                        inputProps={{ "aria-label": "secondary checkbox" }}
-                                                        onChange={(e) => this.updateParameter(route.id, method.id, parameter.id, "required", e.target.checked)}
-                                                      />
-                                                      <label>Required</label>
-                                                      <IconButton
-                                                        edge="end"
-                                                        aria-label="delete"
-                                                        onClick={this.handleDeleteParameter}
-                                                        parameter-id={parameter.id}
-                                                      >
-                                                        <DeleteIcon />
-                                                      </IconButton>
+                                                      <div>
+                                                        <TextField
+                                                          label="type"
+                                                          style={{ margin: 8 }}
+                                                          margin="normal"
+                                                          value={parameter.type}
+                                                          onChange={(e) => this.updateParameter(route.id, method.id, parameter.id, "type", e.target.value)}
+                                                        />
+                                                        {/* <Checkbox
+                                                          color="primary"
+                                                          inputProps={{ "aria-label": "secondary checkbox" }}
+                                                          onChange={(e) => this.updateParameter(route.id, method.id, parameter.id, "required", e.target.checked)}
+                                                        />
+                                                        <label>Required</label> */}
+                                                        <FormControlLabel
+                                                          control={
+                                                            <Checkbox
+
+                                                              name="checkedB"
+                                                              color="primary"
+                                                              onChange={(e) => this.updateParameter(route.id, method.id, parameter.id, "required", e.target.checked)}
+                                                            />
+                                                          }
+                                                          label="Required"
+                                                        />
+                                                        <IconButton
+                                                          edge="end"
+                                                          aria-label="delete"
+                                                          onClick={this.handleDeleteParameter}
+                                                          parameter-id={parameter.id}
+                                                        >
+                                                          <DeleteIcon />
+                                                        </IconButton>
+                                                      </div>
                                                     </Typography>
                                                   </ExpansionPanelDetails>
                                                 </ExpansionPanel>
@@ -637,9 +720,6 @@ class Route extends Component {
                                                         label="code"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
-                                                        InputLabelProps={{
-                                                          shrink: false,
-                                                        }}
                                                         value={response.code}
                                                         onChange={(e) => this.updateResponse(route.id, method.id, response.id, "code", e.target.value)}
                                                       />
@@ -647,9 +727,6 @@ class Route extends Component {
                                                         label="description"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
-                                                        InputLabelProps={{
-                                                          shrink: false,
-                                                        }}
                                                         value={response.description}
                                                         onChange={(e) => this.updateResponse(route.id, method.id, response.id, "description", e.target.value)}
                                                       />
@@ -657,12 +734,17 @@ class Route extends Component {
                                                         label="schema"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
-                                                        InputLabelProps={{
-                                                          shrink: false,
-                                                        }}
                                                         value={response.schema}
                                                         onChange={(e) => this.updateResponse(route.id, method.id, response.id, "schema", e.target.value)}
                                                       />
+                                                      <IconButton
+                                                        edge="end"
+                                                        aria-label="delete"
+                                                        onClick={this.handleDeleteResponse}
+                                                        response-id={response.id}
+                                                      >
+                                                        <DeleteIcon />
+                                                      </IconButton>
                                                       <div>
                                                         <Button
                                                           onClick={() => {
@@ -693,24 +775,22 @@ class Route extends Component {
                                                                       label="name"
                                                                       style={{ margin: 8 }}
                                                                       margin="normal"
-                                                                      InputLabelProps={{
-                                                                        shrink: false,
-                                                                      }}
                                                                       value={selector.name}
-                                                                      onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "name", e.target.value)}
+                                                                      onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "name", e.target.value)}
                                                                     />
-                                                                    <FormControl>
+                                                                    <FormControl style={{ margin: 5, minWidth: 120 }}>
                                                                       <InputLabel id="demo-simple-select-label">Selector Type</InputLabel>
                                                                       <Select
                                                                         labelId="demo-simple-select-label"
                                                                         id="demo-simple-select"
+                                                                        label="selector type"
                                                                         value={selector.selectorType}
-                                                                        onChange={(e) => { this.updateSelector(route.id, method.id, selector.id, "selectorType", e.target.value) }}
+                                                                        onChange={(e) => { this.updateSelector(route.id, method.id, response.id, selector.id, "selectorType", e.target.value) }}
                                                                       >
-                                                                        <MenuItem value={selector.parameter}>Parameter</MenuItem>
-                                                                        <MenuItem value={selector.querySelector}>Query Selector</MenuItem>
-                                                                        <MenuItem value={selector.regex}>Regex</MenuItem>
-                                                                        <MenuItem value={selector.object}>Object</MenuItem>
+                                                                        <MenuItem value={"Parameter"}>Parameter</MenuItem>
+                                                                        <MenuItem value={"Parameter"}>Query Selector</MenuItem>
+                                                                        <MenuItem value={"Parameter"}>Regex</MenuItem>
+                                                                        <MenuItem value={"Parameter"}>Object</MenuItem>
                                                                       </Select>
                                                                     </FormControl>
                                                                     {
@@ -720,11 +800,8 @@ class Route extends Component {
                                                                             label="selector"
                                                                             style={{ margin: 8 }}
                                                                             margin="normal"
-                                                                            InputLabelProps={{
-                                                                              shrink: false,
-                                                                            }}
                                                                             value={selector.selector}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "selector", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "selector", e.target.value)}
                                                                           />
                                                                           {
                                                                             selector.type === "object" ?
@@ -739,21 +816,15 @@ class Route extends Component {
                                                                             label="selector"
                                                                             style={{ margin: 8 }}
                                                                             margin="normal"
-                                                                            InputLabelProps={{
-                                                                              shrink: false,
-                                                                            }}
                                                                             value={selector.selector}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "selector", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "selector", e.target.value)}
                                                                           />
                                                                           <TextField
                                                                             label="type"
                                                                             style={{ margin: 8 }}
                                                                             margin="normal"
-                                                                            InputLabelProps={{
-                                                                              shrink: false,
-                                                                            }}
                                                                             value={selector.type}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "type", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "type", e.target.value)}
                                                                           />
                                                                           {
                                                                             selector.type === "object" ?
@@ -770,31 +841,22 @@ class Route extends Component {
                                                                             label="selector"
                                                                             style={{ margin: 8 }}
                                                                             margin="normal"
-                                                                            InputLabelProps={{
-                                                                              shrink: false,
-                                                                            }}
                                                                             value={selector.selector}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "selector", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "selector", e.target.value)}
                                                                           />
                                                                           <TextField
                                                                             label="type"
                                                                             style={{ margin: 8 }}
                                                                             margin="normal"
-                                                                            InputLabelProps={{
-                                                                              shrink: false,
-                                                                            }}
                                                                             value={selector.type}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "type", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "type", e.target.value)}
                                                                           />
                                                                           <TextField
                                                                             label="regex Group"
                                                                             style={{ margin: 8 }}
                                                                             margin="normal"
-                                                                            InputLabelProps={{
-                                                                              shrink: false,
-                                                                            }}
                                                                             value={selector.regexGroup}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "regexGroup", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "regexGroup", e.target.value)}
                                                                           />
                                                                           {
                                                                             selector.type === "object" ?
@@ -809,31 +871,22 @@ class Route extends Component {
                                                                             label="selector"
                                                                             style={{ margin: 8 }}
                                                                             margin="normal"
-                                                                            InputLabelProps={{
-                                                                              shrink: false,
-                                                                            }}
                                                                             value={selector.selector}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "selector", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "selector", e.target.value)}
                                                                           />
                                                                           <TextField
                                                                             label="type"
                                                                             style={{ margin: 8 }}
                                                                             margin="normal"
-                                                                            InputLabelProps={{
-                                                                              shrink: false,
-                                                                            }}
                                                                             value={selector.type}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "type", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "type", e.target.value)}
                                                                           />
                                                                           <TextField
                                                                             label="regexGroup"
                                                                             style={{ margin: 8 }}
                                                                             margin="normal"
-                                                                            InputLabelProps={{
-                                                                              shrink: false,
-                                                                            }}
                                                                             value={selector.regexGroup}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, selector.id, "regexGroup", e.target.value)}
+                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "regexGroup", e.target.value)}
                                                                           />
                                                                           {
                                                                             selector.type === "object" ?
@@ -856,14 +909,6 @@ class Route extends Component {
                                                           })
                                                         }
                                                       </div>
-                                                      <IconButton
-                                                        edge="end"
-                                                        aria-label="delete"
-                                                        onClick={this.handleDeleteResponse}
-                                                        response-id={response.id}
-                                                      >
-                                                        <DeleteIcon />
-                                                      </IconButton>
                                                     </Typography>
                                                   </ExpansionPanelDetails>
                                                 </ExpansionPanel>
@@ -871,14 +916,6 @@ class Route extends Component {
                                             })
                                           }
                                         </div>
-                                        <IconButton
-                                          edge="end"
-                                          aria-label="delete"
-                                          onClick={this.handleDeleteMethod}
-                                          method-id={method.id}
-                                        >
-                                          <DeleteIcon />
-                                        </IconButton>
                                       </Typography>
                                     </ExpansionPanelDetails>
                                   </ExpansionPanel>

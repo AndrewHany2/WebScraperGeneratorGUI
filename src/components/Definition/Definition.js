@@ -13,226 +13,262 @@ import Button from "@material-ui/core/Button";
 
 
 class Definition extends Component {
-    state = { 
-      addProperty:false,
-      definition:
-        {
-            name:"",
-            type:"",
-            required:"",
-            properties:[]
-        } 
-    }
-      componentDidUpdate() {
-        openScraper.definition = this.state.definition;
+  state = {
+    addProperty: false,
+    definitions: []
+  }
+  componentDidUpdate() {
+    openScraper.definition = this.state.definition;
+  }
+
+  handleDeleteDefinition = (e) => {
+    const definitionId = e.target.closest("div[definition-id]").getAttribute("definition-id");
+
+    this.deleteDefinition(definitionId);
+  }
+
+  deleteDefinition = (definitionId) => {
+    let definitions = this.state.definitions;
+    this.state.definitions.find((definition, i) => {
+      if (definition.id === definitionId) {
+        definitions.splice(i, 1);
+        return true;
       }
-    
-      handleDeleteProperty = (e) => {
-        const id = e.target.closest("button[property-id]").getAttribute("Property-id");
-    
-        this.state.definition.properties.find(property => property.id == property.id);
-    
-        var properties = [...this.state.definition.properties];
-        properties.splice(id, 1);
-    
-        this.setState({
-          definition: {
-            name: this.state.definition.name,
-            type: this.state.definition.type,
-            required: this.state.definition.required,
-            properties: [...properties],
-          }
-        }); 
+    });
+
+    this.setState({
+      definitions: [...definitions]
+    });
+  }
+
+
+  updateDefinition = (id, property, value) => {
+    let definitions = this.state.definitions;
+    this.state.definitions.find((definition, i) => {
+      if (definition.id === id) {
+        definitions[i][property] = value;
+        return true;
       }
-     
-      updateProperty = (id, propert, value) => {
-        let properties = this.state.definition.properties;
-        this.state.definition.properties.find((property, i) => {
-          if (property.id === id) {
-            properties[i][propert] = value;
+    });
+    this.setState({
+      definitions: definitions
+    });
+  }
+
+  handleDeleteProperty = (e) => {
+    const definitionId = e.target.closest("div[definition-id]").getAttribute("definition-id");
+    const propertyId = e.target.closest("button[property-id]").getAttribute("property-id");
+
+    this.deleteProperty(definitionId, propertyId);
+  }
+
+  deleteProperty = (definitionId, propertyId) => {
+    let definitions = this.state.definitions;
+    this.state.definitions.find((definition, i) => {
+      if (definition.id == definitionId) {
+
+        let properties = definition.properties;
+        definition.properties.find((property, j) => {
+          if (property.id == propertyId) {
+            properties.splice(j, 1);
             return true;
           }
         });
-        this.setState({
-          definition: {
-            name: this.state.definition.name,
-            type: this.state.definition.type,
-            required: this.state.definition.required,
-            properties: properties
-          }
-        });
+
+        definitions[i].properties = [...properties];
+        return true;
       }
-      handleDeleteProperty = (e) => {
-        const id = e.target.closest("button[property-id]").getAttribute("Property-id");
-    
-        this.state.definition.properties.find(property => property.id == property.id);
-    
-        var properties = [...this.state.definition.properties];
-        properties.splice(id, 1);
-    
-        this.setState({
-          definition: {
-            name: this.state.definition.name,
-            type: this.state.definition.type,
-            required: this.state.definition.required,
-            properties: [...properties],
-          }
-        }); 
+    });
+
+    this.setState({
+      definitions: [...definitions]
+    });
+  }
+
+  addProperty = (definitionId, property) => {
+    let definitions = this.state.definitions;
+    this.state.definitions.find((definition, i) => {
+      if (definition.id === definitionId) {
+        definitions[i].properties.push(property);
+        return true;
       }
-     
-      updateProperty = (id, propert, value) => {
-        let properties = this.state.definition.properties;
-        this.state.definition.properties.find((property, i) => {
-          if (property.id === id) {
-            properties[i][propert] = value;
+    });
+
+    this.setState({
+      definitions: [...definitions]
+    });
+  }
+
+  updateProperty = (definitionId, propertyId, propert, value) => {
+    let definitions = this.state.definitions;
+    this.state.definitions.find((definition, i) => {
+      if (definition.id === definitionId) {
+
+        let properties = definition.properties;
+        definition.properties.find((property, j) => {
+          if (property.id === propertyId) {
+            properties[j][propert] = value;
             return true;
           }
         });
-        this.setState({
-          definition: {
-            name: this.state.definition.name,
-            type: this.state.definition.type,
-            required: this.state.definition.required,
-            properties: properties
-          }
-        });
+
+        definitions[i].properties = [...properties];
+        return true;
       }
+    });
+
+    this.setState({
+      definitions: [...definitions]
+    });
+  }
 
 
-      handleChange = (panel) => (event, isExpanded) => {
-        this.setState({ expanded: isExpanded ? panel : false })
-      };
+  handleChange = (panel) => (event, isExpanded) => {
+    this.setState({ expanded: isExpanded ? panel : false })
+  };
 
-    render() { 
-      let propertyComp;
-      if(this.state.addProperty)
-      {
-        propertyComp=
-        this.state.definition.properties.map((property,i)=>
-        {
-          return(          
-          <ExpansionPanel
-            key={i}
-            expanded={this.state.expanded === ("panel-" + i)}
-            onChange={this.handleChange("panel-" + i)}>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls={"panel-" + i + "-content"}
-              id={"panel-" + i + "-header"}
-            >
-              <Typography>{property.name ? property.name:"Property"}</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <TextField
-                label="name"
-                style={{ margin: 8 }}
-                margin="normal"
-                value={property.name}
-                onChange={(e) => this.updateProperty(property.id, "name", e.target.value)}
-              />
-              <TextField
-              label="type"
-              style={{ margin: 8 }}
-              margin="normal"
-              value={property.type}
-              onChange={(e) => this.updateProperty(property.id, "type", e.target.value)}
-            />
-            <IconButton
-              edge="end"
-              aria-label="delete"
-              onClick={this.handleDeleteProperty}
-              property-id={property.id}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>)
-        })
-      }
-        return (   
-          <div>             
-          <ExpansionPanel>
+  render() {
+    return (
+      <div>
+        <ExpansionPanel>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="main-panel-content"
             id="main-panel-header"
           >
-            <Typography>Definition</Typography>
+            <Typography>Definitions</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography>
-            <TextField
-              label="Name"
-              style={{ margin: 8 }}
-              margin="normal"
-              onChange={(e) => 
-                this.setState({
-                  definition: {
-                    name: e.target.value,
-                    type:this.state.definition.type,
-                    required:this.state.definition.required,
-                    properties:[...this.state.definition.properties]
-                  }
-                })}
-            />
-            <TextField
-              label="Type"
-              style={{ margin: 8 }}
-              margin="normal"
-              onChange={(e) => 
-                this.setState({
-                  definition: {
-                    name:this.state.definition.name,
-                    type:e.target.value,
-                    required:this.state.definition.required,
-                    properties:[...this.state.definition.properties]
-                  }
-                })}
-            />
-            <TextField
-              label="Required"
-              style={{ margin: 8 }}
-              margin="normal"
-              onChange={(e) => 
-                this.setState({
-                  definition: {
-                    name:this.state.definition.name,
-                    type:this.state.definition.type,
-                    required:e.target.value,
-                    properties:[...this.state.definition.properties]
-                  }
-                })}
-            />
-            <div>
               <Button
                 onClick={() => {
+                  console.log(this.state.definitions)
                   this.setState({
-                    addProperty:true,
-                    definition:
-                    {
-                      name: this.state.definition.name,
-                      type: this.state.definition.type,
-                      required: this.state.definition.required,
-                      properties: [...this.state.definition.properties, {
-                        id: (this.state.definition.properties[this.state.definition.properties.length - 1]?.id ?? -1) + 1,
-                        name: "",type:""
-                      }]
-                    }
+                    definitions: [...this.state.definitions, {
+                      id: (this.state.definitions[this.state.definitions.length - 1]?.id ?? -1) + 1,
+                      name: "", type: "", required: "", properties: []
+                    }]
                   });
-                  console.log(openScraper);
                 }}>
-              Add Property
+                Add Definition
               </Button>
               {
-                propertyComp
+                this.state.definitions.map((definition, i) => {
+                  return (
+                    <ExpansionPanel
+                      key={i}
+                      definition-id={definition.id}
+                      onChange={this.handleChange("definition-" + i)}
+                    >
+                      <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={"definition-" + i + "-content"}
+                        id={"definition-" + i + "-header"}
+                      >
+                        <Typography>{definition.name ? definition.name : "Definition"}</Typography>
+                      </ExpansionPanelSummary>
+                      <ExpansionPanelDetails>
+                        <Typography>
+                          <TextField
+                            label="Name"
+                            style={{ margin: 8 }}
+                            margin="normal"
+                            value={definition.name}
+                            onChange={(e) => this.updateProperty(definition.id, "name", e.target.value)}
+                          />
+                          <TextField
+                            label="Type"
+                            style={{ margin: 8 }}
+                            margin="normal"
+                            value={definition.type}
+                            onChange={(e) => this.updateProperty(definition.id, "type", e.target.value)}
+                          />
+                          <TextField
+                            label="Required"
+                            style={{ margin: 8 }}
+                            margin="normal"
+                            value={definition.required}
+                            onChange={(e) => this.updateProperty(definition.id, "required", e.target.checked)}
+                          />
+                          <IconButton
+                            edge="end"
+                            aria-label="delete"
+                            onClick={this.handleDeleteDefinition}
+                            definition-id={definition.id}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                          <div>
+                            <Button
+                              onClick={() => {
+                                this.addProperty(definition.id, {
+                                  id: (definition.properties[definition.properties.length - 1]?.id ?? -1) + 1,
+                                  name: "", type: "", format: ""
+                                })
+                              }}>
+                              Add Property
+                            </Button>
+                            {
+                              definition.properties.map((property, i) => {
+                                return (
+                                  <ExpansionPanel
+                                    key={i}
+                                    expanded={this.state.expanded === ("panel-" + i)}
+                                    onChange={this.handleChange("panel-" + i)}>
+                                    <ExpansionPanelSummary
+                                      expandIcon={<ExpandMoreIcon />}
+                                      aria-controls={"panel-" + i + "-content"}
+                                      id={"panel-" + i + "-header"}
+                                    >
+                                      <Typography>{property.name ? property.name : "Property"}</Typography>
+                                    </ExpansionPanelSummary>
+                                    <ExpansionPanelDetails>
+                                      <TextField
+                                        label="name"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        value={property.name}
+                                        onChange={(e) => this.updateProperty(definition.id, property.id, "name", e.target.value)}
+                                      />
+                                      <TextField
+                                        label="type"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        value={property.type}
+                                        onChange={(e) => this.updateProperty(definition.id, property.id, "type", e.target.value)}
+                                      />
+                                      <TextField
+                                        label="format"
+                                        style={{ margin: 8 }}
+                                        margin="normal"
+                                        value={property.format}
+                                        onChange={(e) => this.updateProperty(definition.id, property.id, "format", e.target.value)}
+                                      />
+                                      <IconButton
+                                        edge="end"
+                                        aria-label="delete"
+                                        onClick={this.handleDeleteProperty}
+                                        property-id={property.id}
+                                      >
+                                        <DeleteIcon />
+                                      </IconButton>
+                                    </ExpansionPanelDetails>
+                                  </ExpansionPanel>)
+                              })
+                            }
+                          </div>
+                        </Typography>
+                      </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                  )
+                })
               }
-            </div> 
-          </Typography>
+            </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        </div>
-        );
-    }
+      </div >
+    );
+  }
 }
- 
+
 export default Definition;

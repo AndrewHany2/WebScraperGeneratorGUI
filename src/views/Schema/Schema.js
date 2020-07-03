@@ -92,29 +92,10 @@ class Schema extends Component {
                   <ThemeProvider>
                     <form noValidate autoComplete="off">
                       <div>
-                        <MainInfo dataSent={this.handleSent}></MainInfo>
-                        {/* <MyExpantionPanel
-                          headName={"Routes"}
-                          addPanelCompName={"ADD Route"}
-                          addPanelComp={
-                            <Route dataSent={this.handleSent}></Route>
-                          }
-                        ></MyExpantionPanel> */}
+                        <MainInfo></MainInfo>
                         <Route></Route>
-                        <MyExpantionPanel
-                          headName={"Program"}
-                          addPanelCompName={"ADD Program"}
-                          addPanelComp={
-                            <Program dataSent={this.handleSent}></Program>
-                          }
-                        ></MyExpantionPanel>
-                        <MyExpantionPanel
-                          headName={"Definition"}
-                          addPanelCompName={"ADD Definition"}
-                          addPanelComp={
-                            <Definition></Definition>
-                          }
-                        ></MyExpantionPanel>
+                        <Program></Program>
+                        <Definition></Definition>
                       </div>
                       <Button
                         onClick={() => {

@@ -10,6 +10,8 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import openScraper from '../../global'
 import Button from "@material-ui/core/Button";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 
 class MainInfo extends Component {
   constructor(props) {
@@ -116,6 +118,9 @@ class MainInfo extends Component {
                 label="Name"
                 style={{ margin: 8 }}
                 margin="normal"
+                InputLabelProps={{
+                  shrink: false,
+                }}
                 onChange={(e) =>
                   this.setState({
                     mainInfo: {
@@ -155,7 +160,7 @@ class MainInfo extends Component {
                           aria-controls={"panel-" + i + "-content"}
                           id={"panel-" + i + "-header"}
                         >
-                          <Typography>{defaultHeader.name}</Typography>
+                          <Typography>{defaultHeader.name ? defaultHeader.name : "Default Header"}</Typography>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                           <TextField
@@ -212,7 +217,7 @@ class MainInfo extends Component {
                           aria-controls={"panel-" + i + "-content"}
                           id={"panel-" + i + "-header"}
                         >
-                          <Typography>{host.name}</Typography>
+                          <Typography>{host.name ? host.name : "Host"}</Typography>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                           <TextField
@@ -220,7 +225,7 @@ class MainInfo extends Component {
                             style={{ margin: 8 }}
                             margin="normal"
                             InputLabelProps={{
-                              shrink: true,
+                              shrink: false,
                             }}
                             value={host.name}
                             onChange={(e) => this.updateHost(host.id, "name", e.target.value)}
@@ -231,18 +236,20 @@ class MainInfo extends Component {
                             margin="normal"
                             value={host.url}
                             InputLabelProps={{
-                              shrink: true,
+                              shrink: false,
                             }}
                             onChange={(e) => this.updateHost(host.id, "url", e.target.value)}
                           />
-                          <label>default:</label>
-                          <Checkbox
-                            color="primary"
-                            inputProps={{
-                              "aria-label": "secondary checkbox",
-                            }}
-                            checked={host.default}
-                            onChange={(e) => this.updateHost(host.id, "default", e.target.checked)}
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                name="checkedB"
+                                color="primary"
+                                checked={host.default}
+                                onChange={(e) => this.updateHost(host.id, "default", e.target.checked)}
+                              />
+                            }
+                            label="default"
                           />
                           <IconButton
                             edge="end"
