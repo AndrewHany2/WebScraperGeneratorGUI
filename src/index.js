@@ -22,28 +22,46 @@ import history from "./history";
 // core components
 import Admin from "layouts/Admin.js";
 import RTL from "layouts/RTL.js";
-import login from "components/sign-in/SignIn";
+import Login from "components/sign-in/SignIn";
 import SignUp from "components/sign-up/SignUp";
 import home from "layouts/home";
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 import { UserProfile } from "views/UserProfile/UserProfile.js";
 
-const authToken = localStorage.getItem("AuthToken");
+class Main extends Component {
+
+  constructor(props) {
+      super(props)
+
+      this.state = {
+          loggedIn: (localStorage.getItem("AuthToken") !== null),
+      }
+  }
+
+  loginSuccessHandler = (e) => this.setState({ loggedIn: true });
+
+  render() {
+      return (
+          <Router history={history}>
+          {this.state.loggedIn !== null ? (
+            <Switch>
+              <Route path="/admin" component={Admin} />
+              <Redirect from="/admin" to="/admin/dashboard" />
+            </Switch>
+          ) : (
+              <Switch>
+                <Route path="/login" render={(props) => <Login onLoginSuccess={this.loginSuccessHandler} />} />
+                <Route path="/signup" component={SignUp} />
+                <Redirect to="/login" render={(props) => <Login onLoginSuccess={this.loginSuccessHandler} />} />
+              </Switch>
+            )}
+        </Router>
+      );
+  }
+}
+
 ReactDOM.render(
-  <Router history={history}>
-    {authToken !== null ? (
-      <Switch>
-        <Route path="/admin" component={Admin} />
-        <Redirect from="/admin" to="/admin/dashboard" />
-      </Switch>
-    ) : (
-        <Switch>
-          <Route path="/login" component={login} />
-          <Route path="/signup" component={SignUp} />
-          <Redirect to="/login" component={login} />
-        </Switch>
-      )}
-  </Router>,
+  <Main />,
   document.getElementById("root")
 );

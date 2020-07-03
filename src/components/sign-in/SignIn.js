@@ -41,7 +41,7 @@ const styles = (theme) => ({
   },
 });
 
-class login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -81,6 +81,9 @@ class login extends Component {
         this.setState({
           loading: false,
         });
+
+        this.props.onLoginSuccess();
+
         this.props.history.push("/admin/dashboard");
       })
       .catch((error) => {
@@ -165,4 +168,4 @@ class login extends Component {
     );
   }
 }
-export default withStyles(styles)(login);
+export default withStyles(styles)(Login);
