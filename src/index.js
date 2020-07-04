@@ -32,7 +32,7 @@ import { UserProfile } from "views/UserProfile/UserProfile.js";
 const authToken = localStorage.getItem("AuthToken");
 ReactDOM.render(
   <Router history={history}>
-    {authToken !== null ? (
+    {authToken != null ? (
       <Switch>
         <Route path="/admin" component={Admin} />
         <Redirect from="/admin" to="/admin/dashboard" />
