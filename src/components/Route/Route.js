@@ -124,12 +124,12 @@ class Route extends Component {
         let methods = route.methods;
         route.methods.find((method, j) => {
           if (method.id === methodId) {
-            methods[j][property] = value;
+            routes[i].methods[j][property] = value;
             return true;
           }
         });
 
-        routes[i].methods = [...methods];
+        // routes[i].methods = [...methods];
         return true;
       }
     });
@@ -520,6 +520,7 @@ class Route extends Component {
                                   name: "",
                                   summary: "",
                                   description: "",
+                                  outputFile: "",
                                   responses: [],
                                   parameters: []
                                 });
@@ -543,28 +544,28 @@ class Route extends Component {
                                     <ExpansionPanelDetails>
                                       <Typography>
                                         <TextField
-                                          label="name"
+                                          label="Name"
                                           style={{ margin: 8 }}
                                           margin="normal"
                                           value={method.name}
                                           onChange={(e) => this.updateMethod(route.id, method.id, "name", e.target.value)}
                                         />
                                         <TextField
-                                          label="summary"
+                                          label="Summary"
                                           style={{ margin: 8 }}
                                           margin="normal"
                                           value={method.summary}
                                           onChange={(e) => this.updateMethod(route.id, method.id, "summary", e.target.value)}
                                         />
                                         <TextField
-                                          label="description"
+                                          label="Description"
                                           style={{ margin: 8 }}
                                           margin="normal"
                                           value={method.description}
                                           onChange={(e) => this.updateMethod(route.id, method.id, "description", e.target.value)}
                                         />
                                         <TextField
-                                          label="operationId"
+                                          label="Operation id"
                                           style={{ margin: 8 }}
                                           margin="normal"
                                           value={method.operationId}
@@ -576,17 +577,17 @@ class Route extends Component {
                                             aria-label="outputFile"
                                             name="outputFile"
                                             value={method.outputFile}
-                                            onChange={(e) => this.updateMethod(method.id, "outputFile", e.target.value)}
+                                            onChange={(e) => this.updateMethod(route.id, method.id, "outputFile", e.target.value)}
                                           >
                                             <FormControlLabel
-                                              value="Json"
+                                              value="json"
                                               control={<Radio />}
-                                              label="Json"
+                                              label="json"
                                             />
                                             <FormControlLabel
-                                              value="XML"
+                                              value="xml"
                                               control={<Radio />}
-                                              label="XML"
+                                              label="xml"
                                             />
                                           </RadioGroup>
                                         </FormControl>
@@ -629,21 +630,21 @@ class Route extends Component {
                                                   <ExpansionPanelDetails>
                                                     <Typography>
                                                       <TextField
-                                                        label="name"
+                                                        label="Name"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
                                                         value={parameter.name}
                                                         onChange={(e) => this.updateParameter(route.id, method.id, parameter.id, "name", e.target.value)}
                                                       />
                                                       <TextField
-                                                        label="in"
+                                                        label="In"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
                                                         value={parameter.in}
                                                         onChange={(e) => this.updateParameter(route.id, method.id, parameter.id, "in", e.target.value)}
                                                       />
                                                       <TextField
-                                                        label="description"
+                                                        label="Description"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
                                                         value={parameter.description}
@@ -651,7 +652,7 @@ class Route extends Component {
                                                       />
                                                       <div>
                                                         <TextField
-                                                          label="type"
+                                                          label="Type"
                                                           style={{ margin: 8 }}
                                                           margin="normal"
                                                           value={parameter.type}
@@ -717,21 +718,21 @@ class Route extends Component {
                                                   <ExpansionPanelDetails>
                                                     <Typography>
                                                       <TextField
-                                                        label="code"
+                                                        label="Code"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
                                                         value={response.code}
                                                         onChange={(e) => this.updateResponse(route.id, method.id, response.id, "code", e.target.value)}
                                                       />
                                                       <TextField
-                                                        label="description"
+                                                        label="Description"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
                                                         value={response.description}
                                                         onChange={(e) => this.updateResponse(route.id, method.id, response.id, "description", e.target.value)}
                                                       />
                                                       <TextField
-                                                        label="schema"
+                                                        label="Schema"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
                                                         value={response.schema}
@@ -772,7 +773,7 @@ class Route extends Component {
                                                                 <ExpansionPanelDetails>
                                                                   <Typography>
                                                                     <TextField
-                                                                      label="name"
+                                                                      label="Name"
                                                                       style={{ margin: 8 }}
                                                                       margin="normal"
                                                                       value={selector.name}

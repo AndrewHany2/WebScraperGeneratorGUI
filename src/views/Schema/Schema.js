@@ -21,6 +21,28 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
 import openScraper from '../../global'
 import Definition from "components/Definition/Definition";
+import { withStyles } from '@material-ui/styles';
+
+
+const styles = (theme) => ({
+  cardCategoryWhite: {
+    color: "rgba(255,255,255,.62)",
+    margin: "0",
+    fontSize: "14px",
+    marginTop: "0",
+    marginBottom: "0",
+  },
+  cardTitleWhite: {
+    color: "#FFFFFF",
+    marginTop: "0px",
+    minHeight: "auto",
+    fontWeight: "300",
+    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    marginBottom: "3px",
+    textDecoration: "none",
+  },
+});
+
 
 class Schema extends Component {
   state = {
@@ -55,40 +77,20 @@ class Schema extends Component {
   handleSubmit = () => { };
 
   render() {
-    const styles = {
-      cardCategoryWhite: {
-        color: "rgba(255,255,255,.62)",
-        margin: "0",
-        fontSize: "14px",
-        marginTop: "0",
-        marginBottom: "0",
-      },
-      cardTitleWhite: {
-        color: "#FFFFFF",
-        marginTop: "0px",
-        minHeight: "auto",
-        fontWeight: "300",
-        fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-        marginBottom: "3px",
-        textDecoration: "none",
-      },
-    };
-
-    const classesEditSchema = makeStyles(styles);
-
+    const { classes } = this.props;
     return (
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classesEditSchema.cardTitleWhite}>Edit Schema</h4>
-              <p className={classesEditSchema.cardCategoryWhite}>
+              <h4 className={classes.cardTitleWhite}>Edit Schema</h4>
+              <p className={classes.cardCategoryWhite}>
                 Complete your Schema
               </p>
             </CardHeader>
             <CardBody>
               <GridContainer>
-                <GridItem>
+                <GridItem xs={12} sm={12} md={12}>
                   <ThemeProvider>
                     <form noValidate autoComplete="off">
                       <div>
@@ -119,4 +121,4 @@ class Schema extends Component {
   }
 }
 
-export default Schema;
+export default withStyles(styles)(Schema);

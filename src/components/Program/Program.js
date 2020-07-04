@@ -5,7 +5,8 @@ import {
   TextField,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  Button
+  Button,
+  FormControlLabel
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MyExpantionPanel from "../MyExpantionPanel/MyExpantionPanel";
@@ -209,25 +210,31 @@ export default class Program extends Component {
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                           <TextField
-                            label="input"
+                            label="Input"
                             style={{ margin: 8 }}
                             margin="normal"
                             value={input.name}
                             onChange={(e) => this.updateInput(input.id, "name", e.target.value)}
                           />
-                          <label>required:</label>
-                          <Checkbox
-                            color="primary"
-                            inputProps={{ "aria-label": "secondary checkbox" }}
-                            value={input.required}
-                            onChange={(e) => this.updateInput(input.id, "required", e.target.value)}
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                name="checkedB"
+                                color="primary"
+                                onChange={(e) => this.updateInput(input.id, "required", e.target.value)}
+                              />
+                            }
+                            label="Required"
                           />
-                          <label>default:</label>
-                          <Checkbox
-                            color="primary"
-                            inputProps={{ "aria-label": "secondary checkbox" }}
-                            value={input.default}
-                            onChange={(e) => this.updateInput(input.id, "default", e.target.value)}
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                name="checkedB"
+                                color="primary"
+                                onChange={(e) => this.updateInput(input.id, "default", e.target.value)}
+                              />
+                            }
+                            label="Default"
                           />
                           <IconButton
                             edge="end"
@@ -276,32 +283,35 @@ export default class Program extends Component {
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                           <TextField
-                            label="operation"
+                            label="Operation"
                             style={{ margin: 8 }}
                             margin="normal"
                             value={operation.name}
                             onChange={(e) => this.updateOperation(operation.id, "name", e.target.value)}
                           />
                           <TextField
-                            label="method"
+                            label="Method"
                             style={{ margin: 8 }}
                             margin="normal"
                             value={operation.method}
                             onChange={(e) => this.updateOperation(operation.id, "method", e.target.value)}
                           />
                           <TextField
-                            label="parent"
+                            label="Parent"
                             style={{ margin: 8 }}
                             margin="normal"
                             value={operation.parent}
                             onChange={(e) => this.updateOperation(operation.id, "parent", e.target.value)}
                           />
-                          <label>multiple:</label>
-                          <Checkbox
-                            color="primary"
-                            inputProps={{ "aria-label": "secondary checkbox" }}
-                            value={operation.multiple}
-                            onChange={(e) => this.updateOperation(operation.id, "multiple", e.target.checked)}
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                name="checkedB"
+                                color="primary"
+                                onChange={(e) => this.updateOperation(operation.id, "multiple", e.target.checked)}
+                              />
+                            }
+                            label="Multiple"
                           />
                           <IconButton
                             edge="end"
