@@ -41,7 +41,7 @@ const styles = (theme) => ({
   },
 });
 
-class Login extends Component {
+class login extends Component {
   constructor(props) {
     super(props);
 
@@ -54,10 +54,12 @@ class Login extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.UI.errors) {
-      this.setState({
-        errors: nextProps.UI.errors,
-      });
+    if ("errors" in nextProps.UI) {
+      if (nextProps.UI.errors) {
+        this.setState({
+          errors: nextProps.UI.errors,
+        });
+      }
     }
   }
 
@@ -81,10 +83,7 @@ class Login extends Component {
         this.setState({
           loading: false,
         });
-
-        this.props.onLoginSuccess();
-
-        this.props.history.push("/admin/dashboard");
+        this.props.history.push("/admin");
       })
       .catch((error) => {
         this.setState({
@@ -168,4 +167,5 @@ class Login extends Component {
     );
   }
 }
-export default withStyles(styles)(Login);
+
+export default withStyles(styles)(login);
