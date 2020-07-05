@@ -24,6 +24,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
+import Selector from './selector.js'
 
 class Route extends Component {
   constructor(props) {
@@ -325,6 +326,130 @@ class Route extends Component {
   handleChange = (panel) => (event, isExpanded) => {
     this.setState({ expanded: isExpanded ? panel : false })
   };
+
+  addSelector = (routeId, methodId, responseId, selector) => {
+    let routes = this.state.routes;
+
+    this.state.routes.find((route, i) => {
+
+      if (route.id === routeId) {
+        this.state.routes[i].methods.find((method, j) => {
+
+          if (method.id === methodId) {
+            this.state.routes[i].methods[j].responses.find((response, k) => {
+
+              if (response.id === responseId) {
+                routes[i].methods[j].responses[k].selectors.push(selector);
+
+              }
+            })
+
+          }
+        })
+      }
+    });
+
+    this.setState({
+      routes: [...routes]
+    });
+  }
+
+  updateSelector = (routeId, methodId, responseId, selectorId, property, value) => {
+    let routes = this.state.routes;
+
+    this.state.routes.find((route, i) => {
+
+      if (route.id === routeId) {
+        let methods = route.methods;
+
+        route.methods.find((method, j) => {
+
+          if (method.id === methodId) {
+            let responses = method.responses;
+
+            method.responses.find((response, h) => {
+
+              if (response.id === responseId) {
+                let selectors = response.selectors;
+
+                response.selectors.find((selector, l) => {
+
+                  if (selector.id === selectorId) {
+                    selectors[l][property] = value;
+                    return true
+                  }
+                })
+                responses[h].selectors = [...selectors];
+                return true;
+              }
+            })
+            methods[j].responses = [...responses]
+            return true;
+          }
+
+        });
+        routes[i].methods = [...methods]
+        return true
+      }
+    });
+
+    this.setState({
+      routes: [...routes]
+    });
+  }
+
+  handleDeleteSelector = (e) => {
+    const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
+    const methodId = e.target.closest("button[method-id]").getAttribute("method-id");
+    const responseId = e.target.closest("button[response-id]").getAttribute("response-id");
+    const selectorId = e.target.closest("button[selector-id]").getAttribute("selector-id");
+
+
+    this.deleteSelector(routeId, methodId, responseId, selectorId);
+  }
+
+  deleteSelector = (routeId, methodId, responseId, selectorId) => {
+    let routes = this.state.routes;
+
+    this.state.routes.find((route, i) => {
+
+      if (route.id == routeId) {
+        let methods = route.methods;
+
+        route.methods.find((method, j) => {
+
+          if (method.id == methodId) {
+            let responses = method.responses;
+
+            method.responses.find((response, h) => {
+
+              if (response.id === responseId) {
+                let selectors = response.selectors;
+
+                response.selectors.find((selector, l) => {
+
+                  if (selector.id === selectorId) {
+                    selectors.splice(l, 1);
+                    return true;
+                  }
+                })
+                responses[h].selectors = [...selectors];
+                return true;
+              }
+            })
+            methods[j].responses = [...responses];
+            return true;
+          }
+        });
+        routes[i].methods = [...methods];
+        return true;
+      }
+    });
+
+    this.setState({
+      routes: [...routes]
+    });
+  }
 
   render() {
     return (
@@ -633,7 +758,7 @@ class Route extends Component {
                                                         {
                                                           response.selectors.map((selector, k) => {
                                                             return (
-                                                              <Selector k={k} selector={selector} response={response} method={method} route={route}></Selector>
+                                                              <Selector addSelector={this.addSelector} updateSelector={this.updateSelector} deleteSelector={this.handleDeleteSelector} selector={selector} response={response} method={method} route={route}></Selector>
                                                             )
                                                           })
                                                         }
