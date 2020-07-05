@@ -66,7 +66,7 @@ class Definition extends Component {
   // }
 
   componentDidUpdate() {
-    openScraper.definition = this.state.definition;
+    openScraper.definition = this.state.definitions;
   }
 
   handleDeleteDefinition = (e) => {
@@ -292,21 +292,21 @@ class Definition extends Component {
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
                                       <TextField
-                                        label="name"
+                                        label="Name"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         value={property.name}
                                         onChange={(e) => this.updateProperty(definition.id, property.id, "name", e.target.value)}
                                       />
                                       <TextField
-                                        label="type"
+                                        label="Type"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         value={property.type}
                                         onChange={(e) => this.updateProperty(definition.id, property.id, "type", e.target.value)}
                                       />
                                       <TextField
-                                        label="format"
+                                        label="Format"
                                         style={{ margin: 8 }}
                                         margin="normal"
                                         value={property.format}
