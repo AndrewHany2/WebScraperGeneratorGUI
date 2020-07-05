@@ -98,7 +98,6 @@ class Selector extends Component {
         });
     }
 
-
     handleDeleteSelector = (e) => {
         const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
         const methodId = e.target.closest("button[method-id]").getAttribute("method-id");
@@ -198,10 +197,6 @@ class Selector extends Component {
                                     value={selector.selector}
                                     onChange={(e) => this.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selector", e.target.value)}
                                 />
-                                {
-                                    selector.type === "object" ?
-                                        <Selector></Selector> : null
-                                }
                             </React.Fragment> : null
                     }
                     {
@@ -221,11 +216,6 @@ class Selector extends Component {
                                     value={selector.type}
                                     onChange={(e) => this.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "type", e.target.value)}
                                 />
-                                {
-                                    selector.type === "object" ?
-                                        <Selector></Selector>
-                                        : null
-                                }
                             </React.Fragment> : null
 
                     }
@@ -253,11 +243,11 @@ class Selector extends Component {
                                     value={selector.regexGroup}
                                     onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "regexGroup", e.target.value)}
                                 />
-                                {
-                                    selector.type === "object" ?
-                                        <Selector></Selector> : null
-                                }
                             </React.Fragment> : null
+                    }
+                    {
+                        selector.selectorType === "object" ?
+                            <Selector k={this.props.k} selector={this.props.selector} response={this.props.response} method={this.props.method} route={route}></Selector> : null
                     }
                     <IconButton
                         edge="end"
