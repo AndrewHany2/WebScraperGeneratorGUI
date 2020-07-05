@@ -54,10 +54,12 @@ class login extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.UI.errors) {
-      this.setState({
-        errors: nextProps.UI.errors,
-      });
+    if ("errors" in nextProps.UI) {
+      if (nextProps.UI.errors) {
+        this.setState({
+          errors: nextProps.UI.errors,
+        });
+      }
     }
   }
 
@@ -81,7 +83,7 @@ class login extends Component {
         this.setState({
           loading: false,
         });
-        this.props.history.push("/admin/dashboard");
+        this.props.history.push("/admin");
       })
       .catch((error) => {
         this.setState({
@@ -165,4 +167,5 @@ class login extends Component {
     );
   }
 }
+
 export default withStyles(styles)(login);
