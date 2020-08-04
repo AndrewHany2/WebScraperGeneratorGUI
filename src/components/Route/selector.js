@@ -27,135 +27,12 @@ import Select from '@material-ui/core/Select';
 
 class Selector extends Component {
     state = {}
-    addSelector = (routeId, methodId, responseId, selector) => {
-        let routes = this.state.routes;
-
-        this.state.routes.find((route, i) => {
-
-            if (route.id === routeId) {
-                this.state.routes[i].methods.find((method, j) => {
-
-                    if (method.id === methodId) {
-                        this.state.routes[i].methods[j].responses.find((response, k) => {
-
-                            if (response.id === responseId) {
-                                routes[i].methods[j].responses[k].selectors.push(selector);
-
-                            }
-                        })
-
-                    }
-                })
-            }
-        });
-
-        this.setState({
-            routes: [...routes]
-        });
-    }
-
-    updateSelector = (routeId, methodId, responseId, selectorId, property, value) => {
-        let routes = this.state.routes;
-
-        this.state.routes.find((route, i) => {
-
-            if (route.id === routeId) {
-                let methods = route.methods;
-
-                route.methods.find((method, j) => {
-
-                    if (method.id === methodId) {
-                        let responses = method.responses;
-
-                        method.responses.find((response, h) => {
-
-                            if (response.id === responseId) {
-                                let selectors = response.selectors;
-
-                                response.selectors.find((selector, l) => {
-
-                                    if (selector.id === selectorId) {
-                                        selectors[l][property] = value;
-                                        return true
-                                    }
-                                })
-                                responses[h].selectors = [...selectors];
-                                return true;
-                            }
-                        })
-                        methods[j].responses = [...responses]
-                        return true;
-                    }
-
-                });
-                routes[i].methods = [...methods]
-                return true
-            }
-        });
-
-        this.setState({
-            routes: [...routes]
-        });
-    }
-
-    handleDeleteSelector = (e) => {
-        const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
-        const methodId = e.target.closest("button[method-id]").getAttribute("method-id");
-        const responseId = e.target.closest("button[response-id]").getAttribute("response-id");
-        const selectorId = e.target.closest("button[selector-id]").getAttribute("selector-id");
-
-
-        this.deleteSelector(routeId, methodId, responseId, selectorId);
-    }
-
-    deleteSelector = (routeId, methodId, responseId, selectorId) => {
-        let routes = this.state.routes;
-
-        this.state.routes.find((route, i) => {
-
-            if (route.id == routeId) {
-                let methods = route.methods;
-
-                route.methods.find((method, j) => {
-
-                    if (method.id == methodId) {
-                        let responses = method.responses;
-
-                        method.responses.find((response, h) => {
-
-                            if (response.id === responseId) {
-                                let selectors = response.selectors;
-
-                                response.selectors.find((selector, l) => {
-
-                                    if (selector.id === selectorId) {
-                                        selectors.splice(l, 1);
-                                        return true;
-                                    }
-                                })
-                                responses[h].selectors = [...selectors];
-                                return true;
-                            }
-                        })
-                        methods[j].responses = [...responses];
-                        return true;
-                    }
-                });
-                routes[i].methods = [...methods];
-                return true;
-            }
-        });
-
-        this.setState({
-            routes: [...routes]
-        });
-    }
 
     render() {
         return (<ExpansionPanel
             key={this.props.k}
-            // expanded={this.state.expanded === ("selector-" + g)}
-            onChange={this.handleChange("selector-" + this.props.k)}>
+        // expanded={this.state.expanded === ("selector-" + g)}
+        >
             <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls={"selector-" + this.props.k + "-content"}
@@ -170,7 +47,7 @@ class Selector extends Component {
                         style={{ margin: 8 }}
                         margin="normal"
                         value={this.props.selector.name}
-                        onChange={(e) => this.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "name", e.target.value)}
+                        onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "name", e.target.value)}
                     />
                     <FormControl style={{ margin: 5, minWidth: 120 }}>
                         <InputLabel id="demo-simple-select-label">Selector Type</InputLabel>
@@ -179,7 +56,7 @@ class Selector extends Component {
                             id="demo-simple-select"
                             label="selector type"
                             value={this.props.selector.selectorType}
-                            onChange={(e) => { this.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selectorType", e.target.value) }}
+                            onChange={(e) => { this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selectorType", e.target.value) }}
                         >
                             <MenuItem value={"parameter"}>Parameter</MenuItem>
                             <MenuItem value={"querySelector"}>Query Selector</MenuItem>
@@ -188,72 +65,72 @@ class Selector extends Component {
                         </Select>
                     </FormControl>
                     {
-                        selector.selectorType === "parameter" ?
+                        this.props.selector.selectorType === "parameter" ?
                             <React.Fragment>
                                 <TextField
                                     label="selector"
                                     style={{ margin: 8 }}
                                     margin="normal"
-                                    value={selector.selector}
-                                    onChange={(e) => this.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selector", e.target.value)}
+                                    value={this.props.selector.selector}
+                                    onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selector", e.target.value)}
                                 />
                             </React.Fragment> : null
                     }
                     {
-                        selector.selectorType === "querySelector" ?
+                        this.props.selector.selectorType === "querySelector" ?
                             <React.Fragment>
                                 <TextField
                                     label="selector"
                                     style={{ margin: 8 }}
                                     margin="normal"
-                                    value={selector.selector}
-                                    onChange={(e) => this.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selector", e.target.value)}
+                                    value={this.props.selector.selector}
+                                    onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selector", e.target.value)}
                                 />
                                 <TextField
                                     label="type"
                                     style={{ margin: 8 }}
                                     margin="normal"
-                                    value={selector.type}
-                                    onChange={(e) => this.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "type", e.target.value)}
+                                    value={this.props.selector.type}
+                                    onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "type", e.target.value)}
                                 />
                             </React.Fragment> : null
 
                     }
                     {
-                        selector.selectorType === "regex" ?
+                        this.props.selector.selectorType === "regex" ?
                             <React.Fragment>
                                 <TextField
                                     label="selector"
                                     style={{ margin: 8 }}
                                     margin="normal"
-                                    value={selector.selector}
-                                    onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "selector", e.target.value)}
+                                    value={this.props.selector.selector}
+                                    onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selector", e.target.value)}
                                 />
                                 <TextField
                                     label="type"
                                     style={{ margin: 8 }}
                                     margin="normal"
-                                    value={selector.type}
-                                    onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "type", e.target.value)}
+                                    value={this.props.selector.type}
+                                    onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "type", e.target.value)}
                                 />
                                 <TextField
                                     label="regex Group"
                                     style={{ margin: 8 }}
                                     margin="normal"
-                                    value={selector.regexGroup}
-                                    onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "regexGroup", e.target.value)}
+                                    value={this.props.selector.regexGroup}
+                                    onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "regexGroup", e.target.value)}
                                 />
                             </React.Fragment> : null
                     }
                     {
-                        selector.selectorType === "object" ?
-                            <Selector k={this.props.k} selector={this.props.selector} response={this.props.response} method={this.props.method} route={route}></Selector> : null
+                        this.props.selector.selectorType === "object" ?
+                            <Selector k={this.props.k} selector={this.props.selector} response={this.props.response} method={this.props.method} route={this.props.route}></Selector> : null
                     }
                     <IconButton
                         edge="end"
                         aria-label="delete"
-                        onClick={this.handleDeleteSelector}
-                        selector-id={selector.id}
+                        onClick={this.props.handleDeleteSelector}
+                        selector-id={this.props.selector.id}
                     >
                         <DeleteIcon />
                     </IconButton>
@@ -261,6 +138,7 @@ class Selector extends Component {
             </ExpansionPanelDetails>
         </ExpansionPanel>);
     }
+    //edit
 }
 
 export default Selector;

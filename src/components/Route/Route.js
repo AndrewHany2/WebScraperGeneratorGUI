@@ -24,6 +24,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
+import Selector from './selector.js'
 
 class Route extends Component {
   constructor(props) {
@@ -322,6 +323,10 @@ class Route extends Component {
     });
   }
 
+  handleChange = (panel) => (event, isExpanded) => {
+    this.setState({ expanded: isExpanded ? panel : false })
+  };
+
   addSelector = (routeId, methodId, responseId, selector) => {
     let routes = this.state.routes;
 
@@ -393,7 +398,6 @@ class Route extends Component {
     });
   }
 
-
   handleDeleteSelector = (e) => {
     const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
     const methodId = e.target.closest("button[method-id]").getAttribute("method-id");
@@ -446,11 +450,6 @@ class Route extends Component {
       routes: [...routes]
     });
   }
-
-
-  handleChange = (panel) => (event, isExpanded) => {
-    this.setState({ expanded: isExpanded ? panel : false })
-  };
 
   render() {
     return (
@@ -759,123 +758,7 @@ class Route extends Component {
                                                         {
                                                           response.selectors.map((selector, k) => {
                                                             return (
-                                                              <ExpansionPanel
-                                                                key={k}
-                                                                // expanded={this.state.expanded === ("selector-" + g)}
-                                                                onChange={this.handleChange("selector-" + k)}>
-                                                                <ExpansionPanelSummary
-                                                                  expandIcon={<ExpandMoreIcon />}
-                                                                  aria-controls={"selector-" + k + "-content"}
-                                                                  id={"selector-" + k + "-header"}
-                                                                >
-                                                                  <Typography>{selector.name ? selector.name : "Selector"}</Typography>
-                                                                </ExpansionPanelSummary>
-                                                                <ExpansionPanelDetails>
-                                                                  <Typography>
-                                                                    <TextField
-                                                                      label="Name"
-                                                                      style={{ margin: 8 }}
-                                                                      margin="normal"
-                                                                      value={selector.name}
-                                                                      onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "name", e.target.value)}
-                                                                    />
-                                                                    <FormControl style={{ margin: 5, minWidth: 120 }}>
-                                                                      <InputLabel id="demo-simple-select-label">Selector Type</InputLabel>
-                                                                      <Select
-                                                                        labelId="demo-simple-select-label"
-                                                                        id="demo-simple-select"
-                                                                        label="selector type"
-                                                                        value={selector.selectorType}
-                                                                        onChange={(e) => { this.updateSelector(route.id, method.id, response.id, selector.id, "selectorType", e.target.value) }}
-                                                                      >
-                                                                        <MenuItem value={"parameter"}>Parameter</MenuItem>
-                                                                        <MenuItem value={"querySelector"}>Query Selector</MenuItem>
-                                                                        <MenuItem value={"regex"}>Regex</MenuItem>
-                                                                        <MenuItem value={"object"}>Object</MenuItem>
-                                                                      </Select>
-                                                                    </FormControl>
-                                                                    {
-                                                                      selector.selectorType === "parameter" ?
-                                                                        <React.Fragment>
-                                                                          <TextField
-                                                                            label="selector"
-                                                                            style={{ margin: 8 }}
-                                                                            margin="normal"
-                                                                            value={selector.selector}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "selector", e.target.value)}
-                                                                          />
-                                                                          {
-                                                                            selector.type === "object" ?
-                                                                              <div>hazem</div> : null
-                                                                          }
-                                                                        </React.Fragment> : null
-                                                                    }
-                                                                    {
-                                                                      selector.selectorType === "querySelector" ?
-                                                                        <React.Fragment>
-                                                                          <TextField
-                                                                            label="selector"
-                                                                            style={{ margin: 8 }}
-                                                                            margin="normal"
-                                                                            value={selector.selector}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "selector", e.target.value)}
-                                                                          />
-                                                                          <TextField
-                                                                            label="type"
-                                                                            style={{ margin: 8 }}
-                                                                            margin="normal"
-                                                                            value={selector.type}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "type", e.target.value)}
-                                                                          />
-                                                                          {
-                                                                            selector.type === "object" ?
-                                                                              <div>hazem</div>
-                                                                              : null
-                                                                          }
-                                                                        </React.Fragment> : null
-
-                                                                    }
-                                                                    {
-                                                                      selector.selectorType === "regex" ?
-                                                                        <React.Fragment>
-                                                                          <TextField
-                                                                            label="selector"
-                                                                            style={{ margin: 8 }}
-                                                                            margin="normal"
-                                                                            value={selector.selector}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "selector", e.target.value)}
-                                                                          />
-                                                                          <TextField
-                                                                            label="type"
-                                                                            style={{ margin: 8 }}
-                                                                            margin="normal"
-                                                                            value={selector.type}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "type", e.target.value)}
-                                                                          />
-                                                                          <TextField
-                                                                            label="regex Group"
-                                                                            style={{ margin: 8 }}
-                                                                            margin="normal"
-                                                                            value={selector.regexGroup}
-                                                                            onChange={(e) => this.updateSelector(route.id, method.id, response.id, selector.id, "regexGroup", e.target.value)}
-                                                                          />
-                                                                          {
-                                                                            selector.type === "object" ?
-                                                                              <div>hazem</div> : null
-                                                                          }
-                                                                        </React.Fragment> : null
-                                                                    }
-                                                                    <IconButton
-                                                                      edge="end"
-                                                                      aria-label="delete"
-                                                                      onClick={this.handleDeleteSelector}
-                                                                      selector-id={selector.id}
-                                                                    >
-                                                                      <DeleteIcon />
-                                                                    </IconButton>
-                                                                  </Typography>
-                                                                </ExpansionPanelDetails>
-                                                              </ExpansionPanel>
+                                                              <Selector addSelector={this.addSelector} updateSelector={this.updateSelector} deleteSelector={this.handleDeleteSelector} selector={selector} response={response} method={method} route={route}></Selector>
                                                             )
                                                           })
                                                         }
@@ -906,6 +789,7 @@ class Route extends Component {
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div >
+      //edit
     );
   }
 }

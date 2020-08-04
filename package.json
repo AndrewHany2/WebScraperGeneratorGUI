@@ -68,6 +68,5 @@
     ],
     "development": []
   },
-  "proxy": "https://us-central1-webscraper-270ff.cloudfunctions.net/api",
-  "secure": false
+  "proxy": "https://us-central1-webscraper-270ff.cloudfunctions.net/api"
 }
