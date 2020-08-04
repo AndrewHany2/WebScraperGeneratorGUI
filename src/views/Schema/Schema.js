@@ -22,6 +22,8 @@ import DoneIcon from "@material-ui/icons/Done";
 import openScraper from '../../global'
 import Definition from "components/Definition/Definition";
 import { withStyles } from '@material-ui/styles';
+import axios from "axios";
+
 
 
 const styles = (theme) => ({
@@ -47,6 +49,9 @@ const styles = (theme) => ({
 class Schema extends Component {
   state = {
     finalValue: [],
+    body: '',
+    title: 'schema',
+    username:'',
   };
 
   checkIfDuplicated = (values) => {
@@ -104,6 +109,27 @@ class Schema extends Component {
                           console.log(this.state.finalValue);
                           console.log("Open Scraper:");
                           console.log(openScraper);
+                          const authToken = localStorage.getItem("AuthToken")
+                        
+
+                          axios.defaults.headers.common = { Authorization: `${authToken}` };
+                          const schema = {
+                            // title: this.state.title,
+                            body: openScraper
+                          };
+                          axios
+                          .post("/todo", schema)
+                          .then((response) => {
+                            this.setState({
+                              loading: false,
+                            });
+                          })
+                          .catch((error) => {
+                            this.setState({
+                              errors: error.response.data,
+                              loading: false,
+                            });
+                          });
                         }}
                         color="primary"
                       >
