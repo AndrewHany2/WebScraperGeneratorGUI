@@ -396,6 +396,8 @@ class Route extends Component {
     this.setState({
       routes: [...routes]
     });
+
+    console.log([...routes]);
   }
 
   handleDeleteSelector = (e) => {
@@ -759,7 +761,7 @@ class Route extends Component {
                                                         {
                                                           response.selectors.map((selector, k) => {
                                                             return (
-                                                              <Selector addSelectorInsideSelector={this.addSelectorInsideSelector} updateSelector={this.updateSelector} deleteSelector={this.handleDeleteSelector} selector={selector} response={response} method={method} route={route}></Selector>
+                                                              <Selector addSelector={this.addSelector} updateSelector={this.updateSelector} deleteSelector={this.handleDeleteSelector} selector={selector} response={response} method={method} route={route}></Selector>
                                                             )
                                                           })
                                                         }

@@ -26,14 +26,15 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
 
 class Selector extends Component {
-    state = { check: this.props.selector.selectorType }
 
-    test = () => {
-        this.setState({ check: "" });
-        return <Selector addSelectorInsideSelector={this.props.addSelectorInsideSelector} updateSelector={this.props.updateSelector} deleteSelector={this.props.handleDeleteSelector} selector={this.props.selector} response={this.props.response} method={this.props.method} route={this.props.route} ></Selector >
+
+
+    componentDidMount() {
+        this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selectors", [])
     }
 
     render() {
+
         return (<ExpansionPanel
             key={this.props.k}
         // expanded={this.state.expanded === ("selector-" + g)}
@@ -55,22 +56,24 @@ class Selector extends Component {
                         onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "name", e.target.value)}
                     />
                     <FormControl style={{ margin: 5, minWidth: 120 }}>
-                        <InputLabel id="demo-simple-select-label">Selector Type</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Type</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            label="selector type"
-                            value={this.props.selector.selectorType}
-                            onChange={(e) => { this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selectorType", e.target.value) }}
+                            label="type"
+                            value={this.props.selector.type}
+                            onChange={(e) => { this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "type", e.target.value) }}
                         >
-                            <MenuItem value={"parameter"}>Parameter</MenuItem>
-                            <MenuItem value={"querySelector"}>Query Selector</MenuItem>
-                            <MenuItem value={"regex"}>Regex</MenuItem>
+                            <MenuItem value={""}>None</MenuItem>
+                            <MenuItem value={"text"}>Text</MenuItem>
+                            <MenuItem value={"image"}>Image</MenuItem>
+                            <MenuItem value={"attribute"}>Attribute</MenuItem>
+                            <MenuItem value={"link"}>Link</MenuItem>
                             <MenuItem value={"object"}>Object</MenuItem>
                         </Select>
                     </FormControl>
                     {
-                        this.props.selector.selectorType === "parameter" ?
+                        this.props.selector.type != "" && this.props.selector.type !== "object" ?
                             <React.Fragment>
                                 <TextField
                                     label="selector"
@@ -79,30 +82,25 @@ class Selector extends Component {
                                     value={this.props.selector.selector}
                                     onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selector", e.target.value)}
                                 />
-                            </React.Fragment> : null
-                    }
-                    {
-                        this.props.selector.selectorType === "querySelector" ?
-                            <React.Fragment>
-                                <TextField
-                                    label="selector"
-                                    style={{ margin: 8 }}
-                                    margin="normal"
-                                    value={this.props.selector.selector}
-                                    onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selector", e.target.value)}
-                                />
-                                <TextField
-                                    label="type"
-                                    style={{ margin: 8 }}
-                                    margin="normal"
-                                    value={this.props.selector.type}
-                                    onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "type", e.target.value)}
-                                />
+                                <FormControl style={{ margin: 5, minWidth: 120 }}>
+                                    <InputLabel id="demo-simple-select-label">Selector Type</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="selector type"
+                                        value={this.props.selector.selectorType}
+                                        onChange={(e) => { this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selectorType", e.target.value) }}
+                                    >
+                                        <MenuItem value={"parameter"}>Parameter</MenuItem>
+                                        <MenuItem value={"querySelector"}>Query Selector</MenuItem>
+                                        <MenuItem value={"regex"}>Regex</MenuItem>
+                                    </Select>
+                                </FormControl>
                             </React.Fragment> : null
 
                     }
-                    {
-                        this.props.selector.selectorType === "regex" ?
+                    {// addSelectorToSelector
+                        this.props.selector.type === "object" ?
                             <React.Fragment>
                                 <TextField
                                     label="selector"
@@ -111,25 +109,50 @@ class Selector extends Component {
                                     value={this.props.selector.selector}
                                     onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selector", e.target.value)}
                                 />
-                                <TextField
-                                    label="type"
-                                    style={{ margin: 8 }}
-                                    margin="normal"
-                                    value={this.props.selector.type}
-                                    onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "type", e.target.value)}
-                                />
-                                <TextField
-                                    label="regex Group"
-                                    style={{ margin: 8 }}
-                                    margin="normal"
-                                    value={this.props.selector.regexGroup}
-                                    onChange={(e) => this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "regexGroup", e.target.value)}
-                                />
+                                <FormControl style={{ margin: 5, minWidth: 120 }}>
+                                    <InputLabel id="demo-simple-select-label">Selector Type</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="selector type"
+                                        value={this.props.selector.selectorType}
+                                        onChange={(e) => { this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selectorType", e.target.value) }}
+                                    >
+                                        <MenuItem value={"parameter"}>Parameter</MenuItem>
+                                        <MenuItem value={"querySelector"}>Query Selector</MenuItem>
+                                        <MenuItem value={"regex"}>Regex</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                <div>
+                                    <Button
+                                        onClick={() => {
+
+                                            this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selectors", [])
+                                            
+                                            var oldSelectors = [...this.props.selector.selectors];
+
+                                            var newSelector = {
+                                                id: (oldSelectors[oldSelectors.length - 1]?.id ?? -1) + 1,
+                                                name: "", selectorType: "", type: "", selector: "", regexGroup: ""
+                                            };
+
+                                            console.log([...oldSelectors, newSelector]);
+                                            
+                                            this.props.updateSelector(this.props.route.id, this.props.method.id, this.props.response.id, this.props.selector.id, "selectors", [...oldSelectors, newSelector]);
+                                        }}>
+                                        Add Selector
+                                </Button>
+                                    {
+                                        this.props.selector.selectors.map((selector, k) => {
+                                            return (
+                                                <Selector key={k}
+                                                    selector={selector} response={this.props.response} method={this.props.method} route={this.props.route} index={this.props.index + 1}
+                                                    addSelector={this.props.addSelector} updateSelector={this.props.updateSelector} deleteSelector={this.props.deleteSelector}></Selector>
+                                            )
+                                        })
+                                    }
+                                </div>
                             </React.Fragment> : null
-                    }
-                    {
-                        this.state.check === "object" ?
-                            this.test() : null
                     }
                     <IconButton
                         edge="end"
@@ -141,7 +164,7 @@ class Selector extends Component {
                     </IconButton>
                 </Typography>
             </ExpansionPanelDetails>
-        </ExpansionPanel >);
+        </ExpansionPanel>);
     }
     //edit
 }
