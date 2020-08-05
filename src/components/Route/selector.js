@@ -26,7 +26,12 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
 
 class Selector extends Component {
-    state = {}
+    state = { check: this.props.selector.selectorType }
+
+    test = () => {
+        this.setState({ check: "" });
+        return <Selector addSelectorInsideSelector={this.props.addSelectorInsideSelector} updateSelector={this.props.updateSelector} deleteSelector={this.props.handleDeleteSelector} selector={this.props.selector} response={this.props.response} method={this.props.method} route={this.props.route} ></Selector >
+    }
 
     render() {
         return (<ExpansionPanel
@@ -123,8 +128,8 @@ class Selector extends Component {
                             </React.Fragment> : null
                     }
                     {
-                        this.props.selector.selectorType === "object" ?
-                            <Selector k={this.props.k} selector={this.props.selector} response={this.props.response} method={this.props.method} route={this.props.route}></Selector> : null
+                        this.state.check === "object" ?
+                            this.test() : null
                     }
                     <IconButton
                         edge="end"
@@ -136,7 +141,7 @@ class Selector extends Component {
                     </IconButton>
                 </Typography>
             </ExpansionPanelDetails>
-        </ExpansionPanel>);
+        </ExpansionPanel >);
     }
     //edit
 }

@@ -451,6 +451,7 @@ class Route extends Component {
     });
   }
 
+
   render() {
     return (
       <div>
@@ -758,7 +759,7 @@ class Route extends Component {
                                                         {
                                                           response.selectors.map((selector, k) => {
                                                             return (
-                                                              <Selector addSelector={this.addSelector} updateSelector={this.updateSelector} deleteSelector={this.handleDeleteSelector} selector={selector} response={response} method={method} route={route}></Selector>
+                                                              <Selector addSelectorInsideSelector={this.addSelectorInsideSelector} updateSelector={this.updateSelector} deleteSelector={this.handleDeleteSelector} selector={selector} response={response} method={method} route={route}></Selector>
                                                             )
                                                           })
                                                         }
