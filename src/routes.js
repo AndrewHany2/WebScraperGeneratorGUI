@@ -28,6 +28,7 @@ import Language from "@material-ui/icons/Language";
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import Schema from "views/Schema/Schema.js";
+import GenerateSchema from "views/GenerateSchema/GenerateSchema.js";
 import SignIn from "../src/components/sign-in/SignIn";
 import Icons from "views/Icons/Icons.js";
 import Maps from "views/Maps/Maps.js";
@@ -65,19 +66,11 @@ const dashboardRoutes = [
   {
     path: "/generateSchema",
     name: "Generate Schema",
-    rtlName: "سكيما",
-    icon: "content_paste",
+    rtlName: "طباعة",
+    icon: LibraryBooks,
     component: GenerateSchema,
     layout: "/admin"
   },
-  // {
-  //   path: "/signin",
-  //   name: "Typography",
-  //   rtlName: "طباعة",
-  //   icon: LibraryBooks,
-  //   component: SignIn,
-  //   layout: "/admin"
-  // },
   // {
   //   path: "/icons",
   //   name: "Icons",
