@@ -36,7 +36,6 @@ import NotificationsPage from "views/Notifications/Notifications.js";
 import UpgradeToPro from "views/UpgradeToPro/UpgradeToPro.js";
 // core components/views for RTL layout
 import RTLPage from "views/RTLPage/RTLPage.js";
-import GenerateSchema from "components/GenerateSchema/GenerateSchema";
 
 const dashboardRoutes = [
   {
