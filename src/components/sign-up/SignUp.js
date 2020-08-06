@@ -96,6 +96,8 @@ class signup extends Component {
           loading: false,
         });
       });
+      console.log(newUserData)
+
   };
 
   render() {
