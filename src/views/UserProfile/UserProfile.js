@@ -76,7 +76,7 @@ class UserProfile extends Component {
       // username: this.state.username,ٍ
     };
     axios
-      .put("/user", newUserData)
+      .post("/user", newUserData)
       .then((response) => {
         localStorage.setItem("AuthToken", `Bearer ${response.data.token}`);
         this.setState({
