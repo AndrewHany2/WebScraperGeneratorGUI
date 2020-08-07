@@ -51,9 +51,13 @@ export default function AdminNavbarLinks() {
   };
 
   const handleCloseProfile = () => {
-    localStorage.removeItem("AuthToken");
-    history.push("/login");
+ 
   };
+
+  const logoutHandler = (event) => {
+		localStorage.removeItem('AuthToken');
+		history.push('/login');
+	};
 
   // const [redirect, handleCloseProfile] = React.useState("/signin");
 
@@ -217,7 +221,7 @@ export default function AdminNavbarLinks() {
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={logoutHandler}
                       className={classes.dropdownItem}
                     >
                       Logout
