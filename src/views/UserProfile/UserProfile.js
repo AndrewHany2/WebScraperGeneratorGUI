@@ -16,13 +16,12 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import TextField from '@material-ui/core/TextField';
 
-
 import avatar from "assets/img/faces/marc.jpg";
 import axios from "axios";
 
 
 const styles = (theme) => ({
-    cardCategoryWhite: {
+  cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
     margin: "0",
     fontSize: "14px",
@@ -58,10 +57,31 @@ class UserProfile extends Component {
       loading: false,
     };
   }
-  handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
+
+  componentWillMount = () => {
+    const authToken = localStorage.getItem("AuthToken");
+    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    axios
+      .get("/user")
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          firstName: response.data.userCredentials.firstName,
+          lastName: response.data.userCredentials.lastName,
+          email: response.data.userCredentials.email,
+          phoneNumber: response.data.userCredentials.phoneNumber,
+          country: response.data.userCredentials.country,
+          username: response.data.userCredentials.username,
+          uiLoading: false,
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          // this.props.history.push("/login");
+        }
+        console.log(error);
+        this.setState({ errorMsg: "Error in retrieving the data" });
+      });
   };
 
   handleSubmit = (event) => {
@@ -92,7 +112,7 @@ class UserProfile extends Component {
     console.log(newUserData)
   };
 
-  render(){
+  render() {
     const { classes } = this.props;
     return (
       <div>
@@ -105,66 +125,76 @@ class UserProfile extends Component {
               </CardHeader>
               <CardBody>
                 <GridContainer>
-                  {/* <GridItem xs={12} sm={12} md={3}>
-                    <CustomInput
-                      labelText="Username"
-                      id="username"
-                      onChange={this.handleChange}
-                      formControlProps={{
-                        fullWidth: true,
-                      }}
+                  <GridItem xs={12} sm={12} md={4}>
+                    <TextField
+                      disabled
+                      fullWidth
+                      label="Username"
+                      name="username"
+                      value={this.state.username}
+                      onChange={e => this.setState({ username: e.target.value })}
                     />
-                  </GridItem> */}
-                  
+                  </GridItem>
+
                   <GridItem xs={12} sm={12} md={4}>
                     <TextField
-											fullWidth
-											label="Phone Number"
-											name="phone"
-											value={this.state.phoneNumber}
-											onChange={this.handleChange}
-										/>
-                    </GridItem>
-                </GridContainer>
-                <GridContainer>
-                  <GridItem xs={12} sm={12} md={6}>
-                    <TextField
-									  	fullWidth
-									  	label="First name"
-									  	name="firstName"
-									  	value={this.state.firstName}
-									  	onChange={this.handleChange}
-									  	/>
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={6}>
-                    <TextField
-									  	fullWidth
-									  	label="Last name"
-									  	name="lastName"
-									  	value={this.state.lastName}
-									  	onChange={this.handleChange}
-									  />
+                      fullWidth
+                      label="Email Address"
+                      name="Email Address"
+                      value={this.state.email}
+                      onChange={e => this.setState({ email: e.target.value })}
+                    />
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={4}>
                     <TextField
-											fullWidth
-											label="Country"
-											name="country"
-											value={this.state.country}
-											onChange={this.handleChange}
-										/>
+                      fullWidth
+                      label="First name"
+                      name="firstName"
+                      value={this.state.firstName}
+                      onChange={e => this.setState({ firstName: e.target.value })}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={4}>
+                    <TextField
+                      fullWidth
+                      label="Last name"
+                      name="lastName"
+                      value={this.state.lastName}
+                      onChange={e => this.setState({ lastName: e.target.value })}
+                    />
+                  </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={12} md={4}>
+                    <TextField
+                      fullWidth
+                      label="Phone Number"
+                      name="phone"
+                      value={this.state.phoneNumber}
+                      onChange={e => this.setState({ phoneNumber: e.target.value })}
+                    />
+                  </GridItem>
+
+                  <GridItem xs={12} sm={12} md={4}>
+                    <TextField
+                      fullWidth
+                      label="Country"
+                      name="country"
+                      value={this.state.country}
+                      onChange={e => this.setState({ country: e.target.value })}
+                    />
                   </GridItem>
                 </GridContainer>
               </CardBody>
               <CardFooter>
-                <Button 
-                color="primary"
-                variant="contained"
-                type="submit"
-                className={classes.submitButton}
-                onClick={this.handleSubmit}
+                <Button
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  className={classes.submitButton}
+                  onClick={this.handleSubmit}
                 >
                   Update Profile
                 </Button>
