@@ -51,7 +51,7 @@ class Schema extends Component {
     finalValue: [],
     body: '',
     title: 'schema',
-    username:'',
+    username: '',
   };
 
   checkIfDuplicated = (values) => {
@@ -110,26 +110,24 @@ class Schema extends Component {
                           console.log("Open Scraper:");
                           console.log(openScraper);
                           const authToken = localStorage.getItem("AuthToken")
-                        
-
                           axios.defaults.headers.common = { Authorization: `${authToken}` };
                           const schema = {
                             // title: this.state.title,
                             body: openScraper
                           };
                           axios
-                          .post("/todo", schema)
-                          .then((response) => {
-                            this.setState({
-                              loading: false,
+                            .post("/todo", schema)
+                            .then((response) => {
+                              this.setState({
+                                loading: false,
+                              });
+                            })
+                            .catch((error) => {
+                              this.setState({
+                                errors: error.response.data,
+                                loading: false,
+                              });
                             });
-                          })
-                          .catch((error) => {
-                            this.setState({
-                              errors: error.response.data,
-                              loading: false,
-                            });
-                          });
                         }}
                         color="primary"
                       >

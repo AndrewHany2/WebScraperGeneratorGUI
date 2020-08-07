@@ -92,13 +92,13 @@ class UserProfile extends Component {
       lastName: this.state.lastName,
       country: this.state.country,
       email: this.state.email,
-      phoneNumber: this.state.phoneNumber
-      // username: this.state.username,ٍ
+      phoneNumber: this.state.phoneNumber,
     };
+    const authToken = localStorage.getItem("AuthToken")
+    axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios
-      .post("/user", newUserData)
+      .put("/user", newUserData)
       .then((response) => {
-        localStorage.setItem("AuthToken", `Bearer ${response.data.token}`);
         this.setState({
           loading: false,
         });
@@ -135,7 +135,6 @@ class UserProfile extends Component {
                       onChange={e => this.setState({ username: e.target.value })}
                     />
                   </GridItem>
-
                   <GridItem xs={12} sm={12} md={4}>
                     <TextField
                       fullWidth
