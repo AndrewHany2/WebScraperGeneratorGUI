@@ -51,7 +51,7 @@ export default function AdminNavbarLinks() {
   };
 
   const handleCloseProfile = () => {
- 
+    setOpenProfile(null);
   };
 
   const logoutHandler = (event) => {
