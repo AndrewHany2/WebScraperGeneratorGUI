@@ -209,11 +209,13 @@ export default function AdminNavbarLinks() {
                   <MenuList role="menu">
                     <MenuItem
                       className={classes.dropdownItem}
+                      onClick={handleCloseProfile}
                     >
                       Profile
                     </MenuItem>
                     <MenuItem
                       className={classes.dropdownItem}
+                      onClick={handleCloseProfile}
                     >
                       Settings
                     </MenuItem>
