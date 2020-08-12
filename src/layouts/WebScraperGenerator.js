@@ -101,7 +101,7 @@ export default function WebScraperGenerator({ ...rest }) {
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
-        logoText={"WebScraperGenerator"}
+        logoText={"Web Scraper Generator"}
         logo={logo}
         image={image}
         handleDrawerToggle={handleDrawerToggle}
