@@ -14,7 +14,7 @@ import ReactDOM from "react-dom";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import history from "./history";
 // core components
-import Admin from "layouts/Admin.js";
+import WebScraperGenerator from "layouts/WebScraperGenerator.js";
 import RTL from "layouts/RTL.js";
 import login from "components/sign-in/SignIn";
 import SignUp from "components/sign-up/SignUp";
@@ -26,11 +26,11 @@ import { UserProfile } from "views/UserProfile/UserProfile.js";
 ReactDOM.render(
   <Router history={history}>
     <Switch>
-      <Route path="/admin" component={Admin} />
+      <Route path="/WebScraperGenerator" component={WebScraperGenerator} />
       <Route path="/login" component={login} />
       <Route path="/signup" component={SignUp} />
       <Redirect from="/" to="/login" component={login} />
-      <Redirect from="/admin" to="/admin/dashboard" />
+      <Redirect from="/WebScraperGenerator" to="/WebScraperGenerator/dashboard" />
     </Switch>
   </Router>,
   document.getElementById("root")

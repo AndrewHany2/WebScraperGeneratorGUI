@@ -67,7 +67,7 @@ export default function RTL({ ...rest }) {
     setMobileOpen(!mobileOpen);
   };
   const getRoute = () => {
-    return window.location.pathname !== "/admin/maps";
+    return window.location.pathname !== "/WebScraperGenerator/maps";
   };
   const resizeFunction = () => {
     if (window.innerWidth >= 960) {
@@ -118,8 +118,8 @@ export default function RTL({ ...rest }) {
             <div className={classes.container}>{switchRoutes}</div>
           </div>
         ) : (
-          <div className={classes.map}>{switchRoutes}</div>
-        )}
+            <div className={classes.map}>{switchRoutes}</div>
+          )}
         {getRoute() ? <Footer /> : null}
         <FixedPlugin
           handleImageClick={handleImageClick}

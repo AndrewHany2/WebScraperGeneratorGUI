@@ -83,7 +83,7 @@ class login extends Component {
         this.setState({
           loading: false,
         });
-        this.props.history.push("/admin");
+        this.props.history.push("/WebScraperGenerator");
       })
       .catch((error) => {
         this.setState({

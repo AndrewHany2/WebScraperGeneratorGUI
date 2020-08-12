@@ -25,7 +25,7 @@ let ps;
 const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
+      if (prop.layout === "/WebScraperGenerator") {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -36,13 +36,13 @@ const switchRoutes = (
       }
       return null;
     })}
-    <Redirect from="/admin" to="/admin/dashboard" />
+    <Redirect from="/WebScraperGenerator" to="/WebScraperGenerator/dashboard" />
   </Switch>
 );
 
 const useStyles = makeStyles(styles);
 
-export default function Admin({ ...rest }) {
+export default function WebScraperGenerator({ ...rest }) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -69,7 +69,7 @@ export default function Admin({ ...rest }) {
     setMobileOpen(!mobileOpen);
   };
   const getRoute = () => {
-    return window.location.pathname !== "/admin/maps";
+    return window.location.pathname !== "/WebScraperGenerator/maps";
   };
   const resizeFunction = () => {
     if (window.innerWidth >= 960) {
@@ -121,8 +121,8 @@ export default function Admin({ ...rest }) {
             <div className={classes.container}>{switchRoutes}</div>
           </div>
         ) : (
-          <div className={classes.map}>{switchRoutes}</div>
-        )}
+            <div className={classes.map}>{switchRoutes}</div>
+          )}
         {getRoute() ? <Footer /> : null}
         {/* <FixedPlugin
           handleImageClick={handleImageClick}
@@ -135,6 +135,6 @@ export default function Admin({ ...rest }) {
       </div>
     </div>
   ) : (
-    <Redirect from="/admin" to="/login" />
-  );
+      <Redirect from="/WebScraperGenerator" to="/login" />
+    );
 }
