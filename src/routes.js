@@ -24,7 +24,7 @@ import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
-// core components/views for Admin layout
+// core components/views for WebScraperGenerator layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import Schema from "views/Schema/Schema.js";
@@ -44,7 +44,7 @@ const dashboardRoutes = [
     rtlName: "لوحة القيادة",
     icon: Dashboard,
     component: DashboardPage,
-    layout: "/admin"
+    layout: "/WebScraperGenerator"
   },
   {
     path: "/user",
@@ -52,7 +52,7 @@ const dashboardRoutes = [
     rtlName: "ملف تعريفي للمستخدم",
     icon: Person,
     component: UserProfile,
-    layout: "/admin"
+    layout: "/WebScraperGenerator"
   },
   {
     path: "/schema",
@@ -60,7 +60,7 @@ const dashboardRoutes = [
     rtlName: "سكيما",
     icon: "content_paste",
     component: Schema,
-    layout: "/admin"
+    layout: "/WebScraperGenerator"
   },
   {
     path: "/generateSchema",
@@ -68,7 +68,7 @@ const dashboardRoutes = [
     rtlName: "طباعة",
     icon: LibraryBooks,
     component: GenerateSchema,
-    layout: "/admin"
+    layout: "/WebScraperGenerator"
   },
   // {
   //   path: "/icons",
@@ -76,7 +76,7 @@ const dashboardRoutes = [
   //   rtlName: "الرموز",
   //   icon: BubbleChart,
   //   component: Icons,
-  //   layout: "/admin"
+  //   layout: "/WebScraperGenerator"
   // },
   // {
   //   path: "/maps",
@@ -84,7 +84,7 @@ const dashboardRoutes = [
   //   rtlName: "خرائط",
   //   icon: LocationOn,
   //   component: Maps,
-  //   layout: "/admin"
+  //   layout: "/WebScraperGenerator"
   // },
   // {
   //   path: "/notifications",
@@ -92,7 +92,7 @@ const dashboardRoutes = [
   //   rtlName: "إخطارات",
   //   icon: Notifications,
   //   component: NotificationsPage,
-  //   layout: "/admin"
+  //   layout: "/WebScraperGenerator"
   // },
   // {
   //   path: "/rtl-page",
@@ -108,7 +108,7 @@ const dashboardRoutes = [
   //   rtlName: "التطور للاحترافية",
   //   icon: Unarchive,
   //   component: UpgradeToPro,
-  //   layout: "/admin"
+  //   layout: "/WebScraperGenerator"
   // }
 ];
 

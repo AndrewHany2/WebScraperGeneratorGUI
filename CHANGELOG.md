@@ -124,11 +124,11 @@ ajv                        6.9.1   →   6.10.0
 ### New components
 - **src/components/FixedPlugin/FixedPlugin.jsx**(Left menu used by us for customization - due to this, we've had to add a link for the fonts awesome cdn)
 - **src/components/Header/RTLHeaderLinks.jsx**
-- **src/layouts/Admin.jsx** (instead of Dashboard)
+- **src/layouts/WebScraperGenerator.jsx** (instead of Dashboard)
 - **src/layouts/RTL.jsx**
 - **src/views/RTLPage/RTLPage.jsx**
 ### Deleted components
-- **src/layouts/Dashboard/Dashboard.jsx** (renamed to Admin)
+- **src/layouts/Dashboard/Dashboard.jsx** (renamed to WebScraperGenerator)
 - **src/routes/dashboard.jsx**
 - **src/routes/index.jsx**
 ### Deleted dependencies
