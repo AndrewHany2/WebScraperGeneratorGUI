@@ -79,7 +79,9 @@ class Schema extends Component {
     }
   };
 
-  handleSubmit = () => { };
+  handleSubmit = () => {
+    
+  };
 
   render() {
     const { classes } = this.props;
