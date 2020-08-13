@@ -21,6 +21,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import DoneIcon from "@material-ui/icons/Done";
 import openScraper from '../../global'
 import Definition from "components/Definition/Definition";
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { withStyles } from '@material-ui/styles';
 import axios from "axios";
 
@@ -52,6 +53,8 @@ class Schema extends Component {
     body: '',
     title: 'schema',
     username: '',
+    alertCheck: false,
+    alert: ""
   };
 
   checkIfDuplicated = (values) => {
@@ -81,6 +84,16 @@ class Schema extends Component {
 
   handleSubmit = () => { };
 
+  SubmitClicked = () => {
+    this.setState({
+      alertCheck: true,
+      alert: <Alert severity="success">
+        <AlertTitle>Success</AlertTitle>
+        Submited successfully
+      </Alert>
+    })
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -104,35 +117,39 @@ class Schema extends Component {
                         <Program></Program>
                         <Definition></Definition>
                       </div>
-                      <Button
-                        onClick={() => {
-                          console.log(this.state.finalValue);
-                          console.log("Open Scraper:");
-                          console.log(openScraper);
-                          const authToken = localStorage.getItem("AuthToken")
-                          axios.defaults.headers.common = { Authorization: `${authToken}` };
-                          const schema = {
-                            // title: this.state.title,
-                            body: openScraper
-                          };
-                          axios
-                            .post("/todo", schema)
-                            .then((response) => {
-                              this.setState({
-                                loading: false,
+                      {
+                        !this.state.alertCheck ? (<Button
+                          onClick={() => {
+                            console.log(this.state.finalValue);
+                            console.log("Open Scraper:");
+                            console.log(openScraper);
+                            const authToken = localStorage.getItem("AuthToken")
+                            axios.defaults.headers.common = { Authorization: `${authToken}` };
+                            const schema = {
+                              // title: this.state.title,
+                              body: openScraper
+                            };
+                            axios
+                              .post("/todo", schema)
+                              .then((response) => {
+                                this.setState({
+                                  loading: false,
+                                });
+                              })
+                              .catch((error) => {
+                                this.setState({
+                                  errors: error.response.data,
+                                  loading: false,
+                                });
                               });
-                            })
-                            .catch((error) => {
-                              this.setState({
-                                errors: error.response.data,
-                                loading: false,
-                              });
-                            });
-                        }}
-                        color="primary"
-                      >
-                        Submit
-                      </Button>
+                            this.SubmitClicked()
+                          }}
+                          color="primary"
+                        >
+                          Submit
+                        </Button>) : null
+                      }
+                      {this.state.alert}
                     </form>
                   </ThemeProvider>
                 </GridItem>

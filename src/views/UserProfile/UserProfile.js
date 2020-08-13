@@ -15,7 +15,7 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import TextField from '@material-ui/core/TextField';
-
+import { Alert, AlertTitle } from '@material-ui/lab';
 import avatar from "assets/img/faces/marc.jpg";
 import axios from "axios";
 
@@ -55,6 +55,8 @@ class UserProfile extends Component {
       confirmPassword: "",
       errors: [],
       loading: false,
+      alertCheck: false,
+      alert: ""
     };
   }
 
@@ -109,7 +111,17 @@ class UserProfile extends Component {
           loading: false,
         });
       });
-    console.log(newUserData)
+    this.SubmitClicked();
+  };
+
+  SubmitClicked = () => {
+    this.setState({
+      alertCheck: true,
+      alert: <Alert severity="success">
+        <AlertTitle>Success</AlertTitle>
+        Updated successfully
+      </Alert>
+    })
   };
 
   render() {
@@ -188,15 +200,19 @@ class UserProfile extends Component {
                 </GridContainer>
               </CardBody>
               <CardFooter>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  type="submit"
-                  className={classes.submitButton}
-                  onClick={this.handleSubmit}
-                >
-                  Update Profile
-                </Button>
+                {
+                  !this.state.alertCheck ?
+                    (<Button
+                      color="primary"
+                      variant="contained"
+                      type="submit"
+                      className={classes.submitButton}
+                      onClick={this.handleSubmit}
+                    >
+                      Update Profile
+                    </Button>) : null
+                }
+                {this.state.alert}
               </CardFooter>
             </Card>
           </GridItem>

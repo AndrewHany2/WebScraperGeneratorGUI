@@ -115,6 +115,7 @@ class MainInfo extends Component {
           <ExpansionPanelDetails>
             <Typography>
               <TextField
+                required id="standard-required"
                 label="Name"
                 style={{ margin: 8 }}
                 margin="normal"
