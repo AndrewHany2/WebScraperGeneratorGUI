@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 const languages = ['C#', 'Visual Basics'];
 
 var options = [];
+var schemas = [];
 
 export default function GenerateSchema() {
 	const classes = useStyles();
@@ -55,6 +56,17 @@ export default function GenerateSchema() {
 	const [selectedIndex, setSelectedIndex] = React.useState(1);
 	const [selectedIndex2, setSelectedIndex2] = React.useState(1);
 
+	const loadSchemas = (callback) => {
+		axios
+			.get('/todos')
+			.then((response) => {
+				schemas = response.data;
+				callback(schemas);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
 
 	const handleClickListItem = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -83,28 +95,350 @@ export default function GenerateSchema() {
 	};
 
 	const handleSubmit = () => {
-
+		axios
+			.post('https://localhost:44314/api/scrazzer', {
+				"name": "Subscene",
+				"servers": [
+					{
+						"name": "subscene",
+						"url": "https://subscene.com",
+						"default": true
+					}
+				],
+				"defaultHeaders": {
+					"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36"
+				},
+				"routes": {
+					"/subtitles/{filmId}": {
+						"get": {
+							"summary": "Find film by Id",
+							"description": "Returns a single film",
+							"operationId": "getFilmById",
+							"produces": [
+								"application/json",
+								"application/xml"
+							],
+							"parameters": [
+								{
+									"name": "filmId",
+									"in": "path",
+									"description": "Id of film to return",
+									"required": true,
+									"type": "string"
+								}
+							],
+							"responses": {
+								"200": {
+									"description": "successful operation",
+									"schema": {
+										"$ref": "#/definitions/Film"
+									},
+									"selectors": {
+										"id": {
+											"selector": "filmId",
+											"selectorType": "parameter"
+										},
+										"title": {
+											"selector": "#content > div.subtitles.byFilm > div.content.clearfix > table > tbody > tr:nth-child(2) > td.a1 > a > span:nth-child(2)",
+											"selectorType": "querySelector",
+											"type": "text"
+										},
+										"year": {
+											"selector": "<strong>\\s*Year:\\s*</strong>\\s*(?<year>\\d+)\\s*</li>",
+											"selectorType": "regex",
+											"type": "text",
+											"regexGroup": "year"
+										},
+										"imageUrl": {
+											"selector": "#content > div.subtitles.byFilm > div.box.clearfix > div.top.left > a > div > img",
+											"selectorType": "querySelector",
+											"type": "image"
+										},
+										"subtitles": {
+											"selector": "#content > div.subtitles.byFilm > div.content.clearfix > table > tbody > tr",
+											"selectorType": "querySelector",
+											"type": "object",
+											"selectors": {
+												"id": {
+													"selector": "/subtitles/(?<filmId>.*?)/(?<language>.*?)/(?<subtitleId>\\d+?)\"",
+													"selectorType": "regex",
+													"regexGroup": "subtitleId"
+												},
+												"language": {
+													"selector": "td.a1 > a > span:nth-child(1)",
+													"selectorType": "querySelector",
+													"type": "text"
+												},
+												"vote-value": {
+													"selector": "td.a1 > a > span.l.r",
+													"selectorType": "querySelector",
+													"type": "attribute",
+													"attribute": "class"
+												},
+												"link": {
+													"selector": "td.a1 > a",
+													"selectorType": "querySelector",
+													"type": "link"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"/subtitles/{filmId}/{language}/{subtitleId}": {
+						"get": {
+							"summary": "Find subtitle",
+							"description": "Returns a single subtitle",
+							"operationId": "getSubtitle",
+							"produces": [
+								"application/json",
+								"application/xml"
+							],
+							"parameters": [
+								{
+									"name": "filmId",
+									"in": "path",
+									"description": "Id of film to return",
+									"required": true,
+									"type": "string"
+								},
+								{
+									"name": "language",
+									"in": "path",
+									"description": "Language of subtitle to return",
+									"required": true,
+									"type": "string"
+								},
+								{
+									"name": "subtitleId",
+									"in": "path",
+									"description": "Id of subtitle to return",
+									"required": true,
+									"type": "string"
+								}
+							],
+							"responses": {
+								"200": {
+									"description": "successful operation",
+									"schema": {
+										"$ref": "#/definitions/Subtitle"
+									}
+								}
+							},
+							"security": [
+								{
+									"api_key": []
+								}
+							]
+						}
+					},
+					"/user/{username}": {
+						"get": {
+							"summary": "Get user by user name",
+							"description": "",
+							"operationId": "getUserByName",
+							"produces": [
+								"application/json",
+								"application/xml"
+							],
+							"parameters": [
+								{
+									"name": "username",
+									"in": "path",
+									"description": "The name that needs to be fetched.",
+									"required": true,
+									"type": "string"
+								}
+							],
+							"responses": {
+								"200": {
+									"description": "successful operation",
+									"schema": {
+										"$ref": "#/definitions/User"
+									}
+								}
+							}
+						}
+					}
+				},
+				"definitions": {
+					"Film": {
+						"type": "object",
+						"required": [
+							"id"
+						],
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"title": {
+								"type": "string"
+							},
+							"year": {
+								"type": "integer",
+								"format": "int32"
+							},
+							"imageUrl": {
+								"type": "string",
+								"format": "uri"
+							},
+							"subtitles": {
+								"type": "array",
+								"items": {
+									"ref": "#/definitions/Subtitle"
+								}
+							}
+						}
+					},
+					"Subtitle": {
+						"type": "object",
+						"required": [
+							"id"
+						],
+						"properties": {
+							"id": {
+								"type": "integer",
+								"format": "int64"
+							},
+							"link": {
+								"type": "string",
+								"format": "uri"
+							},
+							"language": {
+								"type": "string"
+							},
+							"film": {
+								"ref": "#/definitions/Film"
+							},
+							"releases": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							},
+							"author": {
+								"ref": "#/definitions/User"
+							},
+							"comment": {
+								"type": "string"
+							},
+							"Date": {
+								"type": "string",
+								"format": "date-time"
+							},
+							"hearingImpaired": {
+								"type": "boolean"
+							},
+							"foreignParts": {
+								"type": "boolean"
+							},
+							"releaseType": {
+								"type": "string"
+							},
+							"rate": {
+								"type": "integer",
+								"format": "int64"
+							},
+							"goodVotes": {
+								"type": "integer",
+								"format": "int64"
+							},
+							"badVotes": {
+								"type": "integer",
+								"format": "int64"
+							}
+						}
+					},
+					"User": {
+						"type": "object",
+						"required": [
+							"id"
+						],
+						"properties": {
+							"id": {
+								"type": "integer",
+								"format": "int64"
+							},
+							"name": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"program": {
+					"inputs": {
+						"filmId": {
+							"required": true,
+							"default": true
+						}
+					},
+					"operations": {
+						"film": {
+							"method": "getFilmById",
+							"parameters": {
+								"filmId": {
+									"type": "input",
+									"value": "filmId"
+								}
+							},
+							"parent": "_start"
+						},
+						"subtitles": {
+							"method": "getSubtitle",
+							"parameters": {
+								"filmId": {
+									"type": "input",
+									"value": "filmId"
+								},
+								"subtitleId": {
+									"type": "lamda",
+									"value": "$source.Id"
+								},
+								"language": {
+									"type": "lamda",
+									"value": "$source.Language"
+								}
+							},
+							"parent": "film",
+							"multiple": true,
+							"source": {
+								"type": "variable",
+								"value": "film.Subtitles"
+							}
+						}
+					},
+					"result": {
+						"type": "variable",
+						"value": "film"
+					}
+				}
+			}, {
+				responseType: 'blob', // important
+			})
+			.then((response) => {
+				const url = window.URL.createObjectURL(new Blob([response.data]));
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', 'file.zip'); //or any other extension
+				document.body.appendChild(link);
+				link.click();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	useLayoutEffect(() => {
 		const authToken = localStorage.getItem('AuthToken');
 		axios.defaults.headers.common = { Authorization: `${authToken}` };
-		axios
-			.get('/todos')
-			.then((response) => {
-				// options.push(response.data);
-				var i;
-				options = [];
-				for (i = 0; i < response.data.length; i++) {
-					options.push(response.data[i].body.mainInfo.name);
-				}
-				// console.log(response.data[0].body.mainInfo.name);
-				// console.log(response.data.length);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-		console.log(options);
+
+		loadSchemas((schemas) => {
+			for (var i = 0; i < schemas.length; i++) {
+				options.push(schemas[i].body.mainInfo.name);
+			}
+		});
 
 	}, []);
 
@@ -162,7 +496,7 @@ export default function GenerateSchema() {
 					<CardFooter>
 						<Button color="primary" variant="contained" type="submit" className={classes.submitButton} onClick={handleSubmit}>
 							Genrate schema
-	                	</Button>
+	                </Button>
 					</CardFooter>
 				</Card>
 			</GridItem>

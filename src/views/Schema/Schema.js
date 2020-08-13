@@ -82,7 +82,9 @@ class Schema extends Component {
     }
   };
 
-  handleSubmit = () => { };
+  handleSubmit = () => {
+    
+  };
 
   SubmitClicked = () => {
     this.setState({
