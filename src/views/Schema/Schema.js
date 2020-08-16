@@ -53,48 +53,14 @@ class Schema extends Component {
     body: '',
     title: 'schema',
     username: '',
-    alertCheck: false,
-    alert: ""
+    submitButtonAppear: true,
+    alert: "",
+    errors: []
   };
 
-  checkIfDuplicated = (values) => {
-    var arr = this.state.finalValue;
-    for (let i in arr) {
-      var firstObj = values;
-      var secondObj = arr[i];
-      if (JSON.stringify(firstObj) === JSON.stringify(secondObj)) return true;
-    }
-  };
-
-  checkIfDuplicated = (values) => {
-    var arr = this.state.finalValue;
-    for (let i in arr) {
-      var firstObj = values;
-      var secondObj = arr[i];
-      if (JSON.stringify(firstObj) === JSON.stringify(secondObj)) return true;
-    }
-  };
-
-  handleSent = (values) => {
-    if (!this.checkIfDuplicated(values) && values.length != 0) {
-      var temp = [...this.state.finalValue, values];
-      this.setState({ finalValue: temp });
-    }
-  };
-
-  handleSubmit = () => {
-    
-  };
-
-  SubmitClicked = () => {
-    this.setState({
-      alertCheck: true,
-      alert: <Alert severity="success">
-        <AlertTitle>Success</AlertTitle>
-        Submited successfully
-      </Alert>
-    })
-  };
+  componentDidMount() {
+    this.setState({ submitButtonAppear: true })
+  }
 
   render() {
     const { classes } = this.props;
@@ -113,45 +79,53 @@ class Schema extends Component {
                 <GridItem xs={12} sm={12} md={12}>
                   <ThemeProvider>
                     <form noValidate autoComplete="off">
-                      <div>
-                        <MainInfo></MainInfo>
-                        <Route></Route>
-                        <Program></Program>
-                        <Definition></Definition>
-                      </div>
-                      {
-                        !this.state.alertCheck ? (<Button
-                          onClick={() => {
-                            console.log(this.state.finalValue);
-                            console.log("Open Scraper:");
-                            console.log(openScraper);
-                            const authToken = localStorage.getItem("AuthToken")
-                            axios.defaults.headers.common = { Authorization: `${authToken}` };
-                            const schema = {
-                              // title: this.state.title,
-                              body: openScraper
-                            };
-                            axios
-                              .post("/todo", schema)
-                              .then((response) => {
-                                this.setState({
-                                  loading: false,
-                                });
-                              })
-                              .catch((error) => {
-                                this.setState({
-                                  errors: error.response.data,
-                                  loading: false,
-                                });
-                              });
-                            this.SubmitClicked()
-                          }}
-                          color="primary"
-                        >
-                          Submit
-                        </Button>) : null
-                      }
-                      {this.state.alert}
+                      <MainInfo></MainInfo>
+                      <Route></Route>
+                      <Program></Program>
+                      <Definition></Definition>
+                      <CardFooter>
+                        {
+                          this.state.submitButtonAppear ? (
+                            <Button
+                              onClick={() => {
+                                console.log(this.state.finalValue);
+                                console.log("Open Scraper:");
+                                console.log(openScraper);
+                                const authToken = localStorage.getItem("AuthToken")
+                                axios.defaults.headers.common = { Authorization: `${authToken}` };
+                                const schema = {
+                                  // title: this.state.title,
+                                  body: openScraper
+                                };
+                                axios
+                                  .post("/todo", schema)
+                                  .then((response) => {
+                                    this.setState({
+                                      submitButtonAppear: false,
+                                      alert: <Alert severity="success">
+                                        <AlertTitle>Success</AlertTitle>
+                                    Submited successfully
+                                  </Alert>
+                                    })
+                                  })
+                                  .catch((error) => {
+                                    this.setState({
+                                      errors: error.response.data,
+                                      alert: <Alert severity="error">
+                                        <AlertTitle>Error</AlertTitle>
+                                        {error.response.data.error}
+                                      </Alert>
+                                    });
+                                  });
+
+                              }}
+                              color="primary"
+                            >
+                              Submit
+                            </Button>) : null
+                        }
+                        {this.state.alert}
+                      </CardFooter>
                     </form>
                   </ThemeProvider>
                 </GridItem>

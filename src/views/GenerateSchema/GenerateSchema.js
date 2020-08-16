@@ -495,7 +495,7 @@ export default function GenerateSchema() {
 					</CardBody>
 					<CardFooter>
 						<Button color="primary" variant="contained" type="submit" className={classes.submitButton} onClick={handleSubmit}>
-							Genrate schema
+							Generate
 	                </Button>
 					</CardFooter>
 				</Card>

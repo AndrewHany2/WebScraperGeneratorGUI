@@ -55,8 +55,8 @@ class UserProfile extends Component {
       confirmPassword: "",
       errors: [],
       loading: false,
-      alertCheck: false,
-      alert: ""
+      alert: "",
+      submitButtonAppear: true,
     };
   }
 
@@ -75,14 +75,21 @@ class UserProfile extends Component {
           country: response.data.userCredentials.country,
           username: response.data.userCredentials.username,
           uiLoading: false,
+          submitButtonAppear: true
         });
       })
       .catch((error) => {
         if (error.response.status === 403) {
-          // this.props.history.push("/login");
+          this.props.history.push("/login");
         }
         console.log(error);
-        this.setState({ errorMsg: "Error in retrieving the data" });
+        this.setState({
+          errors: error.response.data,
+          alert: <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            {error.response.data.error}
+          </Alert>
+        });
       });
   };
 
@@ -102,26 +109,22 @@ class UserProfile extends Component {
       .put("/user", newUserData)
       .then((response) => {
         this.setState({
-          loading: false,
+          submitButtonAppear: false,
+          alert: <Alert severity="success">
+            <AlertTitle>Success</AlertTitle>
+            Submited successfully
+          </Alert>
         });
       })
       .catch((error) => {
         this.setState({
           errors: error.response.data,
-          loading: false,
+          alert: <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            {error.response.data.error}
+          </Alert>
         });
       });
-    this.SubmitClicked();
-  };
-
-  SubmitClicked = () => {
-    this.setState({
-      alertCheck: true,
-      alert: <Alert severity="success">
-        <AlertTitle>Success</AlertTitle>
-        Updated successfully
-      </Alert>
-    })
   };
 
   render() {
@@ -201,7 +204,7 @@ class UserProfile extends Component {
               </CardBody>
               <CardFooter>
                 {
-                  !this.state.alertCheck ?
+                  this.state.submitButtonAppear ?
                     (<Button
                       color="primary"
                       variant="contained"

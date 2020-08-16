@@ -63,8 +63,8 @@ const dashboardRoutes = [
     layout: "/WebScraperGenerator"
   },
   {
-    path: "/generateSchema",
-    name: "Generate Schema",
+    path: "/generate",
+    name: "Generate",
     rtlName: "طباعة",
     icon: LibraryBooks,
     component: GenerateSchema,
