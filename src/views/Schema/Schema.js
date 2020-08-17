@@ -62,6 +62,36 @@ class Schema extends Component {
     this.setState({ submitButtonAppear: true })
   }
 
+  removeId = (source) => {
+    let output = [];
+    for (var i = 0; i < source.length; i++) {
+      var object = source[i];
+      delete object.id;
+      output.push(object);
+    }
+    return output;
+  }
+
+  convertToObject = (source) => {
+    let object = {};
+    source.map(def => {
+      let name = def.name;
+      delete def.name;
+      object[name] = def;
+      return def;
+    });
+    return object;
+  }
+
+  test = (source) => {
+
+    let array = this.removeId(source);
+
+    let object = this.convertToObject(array);
+
+    return object;
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -93,10 +123,55 @@ class Schema extends Component {
                                 console.log(openScraper);
                                 const authToken = localStorage.getItem("AuthToken")
                                 axios.defaults.headers.common = { Authorization: `${authToken}` };
+
+                                let definitions = [];
+                                for (let i = 0; i < openScraper.definition.length; i++) {
+                                  let definition = openScraper.definition[i];
+                                  definition.properties = this.test(definition.properties);
+                                  definitions.push(definition);
+                                }
+
+                                definitions = this.test(definitions);
+
+                                let routes = [];
+                                for (let i = 0; i < openScraper.route.length; i++) {
+                                  let route = openScraper.route[i];
+
+                                  let methods = [];
+                                  for (let j = 0; j < route.methods.length; j++) {
+                                    let method = route.methods[i];
+
+                                    method.parameters = this.test(method.parameters);
+                                    method.responses = this.test(method.responses);
+
+                                    methods.push(method);
+                                  }
+                                  
+                                  route.methods = this.test(methods);
+                                  routes.push(route);
+                                }
+
+                                routes = this.test(routes);
+
+                                var spec = {
+                                  name: openScraper.mainInfo?.name,
+                                  defaultHeaders: this.test(openScraper.mainInfo.defaultHeaders),
+                                  servers: openScraper.mainInfo.hosts?.map(({ id, ...item }) => item),
+                                  definitions: definitions,
+                                  routes: routes,
+                                  program: {
+                                    inputs: this.test([...openScraper.program.inputs]),
+                                    operations: this.test([...openScraper.program.operations]),
+                                    result: openScraper.program.result,
+                                  }
+                                }
+
+                                console.log(spec);
+
                                 const schema = {
-                                  // title: this.state.title,
-                                  body: openScraper
+                                  body: spec
                                 };
+
                                 axios
                                   .post("/todo", schema)
                                   .then((response) => {
