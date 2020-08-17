@@ -45,16 +45,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const languages = ['C#', 'Visual Basics'];
+const outputs = ['code', 'executable'];
+const runtimes = ['windows', 'linux', 'mac'];
 
 var options = [];
 var schemas = [];
+
 
 export default function GenerateSchema() {
 	const classes = useStyles();
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const [anchorE2, setAnchorE2] = React.useState(null);
-	const [selectedIndex, setSelectedIndex] = React.useState(1);
-	const [selectedIndex2, setSelectedIndex2] = React.useState(1);
+	const [anchorE3, setAnchorE3] = React.useState(null);
+	const [anchorE4, setAnchorE4] = React.useState(null);
+	const [showRuntime, setShowRuntime] = React.useState(false);
+	const [selectedIndex, setSelectedIndex] = React.useState(null);
+	const [selectedIndex2, setSelectedIndex2] = React.useState(null);
+	const [selectedIndex3, setSelectedIndex3] = React.useState(null);
+	const [selectedIndex4, setSelectedIndex4] = React.useState(null);
+
+
 
 	const loadSchemas = (callback) => {
 		axios
@@ -92,6 +102,40 @@ export default function GenerateSchema() {
 
 	const handleClose1 = () => {
 		setAnchorE2(null);
+	};
+
+	const handleClickListItem2 = (event) => {
+		setAnchorE3(event.currentTarget);
+		if (event.currentTarget == 'executable') {
+			setShowRuntime(true);
+		}
+	};
+
+	const handleMenuItemClick2 = (event, index) => {
+		setSelectedIndex3(index);
+		console.log(index)
+		setAnchorE3(null);
+		if (index == 1) {
+			setShowRuntime(true);
+		}
+
+	};
+
+	const handleClose2 = () => {
+		setAnchorE3(null);
+	};
+
+	const handleClickListItem3 = (event) => {
+		setAnchorE4(event.currentTarget);
+	};
+
+	const handleMenuItemClick3 = (event, index) => {
+		setSelectedIndex4(index);
+		setAnchorE4(null);
+	};
+
+	const handleClose3 = () => {
+		setAnchorE4(null);
 	};
 
 	const handleSubmit = () => {
@@ -454,7 +498,7 @@ export default function GenerateSchema() {
 					<CardBody>
 						<GridContainer>
 							<GridItem xs={12} sm={12} md={4}>
-								<h4>Choose your schema</h4>
+								<h4>Schema</h4>
 							</GridItem>
 							<GridItem xs={12} sm={12} md={4}>
 								<List component="nav" aria-label="Device settings">
@@ -474,7 +518,7 @@ export default function GenerateSchema() {
 						</GridContainer>
 						<GridContainer>
 							<GridItem xs={12} sm={12} md={4}>
-								<h4>Choose your language </h4>
+								<h4>Language </h4>
 							</GridItem>
 							<GridItem xs={12} sm={12} md={4}>
 								<List component="nav" aria-label="Device settings">
@@ -492,6 +536,46 @@ export default function GenerateSchema() {
 								</Menu>
 							</GridItem>
 						</GridContainer>
+						<GridContainer>
+							<GridItem xs={12} sm={12} md={4}>
+								<h4>Output</h4>
+							</GridItem>
+							<GridItem xs={12} sm={12} md={4}>
+								<List component="nav" aria-label="Device settings">
+									<ListItem button aria-haspopup="true" aria-controls="lock-menu" aria-label="language" onClick={handleClickListItem2}>
+										<ListItemText primary="Output" secondary={outputs[selectedIndex3]} />
+									</ListItem>
+								</List>
+								<Menu id="lock-menu" anchorEl={anchorE3} keepMounted open={Boolean(anchorE3)} onClose={handleClose2}>
+									{outputs.map((option, index) => (
+										<MenuItem key={option} selected={index === selectedIndex3} onClick={(event) => handleMenuItemClick2(event, index)}
+										>
+											{option}
+										</MenuItem>
+									))}
+								</Menu>
+							</GridItem>
+						</GridContainer>
+						{showRuntime ? <GridContainer>
+							<GridItem xs={12} sm={12} md={4}>
+								<h4>Runtime</h4>
+							</GridItem>
+							<GridItem xs={12} sm={12} md={4}>
+								<List component="nav" aria-label="Device settings">
+									<ListItem button aria-haspopup="true" aria-controls="lock-menu" aria-label="language" onClick={handleClickListItem3}>
+										<ListItemText primary="Runtime" secondary={runtimes[selectedIndex4]} />
+									</ListItem>
+								</List>
+								<Menu id="lock-menu" anchorEl={anchorE4} keepMounted open={Boolean(anchorE4)} onClose={handleClose3}>
+									{runtimes.map((option, index) => (
+										<MenuItem key={option} selected={index === selectedIndex4} onClick={(event) => handleMenuItemClick3(event, index)}
+										>
+											{option}
+										</MenuItem>
+									))}
+								</Menu>
+							</GridItem>
+						</GridContainer> : null}
 					</CardBody>
 					<CardFooter>
 						<Button color="primary" variant="contained" type="submit" className={classes.submitButton} onClick={handleSubmit}>
