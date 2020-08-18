@@ -78,7 +78,7 @@ class Definition extends Component {
   deleteDefinition = (definitionId) => {
     let definitions = this.state.definitions;
     this.state.definitions.find((definition, i) => {
-      if (definition.id === definitionId) {
+      if (definition.id == definitionId) {
         definitions.splice(i, 1);
         return true;
       }

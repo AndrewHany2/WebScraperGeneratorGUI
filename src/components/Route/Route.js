@@ -196,7 +196,7 @@ class Route extends Component {
 
   handleDeleteParameter = (e) => {
     const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
-    const methodId = e.target.closest("button[method-id]").getAttribute("method-id");
+    const methodId = e.target.closest("div[method-id]").getAttribute("method-id");
     const parameterId = e.target.closest("button[parameter-id]").getAttribute("parameter-id");
 
     this.deleteParameter(routeId, methodId, parameterId);
@@ -287,7 +287,7 @@ class Route extends Component {
 
   handleDeleteResponse = (e) => {
     const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
-    const methodId = e.target.closest("button[method-id]").getAttribute("method-id");
+    const methodId = e.target.closest("div[method-id]").getAttribute("method-id");
     const responseId = e.target.closest("button[response-id]").getAttribute("response-id");
 
     this.deleteResponse(routeId, methodId, responseId);
@@ -534,6 +534,7 @@ class Route extends Component {
                                 return (
                                   <ExpansionPanel
                                     key={j}
+                                    method-id={method.id}
                                     // expanded={this.state.expanded === ("method-" + j)}
                                     onChange={this.handleChange("method-" + j)}>
                                     <ExpansionPanelSummary
@@ -620,6 +621,7 @@ class Route extends Component {
                                               return (
                                                 <ExpansionPanel
                                                   key={h}
+                                                  parameter-id={parameter.id}
                                                   // expanded={this.state.expanded === ("parameter-" + h)}
                                                   onChange={this.handleChange("parameter-" + h)}>
                                                   <ExpansionPanelSummary
@@ -708,6 +710,7 @@ class Route extends Component {
                                               return (
                                                 <ExpansionPanel
                                                   key={g}
+                                                  response-id={response.id}
                                                   // expanded={this.state.expanded === ("response-" + g)}
                                                   onChange={this.handleChange("response-" + g)}>
                                                   <ExpansionPanelSummary

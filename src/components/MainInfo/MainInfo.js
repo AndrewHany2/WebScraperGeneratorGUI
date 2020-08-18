@@ -131,6 +131,7 @@ class MainInfo extends Component {
               <div>
                 <Button
                   onClick={() => {
+                    console.log(this.state.mainInfo)
                     this.setState({
                       addDefaultHeader: true,
                       mainInfo:
@@ -139,7 +140,8 @@ class MainInfo extends Component {
                         hosts: [...this.state.mainInfo.hosts],
                         defaultHeaders: [...this.state.mainInfo.defaultHeaders, {
                           id: (this.state.mainInfo.defaultHeaders[this.state.mainInfo.defaultHeaders.length - 1]?.id ?? -1) + 1,
-                          name: ""
+                          name: "",
+                          value: ""
                         }]
                       }
                     });
@@ -162,11 +164,18 @@ class MainInfo extends Component {
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                           <TextField
-                            label="Default Header"
+                            label="Name"
                             style={{ margin: 8 }}
                             margin="normal"
                             value={defaultHeader.name}
                             onChange={(e) => this.updateDefaultHeader(defaultHeader.id, "name", e.target.value)}
+                          />
+                          <TextField
+                            label="Value"
+                            style={{ margin: 8 }}
+                            margin="normal"
+                            value={defaultHeader.value}
+                            onChange={(e) => this.updateDefaultHeader(defaultHeader.id, "value", e.target.value)}
                           />
                           <IconButton
                             edge="end"
