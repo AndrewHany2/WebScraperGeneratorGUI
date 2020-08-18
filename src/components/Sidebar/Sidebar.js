@@ -82,9 +82,10 @@ export default function Sidebar(props) {
   );
   var brand = (
     <div className={classes.logo}>
-        <h5 tyle={{ color: 'white' }}>Web Scraper Generator</h5>
-       
- 
+        <div className={classes.logoImage}>
+          <img src={logo} alt="logo" className={classes.img} />
+        </div>
+        <text style={{ color: 'white' }}>Web Scraper Generator</text>
     </div>
   );
   return (
