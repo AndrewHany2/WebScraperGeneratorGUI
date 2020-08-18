@@ -676,13 +676,13 @@ class Route extends Component {
                                                           }
                                                           label="Required"
                                                         />
-                                                        <IconButton
+                                                        {/* <IconButton
                                                           edge="end"
                                                           aria-label="delete"
                                                           onClick={this.handleDeleteParameter}
                                                         >
                                                           <DeleteIcon />
-                                                        </IconButton>
+                                                        </IconButton> */}
                                                       </div>
                                                     </Typography>
                                                   </ExpansionPanelDetails>
@@ -739,13 +739,13 @@ class Route extends Component {
                                                         value={response.schema}
                                                         onChange={(e) => this.updateResponse(route.id, method.id, response.id, "schema", e.target.value)}
                                                       />
-                                                      <IconButton
+                                                      {/* <IconButton
                                                         edge="end"
                                                         aria-label="delete"
                                                         onClick={this.handleDeleteResponse}
                                                       >
                                                         <DeleteIcon />
-                                                      </IconButton>
+                                                      </IconButton> */}
                                                       <div>
                                                         <Button
                                                           onClick={() => {

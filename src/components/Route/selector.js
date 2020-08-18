@@ -154,14 +154,14 @@ class Selector extends Component {
                                 </div>
                             </React.Fragment> : null
                     }
-                    <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={this.props.handleDeleteSelector}
-                        selector-id={this.props.selector.id}
-                    >
-                        <DeleteIcon />
-                    </IconButton>
+                        {/* <IconButton
+                            edge="end"
+                            aria-label="delete"
+                            onClick={this.props.handleDeleteSelector}
+                            selector-id={this.props.selector.id}
+                        >
+                            <DeleteIcon />
+                        </IconButton> */}
                 </Typography>
             </ExpansionPanelDetails>
         </ExpansionPanel>);
