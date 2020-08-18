@@ -126,7 +126,7 @@ class Schema extends Component {
 
                                 let definitions = [];
                                 for (let i = 0; i < openScraper.definition.length; i++) {
-                                  let definition = openScraper.definition[i];
+                                  let definition = { ...openScraper.definition[i] };
                                   definition.properties = this.test(definition.properties);
                                   definitions.push(definition);
                                 }
@@ -135,38 +135,54 @@ class Schema extends Component {
 
                                 let routes = [];
                                 for (let i = 0; i < openScraper.route.length; i++) {
-                                  let route = openScraper.route[i];
+                                  let route = { ...openScraper.route[i] };
 
                                   let methods = [];
                                   for (let j = 0; j < route.methods.length; j++) {
-                                    let method = route.methods[i];
+                                    let method = route.methods[j];
 
                                     method.parameters = this.test(method.parameters);
                                     method.responses = this.test(method.responses);
 
                                     methods.push(method);
                                   }
-                                  
+
                                   route.methods = this.test(methods);
                                   routes.push(route);
                                 }
 
                                 routes = this.test(routes);
 
+                                let programOperations = [];
+                                for (let i = 0; i < openScraper.program.operations.length; i++) {
+                                  let operation = { ...openScraper.program.operations[i] };
+                                  operation.parameters = this.test(operation.parameters);
+                                  programOperations.push(operation);
+                                }
+
+                                programOperations = this.test(programOperations);
+
+                                let defaultHeaders = this.test([...openScraper.mainInfo.defaultHeaders]);
+                                Object.keys(defaultHeaders).map(k => defaultHeaders[k] = defaultHeaders[k].value);
+
                                 var spec = {
                                   name: openScraper.mainInfo?.name,
-                                  defaultHeaders: this.test(openScraper.mainInfo.defaultHeaders),
+                                  defaultHeaders: defaultHeaders,
                                   servers: openScraper.mainInfo.hosts?.map(({ id, ...item }) => item),
                                   definitions: definitions,
                                   routes: routes,
                                   program: {
                                     inputs: this.test([...openScraper.program.inputs]),
-                                    operations: this.test([...openScraper.program.operations]),
-                                    result: openScraper.program.result,
+                                    operations: programOperations,
+                                    result: {
+                                      type: openScraper.program.resultType,
+                                      value: openScraper.program.resultValue
+                                    }
                                   }
                                 }
 
                                 console.log(spec);
+                                console.log(JSON.stringify(spec));
 
                                 const schema = {
                                   body: spec
