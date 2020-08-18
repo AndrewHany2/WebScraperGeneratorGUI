@@ -16,9 +16,16 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { set } from "lodash/fp";
 import DoneIcon from "@material-ui/icons/Done";
 import openScraper from '../../global'
+import { withStyles } from '@material-ui/styles';
 
 
-export default class Program extends Component {
+const styles = theme => ({
+  details: {
+    flexDirection: "column"
+  }
+});
+
+class Program extends Component {
   state = {
     program: {
       inputs: [],
@@ -248,6 +255,8 @@ export default class Program extends Component {
 
 
   render() {
+    const { classes } = this.props;
+
     return (
       <div>
         <ExpansionPanel>
@@ -365,7 +374,7 @@ export default class Program extends Component {
                           >
                             <Typography>{operation.name ? operation.name : "Operation"}</Typography>
                           </ExpansionPanelSummary>
-                          <ExpansionPanelDetails>
+                          <ExpansionPanelDetails className={classes.details}>
                             <TextField
                               label="Operation"
                               style={{ margin: 8 }}
@@ -552,3 +561,5 @@ export default class Program extends Component {
     );
   }
 }
+
+export default withStyles(styles)(Program);
