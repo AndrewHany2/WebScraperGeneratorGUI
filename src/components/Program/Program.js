@@ -291,7 +291,6 @@ class Program extends Component {
                     <ExpansionPanel
                       key={i}
                       input-id={input.id}
-                      expanded={this.state.expanded === ("panel-" + i)}
                       onChange={this.handleChange("panel-" + i)}>
                       <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -359,18 +358,17 @@ class Program extends Component {
                   Add operation
             </Button>
                 {
-                  this.state.program.operations.map((operation, i) => {
+                  this.state.program.operations.map((operation, j) => {
                     return (
                       <div>
                         <ExpansionPanel
-                          key={i}
+                          key={j}
                           operation-id={operation.id}
-                          expanded={this.state.expanded === ("panel-" + i)}
-                          onChange={this.handleChange("panel-" + i)}>
+                          onChange={this.handleChange("panel-" + j)}>
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
-                            aria-controls={"panel-" + i + "-content"}
-                            id={"panel-" + i + "-header"}
+                            aria-controls={"panel-" + j + "-content"}
+                            id={"panel-" + j + "-header"}
                           >
                             <Typography>{operation.name ? operation.name : "Operation"}</Typography>
                           </ExpansionPanelSummary>
@@ -427,18 +425,17 @@ class Program extends Component {
                                 Add Parameter
                             </Button>
                               {
-                                operation.parameters.map((parameter, i) => {
+                                operation.parameters.map((parameter, k) => {
                                   return (
                                     <div>
                                       <ExpansionPanel
-                                        key={i}
+                                        key={k}
                                         parameter-id={parameter.id}
-                                        expanded={this.state.expanded === ("panel-" + i)}
-                                        onChange={this.handleChange("panel-" + i)}>
+                                        onChange={this.handleChange("panel-" + k)}>
                                         <ExpansionPanelSummary
                                           expandIcon={<ExpandMoreIcon />}
-                                          aria-controls={"panel-" + i + "-content"}
-                                          id={"panel-" + i + "-header"}
+                                          aria-controls={"panel-" + k + "-content"}
+                                          id={"panel-" + k + "-header"}
                                         >
                                           <Typography>{parameter.name ? parameter.name : "Parameter"}</Typography>
                                         </ExpansionPanelSummary>
@@ -505,17 +502,17 @@ class Program extends Component {
                   Add result
             </Button>
                 {
-                  this.state.program.results.map((result, i) => {
+                  this.state.program.results.map((result, h) => {
                     return (
                       <ExpansionPanel
-                        key={i}
+                        key={h}
                         result-id={result.id}
-                        expanded={this.state.expanded === ("panel-" + i)}
-                        onChange={this.handleChange("panel-" + i)}>
+                        expanded={this.state.expanded === ("panel-" + h)}
+                        onChange={this.handleChange("panel-" + h)}>
                         <ExpansionPanelSummary
                           expandIcon={<ExpandMoreIcon />}
-                          aria-controls={"panel-" + i + "-content"}
-                          id={"panel-" + i + "-header"}
+                          aria-controls={"panel-" + h + "-content"}
+                          id={"panel-" + h + "-header"}
                         >
                           <Typography>{result.type ? result.type : "Result"}</Typography>
                         </ExpansionPanelSummary>
