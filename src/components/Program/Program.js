@@ -27,10 +27,12 @@ const styles = theme => ({
 
 class Program extends Component {
   state = {
+    sourceAppear: false,
     program: {
       inputs: [],
       operations: [],
-      results: []
+      resultType: "",
+      resultValue: "",
     }
   }
 
@@ -58,7 +60,8 @@ class Program extends Component {
       program: {
         inputs: [...inputs],
         operations: [...this.state.program.operations],
-        results: [...this.state.program.results]
+        resultType: this.state.resultType,
+        resultValue: this.state.resultType,
       }
     });
   }
@@ -76,48 +79,8 @@ class Program extends Component {
       program: {
         inputs: [...inputs],
         operations: [...this.state.program.operations],
-        results: [...this.state.program.results]
-      }
-    });
-  }
-  handleDeleteResult = (e) => {
-    const resultId = e.target.closest("div[result-id]").getAttribute("result-id");
-
-    this.deleteResult(resultId);
-  }
-
-  deleteResult = (resultId) => {
-    let results = this.state.program.results;
-    this.state.program.results.find((result, i) => {
-      if (result.id == resultId) {
-        results.splice(i, 1);
-        return true;
-      }
-    });
-
-    this.setState({
-      program: {
-        results: [...results],
-        operations: [...this.state.program.operations],
-        inputs: [...this.state.program.inputs]
-      }
-    });
-  }
-
-
-  updateResult = (id, property, value) => {
-    let results = this.state.program.results;
-    this.state.program.results.find((result, i) => {
-      if (result.id === id) {
-        results[i][property] = value;
-        return true;
-      }
-    });
-    this.setState({
-      program: {
-        results: [...results],
-        operations: [...this.state.program.operations],
-        inputs: [...this.state.program.inputs]
+        resultType: this.state.resultType,
+        resultValue: this.state.resultType,
       }
     });
   }
@@ -141,7 +104,8 @@ class Program extends Component {
       program: {
         operations: [...operations],
         inputs: [...this.state.program.inputs],
-        results: [...this.state.program.results]
+        resultType: this.state.resultType,
+        resultValue: this.state.resultType,
       }
     });
   }
@@ -159,7 +123,8 @@ class Program extends Component {
       program: {
         operations: [...operations],
         inputs: [...this.state.program.inputs],
-        results: [...this.state.program.results]
+        resultType: this.state.resultType,
+        resultValue: this.state.resultType,
       }
     });
   }
@@ -194,7 +159,8 @@ class Program extends Component {
       program:
       {
         operations: [...operations],
-        results: [...this.state.program.results],
+        resultType: this.state.resultType,
+        resultValue: this.state.resultType,
         inputs: [...this.state.program.inputs]
       }
     });
@@ -213,7 +179,8 @@ class Program extends Component {
       program:
       {
         operations: [...operations],
-        results: [...this.state.program.results],
+        resultType: this.state.resultType,
+        resultValue: this.state.resultType,
         inputs: [...this.state.program.inputs]
       }
     });
@@ -240,7 +207,8 @@ class Program extends Component {
       program:
       {
         operations: [...operations],
-        results: [...this.state.program.results],
+        resultType: this.state.resultType,
+        resultValue: this.state.resultType,
         inputs: [...this.state.program.inputs]
       }
     });
@@ -275,7 +243,8 @@ class Program extends Component {
                     program:
                     {
                       operations: [...this.state.program.operations],
-                      results: [...this.state.program.results],
+                      resultType: this.state.resultType,
+                      resultValue: this.state.resultType,
                       inputs: [...this.state.program.inputs, {
                         id: (this.state.program.inputs[this.state.program.inputs.length - 1]?.id ?? -1) + 1,
                         name: "", method: "", default: ""
@@ -347,10 +316,11 @@ class Program extends Component {
                       program:
                       {
                         inputs: [...this.state.program.inputs],
-                        results: [...this.state.program.results],
+                        resultType: this.state.resultType,
+                        resultValue: this.state.resultType,
                         operations: [...this.state.program.operations, {
                           id: (this.state.program.operations[this.state.program.operations.length - 1]?.id ?? -1) + 1,
-                          name: "", method: "", parent: "", multiple: "", parameters: []
+                          name: "", method: "", parent: "", multiple: "", sourceType: "", sourceValue: "", parameters: []
                         }]
                       }
                     });
@@ -399,11 +369,39 @@ class Program extends Component {
                                 <Checkbox
                                   name="checkedB"
                                   color="primary"
-                                  onChange={(e) => this.updateOperation(operation.id, "multiple", e.target.checked)}
+                                  onChange={(e) => {
+                                    this.updateOperation(operation.id, "multiple", e.target.checked)
+                                    if (e.target.checked == true)
+                                      this.setState({ sourceAppear: true })
+                                    if (e.target.checked == false)
+                                      this.setState({ sourceAppear: false })
+                                    console.log(this.state.program)
+                                  }
+                                  }
                                 />
                               }
                               label="Multiple"
                             />
+                            {this.state.sourceAppear ?
+                              (
+                                <div>
+                                  <TextField
+                                    label="source type"
+                                    style={{ margin: 8 }}
+                                    margin="normal"
+                                    value={operation.sourceType}
+                                    onChange={(e) => this.updateOperation(operation.id, "sourceType", e.target.value)}
+                                  />
+                                  <TextField
+                                    label="source value"
+                                    style={{ margin: 8 }}
+                                    margin="normal"
+                                    value={operation.sourceValue}
+                                    onChange={(e) => this.updateOperation(operation.id, "sourceValue", e.target.value)}
+                                  />
+                                </div>
+                              ) : null
+                            }
                             <IconButton
                               edge="end"
                               aria-label="delete"
@@ -481,75 +479,44 @@ class Program extends Component {
                       </div>
                     )
                   })
+
                 }
-              </div>
-              <div>
-                <Button
-                  onClick={() => {
-                    this.setState({
-                      addResult: true,
-                      program:
-                      {
+                <div>
+                  <TextField
+                    label="Result Type"
+                    style={{ margin: 8 }}
+                    margin="normal"
+                    resultLabelProps={{
+                      shrink: true,
+                    }}
+                    value={this.state.program.sourceType}
+                    onChange={(e) => this.setState({
+                      program: {
                         inputs: [...this.state.program.inputs],
                         operations: [...this.state.program.operations],
-                        results: [...this.state.program.results, {
-                          id: (this.state.program.results[this.state.program.results.length - 1]?.id ?? -1) + 1,
-                          type: "", value: ""
-                        }]
+                        resultType: e.target.value,
+                        resultValue: this.state.program.resultValue,
                       }
-                    });
-                  }}>
-                  Add result
-            </Button>
-                {
-                  this.state.program.results.map((result, h) => {
-                    return (
-                      <ExpansionPanel
-                        key={h}
-                        result-id={result.id}
-                        expanded={this.state.expanded === ("panel-" + h)}
-                        onChange={this.handleChange("panel-" + h)}>
-                        <ExpansionPanelSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls={"panel-" + h + "-content"}
-                          id={"panel-" + h + "-header"}
-                        >
-                          <Typography>{result.type ? result.type : "Result"}</Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                          <TextField
-                            label="Type"
-                            style={{ margin: 8 }}
-                            margin="normal"
-                            resultLabelProps={{
-                              shrink: true,
-                            }}
-                            value={result.type}
-                            onChange={(e) => this.updateResult(result.id, "type", e.target.value)}
-                          />
-                          <TextField
-                            label="Value"
-                            style={{ margin: 8 }}
-                            margin="normal"
-                            resultLabelProps={{
-                              shrink: true,
-                            }}
-                            value={result.value}
-                            onChange={(e) => this.updateResult(result.id, "value", e.target.value)}
-                          />
-                          <IconButton
-                            edge="end"
-                            aria-label="delete"
-                            onClick={this.handleDeleteResult}
-                            result-id={result.id}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </ExpansionPanelDetails>
-                      </ExpansionPanel>
-                    )
-                  })
-                }
+                    })}
+                  />
+                  <TextField
+                    label="Result Value"
+                    style={{ margin: 8 }}
+                    margin="normal"
+                    resultLabelProps={{
+                      shrink: true,
+                    }}
+                    value={this.state.program.sourceValue}
+                    onChange={(e) => this.setState({
+                      program: {
+                        inputs: [...this.state.program.inputs],
+                        operations: [...this.state.program.operations],
+                        resultType: this.state.program.resultType,
+                        resultValue: e.target.value,
+                      }
+                    })}
+                  />
+                </div>
               </div>
             </Typography>
           </ExpansionPanelDetails>
