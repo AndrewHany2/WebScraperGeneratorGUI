@@ -480,7 +480,7 @@ export default function GenerateSchema() {
 
 		loadSchemas((schemas) => {
 			for (var i = 0; i < schemas.length; i++) {
-				options.push(schemas[i].body.mainInfo.name);
+				options.push(schemas[i].body.name);
 			}
 		});
 
