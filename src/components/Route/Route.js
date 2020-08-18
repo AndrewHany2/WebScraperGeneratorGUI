@@ -75,7 +75,7 @@ class Route extends Component {
 
   handleDeleteMethod = (e) => {
     const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
-    const methodId = e.target.closest("button[method-id]").getAttribute("method-id");
+    const methodId = e.target.closest("div[method-id]").getAttribute("method-id");
 
     this.deleteMethod(routeId, methodId);
   }
@@ -197,7 +197,7 @@ class Route extends Component {
   handleDeleteParameter = (e) => {
     const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
     const methodId = e.target.closest("div[method-id]").getAttribute("method-id");
-    const parameterId = e.target.closest("button[parameter-id]").getAttribute("parameter-id");
+    const parameterId = e.target.closest("div[parameter-id]").getAttribute("parameter-id");
 
     this.deleteParameter(routeId, methodId, parameterId);
   }
@@ -263,10 +263,10 @@ class Route extends Component {
           if (method.id === methodId) {
             let responses = method.responses;
 
-            method.responses.find((response, h) => {
+            method.responses.find((response, g) => {
 
               if (response.id === responseId) {
-                responses[h][property] = value;
+                responses[g][property] = value;
                 return true;
               }
             })
@@ -288,7 +288,7 @@ class Route extends Component {
   handleDeleteResponse = (e) => {
     const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
     const methodId = e.target.closest("div[method-id]").getAttribute("method-id");
-    const responseId = e.target.closest("button[response-id]").getAttribute("response-id");
+    const responseId = e.target.closest("div[response-id]").getAttribute("response-id");
 
     this.deleteResponse(routeId, methodId, responseId);
   }
@@ -302,9 +302,9 @@ class Route extends Component {
         route.methods.find((method, j) => {
           if (method.id == methodId) {
             let responses = method.responses;
-            method.responses.find((response, h) => {
+            method.responses.find((response, g) => {
               if (response.id === responseId) {
-                responses.splice(h, 1);
+                responses.splice(g, 1);
                 return true;
               }
             })
@@ -402,8 +402,8 @@ class Route extends Component {
 
   handleDeleteSelector = (e) => {
     const routeId = e.target.closest("div[route-id]").getAttribute("route-id");
-    const methodId = e.target.closest("button[method-id]").getAttribute("method-id");
-    const responseId = e.target.closest("button[response-id]").getAttribute("response-id");
+    const methodId = e.target.closest("div[method-id]").getAttribute("method-id");
+    const responseId = e.target.closest("div[response-id]").getAttribute("response-id");
     const selectorId = e.target.closest("button[selector-id]").getAttribute("selector-id");
 
 
@@ -515,8 +515,6 @@ class Route extends Component {
                           <div>
                             <Button
                               onClick={() => {
-                                console.log(route);
-                                console.log(route.methods)
                                 this.addMethod(route.id, {
                                   id: (route.methods[route.methods.length - 1]?.id ?? -1) + 1,
                                   name: "",
@@ -598,7 +596,6 @@ class Route extends Component {
                                           edge="end"
                                           aria-label="delete"
                                           onClick={this.handleDeleteMethod}
-                                          method-id={method.id}
                                         >
                                           <DeleteIcon />
                                         </IconButton>
@@ -683,7 +680,6 @@ class Route extends Component {
                                                           edge="end"
                                                           aria-label="delete"
                                                           onClick={this.handleDeleteParameter}
-                                                          parameter-id={parameter.id}
                                                         >
                                                           <DeleteIcon />
                                                         </IconButton>
@@ -747,7 +743,6 @@ class Route extends Component {
                                                         edge="end"
                                                         aria-label="delete"
                                                         onClick={this.handleDeleteResponse}
-                                                        response-id={response.id}
                                                       >
                                                         <DeleteIcon />
                                                       </IconButton>

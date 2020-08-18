@@ -557,7 +557,7 @@ class Program extends Component {
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-      </div>
+      </div >
     );
   }
 }
