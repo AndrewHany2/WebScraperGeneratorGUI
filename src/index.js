@@ -31,8 +31,8 @@ ReactDOM.render(
       <Route path="/login" component={login} />
       <Route path="/generate" component={GenerateSchema} />
       <Route path="/signup" component={SignUp} />
-      <Redirect from="/" to="/login" component={login} />
       <Redirect from="/WebScraperGenerator" to="/WebScraperGenerator/dashboard" />
+      <Redirect from="/" to="/login" component={login} />
     </Switch>
   </Router>,
   document.getElementById("root")
