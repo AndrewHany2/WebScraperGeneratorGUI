@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const languages = ['C#', 'Visual Basics'];
+const languages = ['C#', 'Visual Basic'];
 const outputs = ['code', 'executable'];
 const runtimes = ['windows', 'linux', 'mac'];
 
