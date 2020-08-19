@@ -28,6 +28,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import history from "../../history"
 
 import { bugs, website, server } from "variables/general.js";
 
@@ -41,7 +42,15 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 
 const useStyles = makeStyles(styles);
 
+
+
 export default function Dashboard() {
+  React.useEffect(() => {
+    const authToken = localStorage.getItem("AuthToken");
+    if (authToken == null) {
+      history.push("/login")
+    }
+  })
   const classes = useStyles();
   return (
     <div>

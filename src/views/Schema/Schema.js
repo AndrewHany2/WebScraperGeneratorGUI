@@ -59,6 +59,12 @@ class Schema extends Component {
     errors: []
   };
 
+  componentWillMount() {
+    const authToken = localStorage.getItem("AuthToken");
+    if (authToken == null) {
+      history.push("/login")
+    }
+  }
   componentDidMount() {
     this.setState({ submitButtonAppear: true })
   }
@@ -133,7 +139,7 @@ class Schema extends Component {
                                 }
 
                                 definitions = this.test(definitions);
-                                
+
                                 let routes = [];
                                 for (let i = 0; i < openScraper.route.length; i++) {
                                   let route = { ...openScraper.route[i] };
@@ -534,7 +540,7 @@ class Schema extends Component {
                                       </Alert>
                                     });
                                   });
-                                  history.push("/WebScraperGenerator/generate");
+                                history.push("/WebScraperGenerator/generate");
 
                               }}
                               color="primary"

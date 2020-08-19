@@ -18,6 +18,8 @@ import TextField from '@material-ui/core/TextField';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import avatar from "assets/img/faces/marc.jpg";
 import axios from "axios";
+import history from "../../history"
+
 
 
 const styles = (theme) => ({
@@ -62,6 +64,10 @@ class UserProfile extends Component {
 
   componentWillMount = () => {
     const authToken = localStorage.getItem("AuthToken");
+    if (authToken == null) {
+      history.push("/login")
+    }
+
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios
       .get("/user")

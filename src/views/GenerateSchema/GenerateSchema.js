@@ -19,8 +19,11 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import history from "../../history"
 
 
+
+const authToken = localStorage.getItem("AuthToken");
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -137,6 +140,13 @@ export default function GenerateSchema() {
 	const handleClose3 = () => {
 		setAnchorE4(null);
 	};
+
+	React.useEffect(() => {
+		const authToken = localStorage.getItem("AuthToken");
+		if (authToken == null) {
+			history.push("/login")
+		}
+	})
 
 	const handleSubmit = () => {
 		axios
