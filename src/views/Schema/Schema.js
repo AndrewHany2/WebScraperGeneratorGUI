@@ -520,7 +520,7 @@ class Schema extends Component {
                                     },
                                     "result": {
                                       "type": "variable",
-                                      "value": "subtitles"
+                                      "value": "film"
                                     }
                                   }
                                 }
