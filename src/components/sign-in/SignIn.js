@@ -82,9 +82,8 @@ class login extends Component {
       .then((response) => {
         localStorage.setItem("AuthToken", `Bearer ${response.data.token}`);
         setTimeout(() => {
-          console.log("time out")
-        }, 2000);
-        history.push("/WebScraperGenerator/dashboard");
+          history.push("/WebScraperGenerator/dashboard");
+        }, 1000);
         this.setState({
           loading: false,
         });
@@ -95,6 +94,8 @@ class login extends Component {
           loading: false,
         });
       });
+
+
 
   };
 
