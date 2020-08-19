@@ -36,7 +36,7 @@ class Route extends Component {
   }
 
   componentDidUpdate() {
-    openScraper.route = this.state.routes;
+    openScraper.route = [...this.state.routes];
   }
 
   handleDeleteRoute = (e) => {
@@ -614,7 +614,7 @@ class Route extends Component {
                                             Add Parameter
                                         </Button>
                                           {
-                                            method.parameters.map((parameter, h) => {
+                                            method.parameters?.map((parameter, h) => {
                                               return (
                                                 <ExpansionPanel
                                                   key={h}
@@ -696,7 +696,7 @@ class Route extends Component {
                                             onClick={() => {
                                               this.addResponse(route.id, method.id, {
                                                 id: (method.responses[method.responses.length - 1]?.id ?? -1) + 1,
-                                                code: "", description: "", schema: "", selectors: []
+                                                name: "", description: "", schema: "", selectors: []
                                               });
                                             }}>
                                             Add Response
@@ -714,7 +714,7 @@ class Route extends Component {
                                                     aria-controls={"response-" + g + "-content"}
                                                     id={"response-" + g + "-header"}
                                                   >
-                                                    <Typography>{response.code ? response.code : "Response"}</Typography>
+                                                    <Typography>{response.name ? response.name : "Response"}</Typography>
                                                   </ExpansionPanelSummary>
                                                   <ExpansionPanelDetails>
                                                     <Typography>
@@ -722,8 +722,8 @@ class Route extends Component {
                                                         label="Code"
                                                         style={{ margin: 8 }}
                                                         margin="normal"
-                                                        value={response.code}
-                                                        onChange={(e) => this.updateResponse(route.id, method.id, response.id, "code", e.target.value)}
+                                                        value={response.name}
+                                                        onChange={(e) => this.updateResponse(route.id, method.id, response.id, "name", e.target.value)}
                                                       />
                                                       <TextField
                                                         label="Description"
