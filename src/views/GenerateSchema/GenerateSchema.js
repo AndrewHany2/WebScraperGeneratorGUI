@@ -149,8 +149,16 @@ export default function GenerateSchema() {
 	})
 
 	const handleSubmit = () => {
+		let type;
+		if (selectedIndex3 == 0) {
+			type = 0;
+		}
+		else if (selectedIndex3 == 1) {
+			type = selectedIndex4 + 1
+		}
+
 		axios
-			.post('https://localhost:44314/api/scrazzer', {
+			.post(`https://localhost:44314/api/scrazzer?language=${selectedIndex2}&type=${type}`, {
 				"name": "Subscene",
 				"servers": [
 					{
@@ -465,7 +473,7 @@ export default function GenerateSchema() {
 					},
 					"result": {
 						"type": "variable",
-						"value": "film"
+						"value": "subtitles"
 					}
 				}
 			}, {
