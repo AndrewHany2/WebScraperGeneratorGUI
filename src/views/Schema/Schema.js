@@ -24,6 +24,7 @@ import Definition from "components/Definition/Definition";
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { withStyles } from '@material-ui/styles';
 import axios from "axios";
+import history from "../../history"
 
 
 
@@ -533,6 +534,7 @@ class Schema extends Component {
                                       </Alert>
                                     });
                                   });
+                                  history.push("/WebScraperGenerator/generate");
 
                               }}
                               color="primary"

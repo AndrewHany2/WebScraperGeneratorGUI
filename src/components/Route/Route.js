@@ -473,7 +473,7 @@ class Route extends Component {
                   this.setState({
                     routes: [...this.state.routes, {
                       id: (this.state.routes[this.state.routes.length - 1]?.id ?? -1) + 1,
-                      name: "", summary: "", description: "", methods: [], responses: [], parameters: []
+                      name: "", summary: "", description: "", methods: []
                     }]
                   });
                 }}>
@@ -522,8 +522,9 @@ class Route extends Component {
                                   description: "",
                                   outputFile: "",
                                   responses: [],
-                                  parameters: []
+                                  parameters: [],
                                 });
+                                console.log(this.state.routes)
                               }}>
                               Add Method
                             </Button>

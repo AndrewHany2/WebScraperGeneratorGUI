@@ -18,26 +18,29 @@ import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
 
+
 const authToken = localStorage.getItem("AuthToken");
 
 let ps;
 
 const switchRoutes = (
-  <Switch>
-    {routes.map((prop, key) => {
-      if (prop.layout === "/WebScraperGenerator") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      }
-      return null;
-    })}
-    <Redirect from="/WebScraperGenerator" to="/WebScraperGenerator/dashboard" />
-  </Switch>
+  authToken !== null ? (
+    <Switch>
+      {routes.map((prop, key) => {
+        if (prop.layout === "/WebScraperGenerator") {
+          return (
+            <Route
+              path={prop.layout + prop.path}
+              component={prop.component}
+              key={key}
+            />
+          );
+        }
+        return null;
+      })}
+      <Redirect from="/WebScraperGenerator" to="/WebScraperGenerator/dashboard" />
+    </Switch>
+  ) : <Redirect from="/WebScraperGenerator" to="/login" />
 );
 
 const useStyles = makeStyles(styles);
@@ -97,7 +100,8 @@ export default function WebScraperGenerator({ ...rest }) {
       };
     }
   }, [mainPanel]);
-  return authToken !== null ? (
+
+  return (
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
@@ -134,7 +138,5 @@ export default function WebScraperGenerator({ ...rest }) {
         /> */}
       </div>
     </div>
-  ) : (
-      <Redirect from="/WebScraperGenerator" to="/login" />
-    );
+  );
 }

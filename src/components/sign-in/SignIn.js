@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import history from "../../history"
 
 import axios from "axios";
 
@@ -80,10 +81,12 @@ class login extends Component {
       .post("/login", userData)
       .then((response) => {
         localStorage.setItem("AuthToken", `Bearer ${response.data.token}`);
+        setTimeout(() => {
+          history.push("/WebScraperGenerator/dashboard");
+        }, 1000);
         this.setState({
           loading: false,
         });
-        this.props.history.push("/WebScraperGenerator");
       })
       .catch((error) => {
         this.setState({
@@ -91,6 +94,9 @@ class login extends Component {
           loading: false,
         });
       });
+
+
+
   };
 
   render() {
