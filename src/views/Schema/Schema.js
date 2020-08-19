@@ -59,6 +59,12 @@ class Schema extends Component {
     errors: []
   };
 
+  componentWillMount() {
+    const authToken = localStorage.getItem("AuthToken");
+    if (authToken == null) {
+      history.push("/login")
+    }
+  }
   componentDidMount() {
     this.setState({ submitButtonAppear: true })
   }

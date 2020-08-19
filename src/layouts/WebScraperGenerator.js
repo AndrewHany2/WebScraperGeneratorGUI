@@ -24,23 +24,21 @@ const authToken = localStorage.getItem("AuthToken");
 let ps;
 
 const switchRoutes = (
-  authToken !== null ? (
-    <Switch>
-      {routes.map((prop, key) => {
-        if (prop.layout === "/WebScraperGenerator") {
-          return (
-            <Route
-              path={prop.layout + prop.path}
-              component={prop.component}
-              key={key}
-            />
-          );
-        }
-        return null;
-      })}
-      <Redirect from="/WebScraperGenerator" to="/WebScraperGenerator/dashboard" />
-    </Switch>
-  ) : <Redirect from="/WebScraperGenerator" to="/login" />
+  <Switch>
+    {routes.map((prop, key) => {
+      if (prop.layout === "/WebScraperGenerator") {
+        return (
+          <Route
+            path={prop.layout + prop.path}
+            component={prop.component}
+            key={key}
+          />
+        );
+      }
+      return null;
+    })}
+    <Redirect from="/WebScraperGenerator" to="/WebScraperGenerator/dashboard" />
+  </Switch>
 );
 
 const useStyles = makeStyles(styles);
@@ -81,24 +79,22 @@ export default function WebScraperGenerator({ ...rest }) {
   };
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
-    if (authToken !== null) {
-      if (navigator.platform.indexOf("Win") > -1) {
-        console.log(mainPanel);
-        ps = new PerfectScrollbar(mainPanel.current, {
-          suppressScrollX: true,
-          suppressScrollY: false,
-        });
-        document.body.style.overflow = "hidden";
-      }
-      window.addEventListener("resize", resizeFunction);
-      // Specify how to clean up after this effect:
-      return function cleanup() {
-        if (navigator.platform.indexOf("Win") > -1) {
-          ps.destroy();
-        }
-        window.removeEventListener("resize", resizeFunction);
-      };
+    if (navigator.platform.indexOf("Win") > -1) {
+      console.log(mainPanel);
+      ps = new PerfectScrollbar(mainPanel.current, {
+        suppressScrollX: true,
+        suppressScrollY: false,
+      });
+      document.body.style.overflow = "hidden";
     }
+    window.addEventListener("resize", resizeFunction);
+    // Specify how to clean up after this effect:
+    return function cleanup() {
+      if (navigator.platform.indexOf("Win") > -1) {
+        ps.destroy();
+      }
+      window.removeEventListener("resize", resizeFunction);
+    };
   }, [mainPanel]);
 
   return (
