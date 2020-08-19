@@ -327,6 +327,17 @@ class Schema extends Component {
                                             "description": "successful operation",
                                             "schema": {
                                               "$ref": "#/definitions/Subtitle"
+                                            },
+                                            "selectors": {
+                                              "language": {
+                                                "selector": "language",
+                                                "selectorType": "parameter"
+                                              },
+                                              "link": {
+                                                "selector": "#downloadButton",
+                                                "selectorType": "querySelector",
+                                                "type": "link"
+                                              }
                                             }
                                           }
                                         }

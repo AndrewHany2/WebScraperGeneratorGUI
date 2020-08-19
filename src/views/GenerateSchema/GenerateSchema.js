@@ -157,7 +157,7 @@ export default function GenerateSchema() {
 			type = selectedIndex4 + 1
 		}
 
-		let schema = schemas[selectedIndex];
+		let schema = schemas[selectedIndex].body;
 
 		axios
 			.post(`https://localhost:44314/api/scrazzer?language=${selectedIndex2}&type=${type}`, schema, {
@@ -167,7 +167,7 @@ export default function GenerateSchema() {
 				const url = window.URL.createObjectURL(new Blob([response.data]));
 				const link = document.createElement('a');
 				link.href = url;
-				link.setAttribute('download', 'file.zip'); //or any other extension
+				link.setAttribute('download', schema.name + '.zip'); //or any other extension
 				document.body.appendChild(link);
 				link.click();
 			})
@@ -181,6 +181,7 @@ export default function GenerateSchema() {
 		axios.defaults.headers.common = { Authorization: `${authToken}` };
 
 		loadSchemas((schemas) => {
+			options = [];
 			for (var i = 0; i < schemas.length; i++) {
 				options.push(schemas[i].body.name);
 			}
