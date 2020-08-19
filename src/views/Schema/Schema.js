@@ -133,7 +133,7 @@ class Schema extends Component {
                                 }
 
                                 definitions = this.test(definitions);
-                                
+
                                 let routes = [];
                                 for (let i = 0; i < openScraper.route.length; i++) {
                                   let route = { ...openScraper.route[i] };
@@ -510,7 +510,7 @@ class Schema extends Component {
 
                                 const schema = {
                                   body: spec
-                                  // body: this.testschema
+                                  // body: testschema
                                 };
 
                                 axios
@@ -534,7 +534,7 @@ class Schema extends Component {
                                       </Alert>
                                     });
                                   });
-                                  history.push("/WebScraperGenerator/generate");
+                                history.push("/WebScraperGenerator/generate");
 
                               }}
                               color="primary"
