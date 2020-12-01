@@ -3,6 +3,10 @@
   "version": "1.9.0",
   "description": "Material Dashboard React. Coded by Creative Tim",
   "private": false,
+  "engines": {
+    "npm": "5.7.1",
+    "node": "9.5.0"
+  },
   "main": "dist/index.js",
   "dependencies": {
     "@material-ui/core": "4.10.0",
