@@ -4,9 +4,9 @@
   "description": "Material Dashboard React. Coded by Creative Tim",
   "private": false,
   "engines": {
-    "npm": "5.7.1",
-    "node": "9.5.0"
-  },
+      "npm": "6.9.0",
+      "node": "10.16.2"
+    },
   "main": "dist/index.js",
   "dependencies": {
     "@material-ui/core": "4.10.0",
